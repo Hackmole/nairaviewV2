@@ -647,14 +647,8 @@ a, button { -webkit-tap-highlight-color: transparent; }
 /* Sticky header with frosted blur */
 .site-header { background: var(--paper); }
 
-/* Hero glow wash */
+/* Hero glow wash (retired: was a gradient, now flat) */
 .hero { position: relative; isolation: isolate; }
-.hero::before {
-  content: ""; position: absolute; z-index: -1; pointer-events: none;
-  top: -34px; left: 50%; transform: translateX(-50%);
-  width: min(920px, 110%); height: 400px;
-  background: none;
-}
 
 /* Card hover lift */
 .news-card, .listing, .offer-card, .guide-steps li {
@@ -679,9 +673,6 @@ a, button { -webkit-tap-highlight-color: transparent; }
 }
 
 
-
-/* Stronger hero glow */
-.hero::before { opacity: .8; }
 
 /* Buttons & interactive controls */
 .btn-primary, .btn-ghost, .ghost-btn, .modal-live, .modal-star, .ticker-chip {
@@ -810,13 +801,6 @@ a, button { -webkit-tap-highlight-color: transparent; }
     .eyebrow { color: var(--gold); }
 
     .metric { border-top: 2px solid var(--gold-bright); }
-
-    /* Hero: a warm gold aura offset from the green wash. */
-    .hero::after {
-      content: ""; position: absolute; z-index: -1; pointer-events: none;
-      top: -70px; right: -90px; width: 440px; height: 440px;
-      background: none;
-    }
 
     /* Page atmosphere: gold dawn fading into the green wash. */
     .shell {
@@ -981,8 +965,6 @@ a, button { -webkit-tap-highlight-color: transparent; }
   padding: 40px 24px 34px;
   margin-top: 6px;
 }
-.hero::before { top: 0; height: 300px; }
-.hero::after { top: -40px; right: -40px; width: 340px; height: 340px; }
 
 /* ---- Dark ticker tape (Figma pattern; always dark) ---- */
 .live-ticker {

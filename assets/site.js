@@ -251,7 +251,7 @@
           var gy = y(span * f);
           svg.appendChild(node('line', { x1: L, x2: W - R, y1: gy, y2: gy, 'class': 'grid-line' }));
           var label = node('text', { x: L - 12, y: gy + 4, 'text-anchor': 'end', 'class': 'axis-label' });
-          if (narrowChart) label.setAttribute('font-size', '30');
+          if (narrowChart) label.style.fontSize = '30px'; /* inline: beats the .axis-label CSS rule */
           label.textContent = fmtPct(span * f); svg.appendChild(label);
         });
         var coords = pcts.map(function (pc, idx) { return [x(idx), y(pc)]; });

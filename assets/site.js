@@ -243,10 +243,15 @@
         function x(i) { return points.length === 1 ? (L + W - R) / 2 : L + i * (W - L - R) / (points.length - 1); }
         function y(pct) { return T + (span - pct) * (H - T - B) / (2 * span); }
         var zeroY = y(0);
-        [-1, -0.5, 0, 0.5, 1].forEach(function (f) {
+        /* Fewer, larger axis labels on narrow screens: the 1000-unit viewBox
+           squeezes ~3x on phones, so 5 ticks at 10 units render tiny. */
+        var narrowChart = svg.clientWidth > 0 && svg.clientWidth < 560;
+        var tickFs = narrowChart ? [-1, 0, 1] : [-1, -0.5, 0, 0.5, 1];
+        tickFs.forEach(function (f) {
           var gy = y(span * f);
           svg.appendChild(node('line', { x1: L, x2: W - R, y1: gy, y2: gy, 'class': 'grid-line' }));
           var label = node('text', { x: L - 12, y: gy + 4, 'text-anchor': 'end', 'class': 'axis-label' });
+          if (narrowChart) label.setAttribute('font-size', '30');
           label.textContent = fmtPct(span * f); svg.appendChild(label);
         });
         var coords = pcts.map(function (pc, idx) { return [x(idx), y(pc)]; });
@@ -953,9 +958,9 @@
         .then(function (r) { return r.ok ? r.json() : null; })
         .then(function (me) {
           if (me && me.email) { form.hidden = false; load(); }
-          else { signin.hidden = false; }
+          else { signin.hidden = false; box.classList.add('is-signed-out'); }
         })
-        .catch(function () { signin.hidden = false; });
+        .catch(function () { signin.hidden = false; box.classList.add('is-signed-out'); });
     }());
 
 /* ---- Nav dropdowns: hover reveals (CSS), click toggles, parent highlights on child pages ---- */

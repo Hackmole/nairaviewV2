@@ -861,9 +861,15 @@ a, button { -webkit-tap-highlight-color: transparent; }
 .alert-list:empty{display:none}
 .alert-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 0;border-top:1px dashed var(--line);font-size:14px}
 .alert-form{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin-top:10px}
+.alert-form[hidden]{display:none}
 .alert-form label{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:600;color:var(--muted)}
 .alert-form input,.alert-form select{padding:9px 10px;border:1px solid var(--line);border-radius: 0;font-size:14px;background:var(--surface);color:var(--ink);min-height:44px}
 .alert-signin{margin:8px 0 0;font-size:13px}
+/* Signed-out: slim banner instead of a full widget */
+.alert-widget.is-signed-out{padding:12px 14px}
+.alert-widget.is-signed-out .alert-note{display:none}
+.alert-widget.is-signed-out .alert-title{margin:0 0 2px;font-size:14px}
+.alert-widget.is-signed-out .alert-signin{margin:0}
 
 /* ============================================================
    Nairaview redesign system (2026-10-01)

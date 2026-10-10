@@ -528,6 +528,10 @@
 @media (max-width: 700px) and (pointer: coarse) {
   .nav-burger { width: 44px; height: 44px; }
 }
+/* Mobile: drop the external-link arrow from the hero CTA */
+@media (max-width: 700px) {
+  .hero-cta span[aria-hidden="true"] { display: none; }
+}
 .drawer-scrim { position: fixed; inset: 0; background: rgba(2,33,38,.6); z-index: 80; opacity: 0; pointer-events: none; transition: opacity .2s; }
 body.drawer-open .drawer-scrim { opacity: 1; pointer-events: auto; }
 .nav-drawer {

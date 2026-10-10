@@ -23,6 +23,12 @@
       --gold-soft: #f4ead0;
       --gold-line: #dcc98f;
       --gold-ink: #221a05;
+      /* ASI hero gradient stops: darkened for light mode (neon fails on paper) */
+      --grad-a: #1B7FA8;
+      --grad-b: #1E9E50;
+      --grad-c: #A8842A;
+      --fx-official: #1E9E50;
+      --fx-parallel: #8A6D1F;
     }
     @media (prefers-color-scheme: dark) {
       :root:not([data-theme="light"]) {
@@ -47,6 +53,11 @@
       --gold-soft: #37320f;
       --gold-line: #6e6524;
       --gold-ink: #221a05;
+      --grad-a: #32D9EB;
+      --grad-b: #77FC49;
+      --grad-c: #FBE25D;
+      --fx-official: #77FC49;
+      --fx-parallel: #FBE25D;
       }
     }
     * { box-sizing: border-box; }
@@ -76,6 +87,11 @@
       --gold-soft: #37320f;
       --gold-line: #6e6524;
       --gold-ink: #221a05;
+      --grad-a: #32D9EB;
+      --grad-b: #77FC49;
+      --grad-c: #FBE25D;
+      --fx-official: #77FC49;
+      --fx-parallel: #FBE25D;
     }
     .theme-toggle {
       margin-left: auto;
@@ -153,7 +169,7 @@
     #market-heading {
       font: 700 clamp(72px, 12vw, 160px)/.92 "Barlow Semi Condensed", sans-serif;
       letter-spacing: -.055em;
-      background: linear-gradient(90deg, #32D9EB 0%, #77FC49 50%, #FBE25D 100%);
+      background: linear-gradient(90deg, var(--grad-a) 0%, var(--grad-b) 50%, var(--grad-c) 100%);
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -1306,8 +1322,8 @@ a, button { -webkit-tap-highlight-color: transparent; }
 .fx-value { font: 700 34px/1.2 "Barlow Semi Condensed", sans-serif; margin: 8px 0 4px; }
 .fx-sub { font-size: 13px; color: var(--muted); }
 .fx-tag { display: inline-block; font-size: 10px; letter-spacing: .08em; text-transform: uppercase; background: #FBE25D; color: #022126; border-radius: 0; padding: 2px 6px; margin-left: 6px; vertical-align: 2px; }
-.fx-line-official { stroke: #77FC49; }
-.fx-line-parallel { stroke: #FBE25D; stroke-dasharray: 7 4; }
+.fx-line-official { stroke: var(--fx-official); }
+.fx-line-parallel { stroke: var(--fx-parallel); stroke-dasharray: 7 4; }
 .fx-axis { stroke: var(--line); stroke-width: 1; }
 .fx-empty { fill: var(--muted); font-size: 15px; }
 /* breathing room between the rate cards and the trend chart */
@@ -1329,8 +1345,8 @@ a, button { -webkit-tap-highlight-color: transparent; }
 .fx-convert-result { font: 700 40px/1.2 "Barlow Semi Condensed", sans-serif; margin: 14px 0 4px; }
 .fx-legend { display: inline-flex; align-items: center; gap: 6px; margin-right: 16px; font-size: 13px; }
 .fx-dot { width: 10px; height: 10px; border-radius: 0; display: inline-block; }
-.fx-dot-official { background: #77FC49; }
-.fx-dot-parallel { background: #FBE25D; }
+.fx-dot-official { background: var(--fx-official); }
+.fx-dot-parallel { background: var(--fx-parallel); }
 .fine-print { font-size: 12.5px; color: var(--muted); max-width: 860px; line-height: 1.7; margin-top: 18px; }
 /* Homepage FX tiles */
 .fx-tiles { margin: 28px 0 28px; }

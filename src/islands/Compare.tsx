@@ -14,6 +14,24 @@ interface Pick {
   name: string;
 }
 
+/* Baked snapshot (window.compareSnapshot) so search + table paint instantly
+   and survive API failure; the live fetch overwrites with fresh data. */
+interface SnapshotRow {
+  symbol: string;
+  name: string;
+  current_price: number;
+  official_change_percent?: number | null;
+  change_percent?: number | null;
+  volume?: number | null;
+  market_cap?: number | null;
+  sector?: string | null;
+}
+
+function baked(): SnapshotRow[] {
+  const w = window as unknown as { compareSnapshot?: unknown };
+  return Array.isArray(w.compareSnapshot) ? (w.compareSnapshot as SnapshotRow[]) : [];
+}
+
 function fmtMcap(n: number | undefined): string {
   if (n == null || !(n > 0)) return '—';
   if (n >= 1e12) return '₦' + (n / 1e12).toFixed(2) + 'tn';
@@ -31,21 +49,22 @@ function fmtVol(n: number | undefined): string {
 
 export default function Compare(): React.JSX.Element {
   const [names, setNames] = useState<Pick[]>(() =>
-    Array.isArray((window as unknown as { directory?: unknown }).directory)
-      ? ((window as unknown as { directory: Array<{ s: string; c: string }> }).directory.map((d) => ({
-          symbol: d.s,
-          name: d.c,
-        })))
-      : []
+    baked().map((d) => ({ symbol: d.symbol, name: d.name }))
   );
-  const [full, setFull] = useState<Record<string, ApiStock>>({});
+  const [full, setFull] = useState<Record<string, ApiStock>>(() => {
+    const map: Record<string, ApiStock> = {};
+    baked().forEach((d) => {
+      map[d.symbol] = d as unknown as ApiStock;
+    });
+    return map;
+  });
   const [sel, setSel] = useState<string[]>([]);
   const [q, setQ] = useState('');
   const [live, setLive] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
-    getJSON<PricesResponse>('https://nairaview-api.meetomidiora.workers.dev/api/prices')
+    getJSON<PricesResponse>('/api/prices')
       .then((p) => {
         if (cancelled) return;
         const arr = (p && p.stocks && p.stocks.stocks) || [];

@@ -189,4 +189,19 @@
   <url><loc>https://nairaview.com/stocks/ZICHIS</loc><priority>0.7</priority></url>
   <url><loc>https://nairaview.com/market-recap</loc><priority>0.8</priority></url>
   <url><loc>https://nairaview.com/ngx-weekly-recap-02-oct-2026</loc><priority>0.8</priority></url>
+  <url><loc>https://nairaview.com/compare</loc><priority>0.8</priority></url>
+  <url><loc>https://nairaview.com/etfs</loc><priority>0.8</priority></url>
+  <url><loc>https://nairaview.com/etfs/GREENWETF</loc><priority>0.8</priority></url>
+  <url><loc>https://nairaview.com/etfs/LOTUSHAL15</loc><priority>0.8</priority></url>
+  <url><loc>https://nairaview.com/etfs/MERGROWTH</loc><priority>0.8</priority></url>
+  <url><loc>https://nairaview.com/etfs/MERVALUE</loc><priority>0.8</priority></url>
+  <url><loc>https://nairaview.com/etfs/NEWGOLD</loc><priority>0.8</priority></url>
+  <url><loc>https://nairaview.com/etfs/SIAMLETF40</loc><priority>0.8</priority></url>
+  <url><loc>https://nairaview.com/etfs/STANBICETF30</loc><priority>0.8</priority></url>
+  <url><loc>https://nairaview.com/etfs/VETBANK</loc><priority>0.8</priority></url>
+  <url><loc>https://nairaview.com/etfs/VETGOODS</loc><priority>0.8</priority></url>
+  <url><loc>https://nairaview.com/etfs/VETGRIF30</loc><priority>0.8</priority></url>
+  <url><loc>https://nairaview.com/etfs/VETINDETF</loc><priority>0.8</priority></url>
+  <url><loc>https://nairaview.com/etfs/VSPBONDETF</loc><priority>0.8</priority></url>
+  <url><loc>https://nairaview.com/ipo-tracker</loc><priority>0.8</priority></url>
 </urlset>

@@ -32,6 +32,7 @@ import ChartLab from './islands/ChartLab.js';
 import Portfolio from './islands/Portfolio.js';
 import FxConverter from './islands/FxConverter.js';
 import FxCcy from './islands/FxCcy.js';
+import Compare from './islands/Compare.js';
 
 type IslandComponent = React.ComponentType<Record<string, string | undefined>>;
 
@@ -46,6 +47,7 @@ const ISLANDS: Record<string, IslandComponent> = {
   portfolio: Portfolio as IslandComponent,
   'fx-converter': FxConverter as IslandComponent,
   'fx-ccy': FxCcy as IslandComponent,
+  compare: Compare as IslandComponent,
 };
 
 /* Islands that adopt existing DOM (return null) must not mount on the

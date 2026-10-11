@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script>try{var t=localStorage.getItem("nv-theme");document.documentElement.setAttribute("data-theme",t==="light"?"light":"dark");}catch(e){document.documentElement.setAttribute("data-theme","dark");}</script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="theme-color" content="#022126" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Nairaview" />
+<meta property="og:title" content="Compare NGX Stocks Side by Side | Nairaview" />
+<meta property="og:description" content="Pick two to four Nigerian stocks and compare price, day change, volume, market cap and sector side by side." />
+<meta property="og:url" content="https://nairaview.com/compare" />
+<meta property="og:image" content="https://nairaview.com/assets/og-default.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Compare NGX Stocks Side by Side | Nairaview" />
+<meta name="twitter:description" content="Pick two to four Nigerian stocks and compare price, day change, volume, market cap and sector side by side." />
+<meta name="twitter:image" content="https://nairaview.com/assets/og-default.png" />
+<link rel="canonical" href="https://nairaview.com/compare" />
+  <meta name="description" content="Pick two to four Nigerian stocks and compare price, day change, volume, market cap and sector side by side." />
+  <link rel="icon" href="assets/logo-icon.svg" type="image/svg+xml">
+  <link rel="icon" href="assets/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="icon" href="assets/favicon-48.png" sizes="48x48" type="image/png">
+  <link rel="icon" href="assets/favicon-96.png" sizes="96x96" type="image/png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <title>Compare NGX Stocks Side by Side | Nairaview</title>
+  <link rel="stylesheet" href="assets/styles.css?v=20261010j" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Barlow+Semi+Condensed:wght@600;700&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+  </head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="./" aria-label="Nairaview home"><picture><source srcset="assets/logo-dark.svg" media="(prefers-color-scheme: dark)"><img src="assets/logo.svg" alt="Nairaview" height="34"></picture></a>
+      <nav class="site-nav" aria-label="Primary">
+          <a href="./">Home</a>
+          <div class="nav-item"><a href="stocks" class="active">Stocks</a><div class="nav-dropdown" role="menu"><a href="stocks">All listed stocks</a><a href="highs-lows">Highs & lows</a><a href="watchlist">My watchlist</a><a href="etfs">ETFs</a><a href="compare">Compare stocks</a></div></div>
+          <a href="screener">Screener</a><div class="nav-item"><a href="fx">FX</a><div class="nav-dropdown" role="menu"><a href="fx">FX converter</a><a href="fx-usd">US dollar</a><a href="fx-eur">Euro</a><a href="fx-gbp">British pound</a></div></div>
+          <div class="nav-item"><a href="offers">Offers</a><div class="nav-dropdown" role="menu"><a href="offers">Public offers</a><a href="ipo-tracker">IPO performance tracker</a></div></div>
+          <div class="nav-item"><a href="calendar">Calendar</a><div class="nav-dropdown" role="menu"><a href="calendar">Market calendar</a><a href="dividends">Dividends</a><a href="corporate-actions">Corporate actions</a></div></div>
+          <div class="nav-item"><a href="news">News</a><div class="nav-dropdown" role="menu"><a href="news">Market news</a><a href="news-headlines">Latest headlines</a><a href="news-newsroom">Newsroom</a><a href="news-notes">Market notes</a><a href="insider-dealings">Insider dealings</a></div></div>
+          <a href="learn">Learn</a>
+          <a href="market-recap">Recap</a>
+      </nav>
+    </div>
+  </header>
+  <div class="shell">
+    <div class="topline">
+      <span class="status"><i class="status-dot" aria-hidden="true"></i> MARKET CLOSED</span>
+      <span class="topline-date">DAILY CLOSE &middot; FRI 9 OCT 2026 &middot; WAT</span>
+    </div>
+    <main>
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="./">Home</a><span class="sep">/</span><a href="stocks">Stocks</a><span class="sep">/</span><span>Compare</span></nav>
+      <div class="page-hero">
+        <div>
+          <div class="eyebrow">Side by side</div>
+          <h1>Compare stocks.</h1>
+          <p class="lede">Zenith vs GTCO vs Access, or any four NGX stocks &mdash; price, move, size and sector in one view.</p>
+        </div>
+      </div>
+      <section class="section">
+        <div id="compareApp" data-island="compare">
+          <p class="guide-p">Loading the comparison tool&hellip;</p>
+        </div>
+      </section>
+    </main>
+  </div>
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="./" aria-label="Nairaview home"><img src="assets/logo-dark.svg" alt="Nairaview" height="34"></a>
+          <p>The Nigerian Exchange, decoded daily. Prices, movers, offers, news and plain-language guides.</p>
+          <a class="footer-x" href="https://x.com/naira_view" target="_blank" rel="noopener" aria-label="Nairaview on X"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+        </div>
+        <div class="footer-col">
+          <h4>Markets</h4>
+          <a href="stocks">All listed stocks</a>
+          <a href="screener">Stock screener</a>
+          <a href="compare">Compare stocks</a>
+          <a href="highs-lows">Highs & lows</a>
+          <a href="dividends">Dividends</a>
+          <a href="corporate-actions">Corporate actions</a>
+          <a href="insider-dealings">Insider dealings</a>
+          <a href="offers">Public offers</a>
+          <a href="ipo-tracker">IPO tracker</a>
+          <a href="etfs">ETFs</a>
+          <a href="calendar">Market calendar</a>
+          <a href="fx">Dollar / naira</a>
+        </div>
+        <div class="footer-col">
+          <h4>Nairaview</h4>
+          <a href="news">Market news</a>
+          <a href="learn">Learn</a>
+          <a href="portfolio">Portfolio tracker</a>
+          <a href="watchlist">My watchlist</a>
+          <a href="market-recap">Weekly recap</a>
+        </div>
+      </div>
+      <div class="footer-legal">
+        <span>&copy; 2026 Nairaview. information only, not investment advice.</span>
+        <span>Market data is delayed. Prices may have changed, confirm before acting.</span>
+      </div>
+    </div>
+  </footer>
+  <script>window.NV_ISLANDS = window.NV_ISLANDS || {}; window.NV_ISLANDS['compare'] = true;</script>
+  <script src="assets/data.js?v=20261009adark39"></script>
+  <script src="assets/site.js?v=20261010c"></script>
+  <script src="assets/islands.js?v=20261011a"></script>
+  <script src="assets/live.js?v=20261009adark39"></script>
+  <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a9f4136dd40547a7b1acca41e62cc7a5"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

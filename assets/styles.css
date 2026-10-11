@@ -1421,3 +1421,18 @@ a, button { -webkit-tap-highlight-color: transparent; }
 #converter, #usd, #eur, #gbp { scroll-margin-top: 90px; }
 
 #insiderNote { margin-top: 14px; }
+
+/* ---- Compare tool ---- */
+.compare-app { max-width: 100%; }
+.compare-picker { margin-bottom: 18px; position: relative; max-width: 560px; }
+.compare-picker label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+.compare-picker input[type="search"] { width: 100%; padding: 10px 12px; font-size: 15px; border: 1px solid var(--line, #2a4a52); background: var(--card, #062a30); color: inherit; border-radius: 0; }
+.compare-suggest { list-style: none; margin: 4px 0 0; padding: 0; border: 1px solid var(--line, #2a4a52); background: var(--card, #062a30); position: absolute; width: 100%; z-index: 5; }
+.compare-suggest li button { display: block; width: 100%; text-align: left; padding: 9px 12px; background: none; border: 0; color: inherit; font-size: 14px; cursor: pointer; }
+.compare-suggest li button:hover { background: rgba(50,217,235,.12); }
+.compare-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.compare-chips .chip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; background: rgba(50,217,235,.14); border: 1px solid rgba(50,217,235,.4); font-size: 13px; font-weight: 600; }
+.compare-chips .chip button { background: none; border: 0; color: inherit; font-size: 16px; cursor: pointer; line-height: 1; padding: 0 0 0 2px; }
+.compare-table th[scope="row"] { text-align: left; white-space: nowrap; }
+.compare-table td.up { color: #77FC49; }
+.compare-table td.down { color: #ff6b6b; }

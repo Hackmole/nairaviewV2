@@ -10,7 +10,7 @@ Curated external related-links are carried over per page.
 import json, os, html, re, urllib.request
 from datetime import datetime
 
-ROOT = os.path.expanduser('~/workspace/nairaview')
+ROOT = os.path.expanduser('~/workspace/nairaviewV2')
 ASSET_V = '20261004a'
 API = 'https://nairaview-api.meetomidiora.workers.dev'
 SKIP = {'ACCESS', 'FBNH', 'GUARANTY'}  # ticker-alias redirect stubs
@@ -362,7 +362,7 @@ for s in stocks:
         span = (hi_t - lo_t) or 1
         pos = max(0, min(100, (last['close'] - lo_t) / span * 100))
         prange = (
-            '<div class="prange"><div class="kstats-title">Tracked range &middot; since ' + esc(fmt_date_iso(hist[0]['date'])) + '</div>'
+            '<div class="prange"><div class="kstats-title">Tracked range</div>'
             '<div class="prange-bar"><span class="prange-marker" style="left:' + ('%.1f' % pos) + '%"></span></div>'
             '<div class="prange-labels">'
             '<span class="pl">Low<b>' + d_lot + '</b></span>'
@@ -387,7 +387,7 @@ for s in stocks:
                     'up' if pc > 0 else ('down' if pc < 0 else ''),
                     '%s%.2f%%' % ('+' if pc >= 0 else '−', abs(pc)),
                     fmt_vol(x['volume'])))
-        hist_table = ('<div class="hist-card"><div class="kstats-title">Historical data &middot; daily closes</div>'
+        hist_table = ('<div class="hist-card"><div class="kstats-title">Historical data</div>'
                       '<div style="overflow-x:auto"><table class="hist-table"><thead><tr>'
                       '<th>Date</th><th>Open</th><th>High</th><th>Low</th><th>Close</th><th>Change</th><th>Volume</th>'
                       '</tr></thead><tbody id="histBody">' + ''.join(rows) + '</tbody></table></div></div>')
@@ -407,7 +407,7 @@ for s in stocks:
 
     # key statistics panel (ngnmarket-style)
     kstats = (
-        '<div class="kstats"><div class="kstats-title">Key statistics &middot; ' + esc(trade_date) + ' close</div>'
+        '<div class="kstats"><div class="kstats-title">Key statistics</div>'
         '<div class="kstats-grid">'
         '<div class="kstat" data-stat="prevclose"><div class="k">Previous close</div><div class="v">' + d_prev + '</div></div>'
         '<div class="kstat" data-stat="open"><div class="k">Open</div><div class="v">' + d_open + '</div></div>'

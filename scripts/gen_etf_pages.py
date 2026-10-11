@@ -123,7 +123,7 @@ TEMPLATE = '''<!doctype html>
           <p class="asof">Last verified close &middot; @@CLOSE_DATE@@ &middot; NGX Daily Official List (ETFs).</p>
         </div>
       </div>
-      <div class="kstats"><div class="kstats-title">Key statistics &middot; verified @@CLOSE_DATE@@</div>
+      <div class="kstats"><div class="kstats-title">Key statistics</div>
       <div class="kstats-grid">
         <div class="kstat"><div class="k">Tracks</div><div class="v" style="font-size:15px">@@UNDERLYING@@</div></div>
         <div class="kstat"><div class="k">Manager</div><div class="v" style="font-size:15px">@@MANAGER@@</div></div>

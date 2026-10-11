@@ -274,7 +274,7 @@ export default function Screener(): React.ReactElement {
             >
               <span dangerouslySetInnerHTML={{ __html: badgeHTML }} />
               <span className="row-text">
-                <span className="symbol">{r.s}<span className="list-tag">{r.g}</span></span>
+                <span className="symbol">{r.s}<span className="sym-sep"> · </span><span className="list-tag">{r.g}</span></span>
                 <span className="company">{r.c}</span>
               </span>
             </button>

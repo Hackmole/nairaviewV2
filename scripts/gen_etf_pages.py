@@ -7,7 +7,7 @@ Every figure is labeled with its date. No invented data.
 import json, os, html
 
 ROOT = os.path.expanduser('~/workspace/nairaviewV2')
-ASSET_V = '20261010j'
+ASSET_V = '20261011c'
 
 def esc(t):
     return html.escape(str(t), quote=True)
@@ -26,7 +26,7 @@ def fmt_pct(n):
         return '—'
 
 NAV = '''          <a href="../">Home</a>
-          <div class="nav-item"><a href="../stocks" class="active">Stocks</a><div class="nav-dropdown" role="menu"><a href="../stocks">All listed stocks</a><a href="../highs-lows">Highs &amp; lows</a><a href="../watchlist">My watchlist</a><a href="../etfs">ETFs</a><a href="../compare">Compare stocks</a></div></div>
+          <div class="nav-item"><a href="../stocks" class="active">Stocks</a><div class="nav-dropdown" role="menu"><a href="../stocks">All listed stocks</a><a href="../screener">Stock screener</a><a href="../compare">Compare stocks</a><a href="../highs-lows">Highs &amp; lows</a><a href="../etfs">ETFs</a><a href="../watchlist">My watchlist</a></div></div>
           <a href="../screener">Screener</a><div class="nav-item"><a href="../fx">FX</a><div class="nav-dropdown" role="menu"><a href="../fx">FX converter</a><a href="../fx-usd">US dollar</a><a href="../fx-eur">Euro</a><a href="../fx-gbp">British pound</a></div></div>
           <div class="nav-item"><a href="../offers">Offers</a><div class="nav-dropdown" role="menu"><a href="../offers">Public offers</a><a href="../ipo-tracker">IPO performance tracker</a></div></div>
           <div class="nav-item"><a href="../calendar">Calendar</a><div class="nav-dropdown" role="menu"><a href="../calendar">Market calendar</a><a href="../dividends">Dividends</a><a href="../corporate-actions">Corporate actions</a></div></div>

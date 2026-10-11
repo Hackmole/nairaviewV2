@@ -362,7 +362,8 @@
           main.setAttribute('aria-label', r.s + ', ' + r.c + ' — view details');
           var symbol = document.createElement('span'); symbol.className = 'symbol'; symbol.textContent = r.s;
           var tag = document.createElement('span'); tag.className = 'list-tag'; tag.textContent = r.g;
-          symbol.appendChild(tag);
+          var sep1 = document.createElement('span'); sep1.className = 'sym-sep'; sep1.textContent = ' \u00b7 ';
+          symbol.appendChild(sep1); symbol.appendChild(tag);
           var company = document.createElement('span'); company.className = 'company'; company.textContent = r.c;
           var rowText = document.createElement('span'); rowText.className = 'row-text'; rowText.appendChild(symbol); rowText.appendChild(company); main.appendChild(window.nvBadge(r.s)); main.appendChild(rowText);
           main.addEventListener('click', function () { openModal(r.s, main); });
@@ -434,7 +435,8 @@
         var symbol = document.createElement('span'); symbol.className = 'symbol'; symbol.textContent = (i + 1) + '. ' + r.s;
         if (tag) {
           var tg = document.createElement('span'); tg.className = 'list-tag'; tg.textContent = tag;
-          symbol.appendChild(tg);
+          var sep2 = document.createElement('span'); sep2.className = 'sym-sep'; sep2.textContent = ' \u00b7 ';
+          symbol.appendChild(sep2); symbol.appendChild(tg);
         }
         var company = document.createElement('span'); company.className = 'company'; company.textContent = r.c;
         var rowText = document.createElement('span'); rowText.className = 'row-text'; rowText.appendChild(symbol); rowText.appendChild(company);
@@ -779,7 +781,8 @@
           main.setAttribute('aria-label', r.s + ', ' + r.c + ' — view details');
           var symbol = document.createElement('span'); symbol.className = 'symbol'; symbol.textContent = r.s;
           var tag = document.createElement('span'); tag.className = 'list-tag'; tag.textContent = r.g;
-          symbol.appendChild(tag);
+          var sep1 = document.createElement('span'); sep1.className = 'sym-sep'; sep1.textContent = ' \u00b7 ';
+          symbol.appendChild(sep1); symbol.appendChild(tag);
           var company = document.createElement('span'); company.className = 'company'; company.textContent = r.c;
           var rowText = document.createElement('span'); rowText.className = 'row-text'; rowText.appendChild(symbol); rowText.appendChild(company); main.appendChild(window.nvBadge(r.s)); main.appendChild(rowText);
           main.addEventListener('click', function () { openModal(r.s, main); });

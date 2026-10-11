@@ -1017,9 +1017,10 @@
   /* highlight the parent when on a dropdown child page */
   var seg = location.pathname.split('/').pop().replace(/\.html$/, '');
   var childToParent = {
-    'highs-lows': 'stocks', 'watchlist': 'stocks',
+    'highs-lows': 'stocks', 'watchlist': 'stocks', 'screener': 'stocks',
+    'etfs': 'stocks', 'compare': 'stocks',
     'dividends': 'calendar', 'corporate-actions': 'calendar',
-    'insider-dealings': 'news'
+    'insider-dealings': 'news', 'ipo-tracker': 'offers'
   };
   var parent = childToParent[seg];
   if (parent) {

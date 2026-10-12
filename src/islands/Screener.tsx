@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { getJSON, toRow, dirArrow } from '../lib/api.js';
+import { markFeedOk, unavailableHTML, lastUpdatedDate } from '../lib/feedState.js';
 import type { DirectoryRow, PricesResponse } from '../lib/types.js';
 
 /* React-owned stock screener results.
@@ -103,6 +104,8 @@ export default function Screener(): React.ReactElement {
   const [watch, setWatch] = useState<string[]>(readWatchlist);
   const [f, setF] = useState<FilterState>({ mover: 'all', sector: 'All', minP: '', maxP: '', minC: '', maxC: '', sort: 'chg-desc' });
   const [activePreset, setActivePreset] = useState<string | null>(null);
+  const [liveStale, setLiveStale] = useState(false);
+  const [dataFailed, setDataFailed] = useState(false);
 
   const sectors = useMemo(() => {
     const s: Record<string, boolean> = {};
@@ -218,6 +221,9 @@ export default function Screener(): React.ReactElement {
       .then((doc) => {
         const list = doc && doc.stocks && doc.stocks.stocks;
         if (cancelled || !list || !list.length) return;
+        markFeedOk('prices');
+        setLiveStale(false);
+        setDataFailed(false);
         const bySym: Record<string, DirectoryRow> = {};
         list.map(toRow).forEach((r) => { bySym[r.s] = r; });
         setStocks((prev) => prev.map((e) => {
@@ -225,7 +231,15 @@ export default function Screener(): React.ReactElement {
           return liveR ? { ...e, p: liveR.p, m: liveR.m, d: liveR.d, pv: liveR.pv, cv: liveR.cv, vol: false, noSnap: false } : e;
         }));
       })
-      .catch(() => { /* keep baked snapshot */ });
+      .catch(() => {
+        /* clear state: snapshot (if any) is labeled, empty is labeled */
+        if (cancelled) return;
+        setStocks((prev) => {
+          if (!prev.length) setDataFailed(true);
+          else setLiveStale(true);
+          return prev;
+        });
+      });
     return () => { cancelled = true; };
   }, []);
 
@@ -250,12 +264,18 @@ export default function Screener(): React.ReactElement {
     window.location.href = 'stocks/' + s + '.html';
   }
 
+  if (dataFailed) {
+    return <div dangerouslySetInnerHTML={{ __html: unavailableHTML('Stock data', 'prices') }} />;
+  }
+
   if (!rows.length) {
     return <div className="empty-note">No stocks match these filters.</div>;
   }
 
+  const staleDate = lastUpdatedDate('prices');
   return (
     <>
+      {liveStale && <p className="stale-note">Live prices unavailable — showing the last snapshot{staleDate ? ' (' + staleDate + ')' : ''}.</p>}
       {rows.map((r) => {
         const starred = watch.indexOf(r.s) !== -1;
         const badgeHTML = window.nvBadgeHTML ? window.nvBadgeHTML(r.s) : '';

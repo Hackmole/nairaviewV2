@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { getFx, fmtFx, fmtFxDate } from '../lib/fx.js';
+import { markFeedOk, lastUpdatedLine } from '../lib/feedState.js';
 import type { FxDoc } from '../lib/types.js';
 
 /* React-owned FX converter. Adopts the existing card DOM (#fxAmount, the custom
@@ -13,10 +14,22 @@ export default function FxConverter(): null {
   const [ccy, setCcy] = useState('USD');
   const [leg, setLeg] = useState('official');
   const [rates, setRates] = useState<FxDoc['latest'] | null>(null);
+  const [fxFailed, setFxFailed] = useState(false);
+  const settled = useRef(false);
 
   useEffect(() => {
     let alive = true;
-    getFx().then((doc) => { if (alive) setRates((doc && doc.latest) || null); });
+    getFx().then((doc) => {
+      if (!alive) return;
+      settled.current = true;
+      const latest = (doc && doc.latest) || null;
+      const usable = latest && Object.keys(latest).some((k) => {
+        const l = (latest as Record<string, { official?: number; parallel?: number }>)[k];
+        return l && ((l.official || 0) > 0 || (l.parallel || 0) > 0);
+      });
+      setRates(latest);
+      setFxFailed(!usable);
+    });
     const amtEl = el('fxAmount') as HTMLInputElement | null;
     function onAmt() { if (amtEl) { const v = parseFloat(amtEl.value); setAmount(isNaN(v) ? NaN : v); } }
     if (amtEl) {
@@ -113,10 +126,18 @@ export default function FxConverter(): null {
     const legs = rates && rates[ccy];
     const rate = legs ? legs[leg as 'official' | 'parallel'] : undefined;
     if (!legs || !(rate && rate > 0) || !(amount >= 0) || isNaN(amount)) {
-      res.textContent = '₦—';
-      if (note) note.textContent = 'Rate loading…';
+      if (fxFailed && settled.current) {
+        /* feed failed: clear state, not a permanent spinner */
+        const last = lastUpdatedLine('fx');
+        res.innerHTML = '<span class="val-unavail">Rate unavailable</span>';
+        if (note) note.textContent = 'Rate temporarily unavailable' + (last ? ' · ' + last : '.');
+      } else {
+        res.textContent = '₦—';
+        if (note) note.textContent = 'Rate loading…';
+      }
       return;
     }
+    markFeedOk('fx', fmtFxDate(legs.official_date));
     res.textContent = fmtFx(amount * (rate as number));
     if (note) {
       const legName = leg === 'official' ? 'official NFEM rate' : 'indicative street rate';

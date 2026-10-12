@@ -156,7 +156,7 @@ export default function Portfolio(): React.ReactElement | null {
       <div className="facts" id="portfolioTotals">
         <div className="fact">
           <span>Total value</span>
-          <strong id="totValue">{valued ? naira(totValue) : '—'}</strong>
+          <strong id="totValue">{valued ? naira(totValue) : <span className="val-unavail">Unavailable</span>}</strong>
         </div>
         <div className="fact">
           <span>Total cost</span>
@@ -165,12 +165,14 @@ export default function Portfolio(): React.ReactElement | null {
         <div className="fact">
           <span>Gain / loss (covered)</span>
           <strong id="totGain" style={{ color: valued ? (totGain >= 0 ? 'var(--green-strong)' : 'var(--red)') : '' }}>
-            {valued ? (totGain >= 0 ? '+' : '') + naira(totGain) : '—'}
+            {valued ? (totGain >= 0 ? '+' : '') + naira(totGain) : <span className="val-unavail">Unavailable</span>}
           </strong>
         </div>
       </div>
       <p className="asof" id="priceNote">
-        {liveCount
+        {!valued
+          ? 'Prices temporarily unavailable — valuation appears when the feed loads. Holdings still show cost below.'
+          : liveCount
           ? 'Valued at the latest daily-close prices, refreshed after each market close. Gain/loss is calculated on covered holdings only.'
           : 'Valued at Nairaview\u2019s latest daily-close snapshot prices — not live. Gain/loss is calculated on covered holdings only; other holdings show cost only.'}
       </p>

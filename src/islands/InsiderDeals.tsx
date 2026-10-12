@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { markFeedOk, unavailableHTML } from '../lib/feedState.js';
 
 /* React-owned insider dealings feed. Mounts on #insider-section
    (insider-dealings.html). Reads the curated assets/insider-dealings.json
@@ -43,7 +44,10 @@ export default function InsiderDeals(): null {
     fetch('assets/insider-dealings.json?v=20261008a')
       .then((r) => { if (!r.ok) throw new Error('bad status'); return r.json() as Promise<InsiderDoc>; })
       .then((d) => { if (alive) setDoc(d); })
-      .catch(() => { /* table stays empty */ });
+      .catch(() => {
+        const tb = document.getElementById('insiderBody');
+        if (tb) tb.innerHTML = '<tr><td colspan="7">' + unavailableHTML('Insider dealings data', 'insider-deals') + '</td></tr>';
+      });
     return () => { alive = false; };
   }, []);
 
@@ -67,6 +71,7 @@ export default function InsiderDeals(): null {
     }
     const note = document.getElementById('insiderNote');
     if (note) note.textContent = doc.note;
+    markFeedOk('insider-deals', fmtDate(doc.updated));
   }, [doc]);
 
   return null;

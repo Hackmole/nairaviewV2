@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { markFeedOk, unavailableHTML } from '../lib/feedState.js';
 
 /* React-owned corporate actions feed. Mounts on #corp-actions-section
    (corporate-actions.html). Reads the curated assets/corporate-actions.json
@@ -45,7 +46,10 @@ export default function CorpActions(): null {
     fetch('assets/corporate-actions.json?v=20261008a')
       .then((r) => { if (!r.ok) throw new Error('bad status'); return r.json() as Promise<CaDoc>; })
       .then((d) => { if (alive) setDoc(d); })
-      .catch(() => { /* feed stays empty with the note */ });
+      .catch(() => {
+        const host = document.getElementById('caList');
+        if (host) host.innerHTML = unavailableHTML('Corporate actions data', 'corp-actions');
+      });
     return () => { alive = false; };
   }, []);
 
@@ -67,6 +71,7 @@ export default function CorpActions(): null {
     }
     const note = document.getElementById('caNote');
     if (note) note.textContent = doc.note + ' Last verified ' + fmtDate(doc.updated) + '.';
+    markFeedOk('corp-actions', fmtDate(doc.updated));
   }, [doc]);
 
   return null;

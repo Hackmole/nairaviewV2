@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { markFeedOk, unavailableHTML } from '../lib/feedState.js';
 import type { DirectoryRow } from '../lib/types.js';
 
 /* React-owned highs/lows board. Mounts on #highs-lows-section (highs-lows.html).
@@ -44,7 +45,14 @@ export default function HighsLows(): null {
     fetch('assets/highs-lows.json?v=20261008a')
       .then((r) => { if (!r.ok) throw new Error('bad status'); return r.json() as Promise<HlDoc>; })
       .then((d) => { if (alive) setDoc(d); })
-      .catch(() => { /* board stays empty with the note */ });
+      .catch(() => {
+        /* clear state, not an empty board */
+        const html = unavailableHTML('Highs & lows data', 'highs-lows');
+        const highsEl = document.getElementById('hlHighs');
+        const lowsEl = document.getElementById('hlLows');
+        if (highsEl) highsEl.innerHTML = html;
+        if (lowsEl) lowsEl.innerHTML = html;
+      });
     return () => { alive = false; };
   }, []);
 
@@ -105,6 +113,7 @@ export default function HighsLows(): null {
     if (lede) lede.textContent = 'Stocks trading at or near the top and bottom of their tracked range (' + fmtDate(doc.window_start) + ' – ' + fmtDate(doc.as_of) + ').';
     const note = document.getElementById('hlNote');
     if (note) note.textContent = 'Range is built from Nairaview\u2019s tracked daily closes and grows as history accumulates — not a full 52-week window yet. Data as of ' + fmtDate(doc.as_of) + '.';
+    markFeedOk('highs-lows', fmtDate(doc.as_of));
 
     return () => { if (section) section.removeEventListener('click', onClick); };
   }, [doc]);

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getJSON, fmt2 } from '../lib/api.js';
+import { markFeedOk, unavailableHTML, lastUpdatedDate } from '../lib/feedState.js';
 import type { PricesResponse } from '../lib/types.js';
 
 /* React-owned dividend hub. Mounts on #dividends-section (dividends.html).
@@ -46,13 +47,18 @@ export default function Dividends(): null {
     fetch('assets/dividends.json?v=20261009a')
       .then((r) => { if (!r.ok) throw new Error('bad status'); return r.json() as Promise<DivDoc>; })
       .then((d) => { if (alive) setDoc(d); })
-      .catch(() => { /* section stays as-is */ });
+      .catch(() => {
+        /* section-level clear state instead of empty containers */
+        const up = document.getElementById('divUpcoming');
+        if (up) up.innerHTML = unavailableHTML('Dividend data', 'dividends');
+      });
     getJSON<PricesResponse>('/api/prices')
       .then((p) => {
         const list = p && p.stocks && p.stocks.stocks;
         if (!alive || !list) return;
         const map: Record<string, number> = {};
         list.forEach((s) => { if (s.current_price > 0) map[s.symbol] = Number(s.current_price); });
+        if (Object.keys(map).length) markFeedOk('div-prices');
         setPrices(map);
       })
       .catch(() => { /* yields fall back to no-price state */ });
@@ -99,12 +105,13 @@ export default function Dividends(): null {
     doc.dividends.forEach((d) => { perTicker[d.ticker] = (perTicker[d.ticker] || 0) + d.amount; });
     const yb = document.getElementById('divYieldBody');
     const yn = document.getElementById('divYieldNote');
+    const yRows = Object.keys(perTicker)
+      .map((t) => ({ t, dps: perTicker[t], price: prices[t] }))
+      .filter((r) => r.price && r.price > 0)
+      .map((r) => ({ ...r, y: (r.dps / (r.price as number)) * 100 }))
+      .sort((a, b) => b.y - a.y);
     if (yb) {
-      const rows = Object.keys(perTicker)
-        .map((t) => ({ t, dps: perTicker[t], price: prices[t] }))
-        .filter((r) => r.price && r.price > 0)
-        .map((r) => ({ ...r, y: (r.dps / (r.price as number)) * 100 }))
-        .sort((a, b) => b.y - a.y);
+      const rows = yRows;
       const comp = (t: string) => {
         const d = doc.dividends.find((x) => x.ticker === t);
         return d ? d.company : t;
@@ -115,7 +122,12 @@ export default function Dividends(): null {
         '<td class="num"><strong>' + r.y.toFixed(2) + '%</strong></td></tr>'
       )).join('') : '<tr><td colspan="4" style="text-align:center;color:var(--muted)">Price data unavailable — yields will appear when the feed loads.</td></tr>';
     }
-    if (yn) yn.textContent = 'Yield = total dividends declared in 2026 ÷ latest close price. Only verified declarations are included; coverage grows as more are confirmed.';
+    if (yn) {
+      const priceDate = lastUpdatedDate('div-prices');
+      yn.textContent = 'Yield = total dividends declared in 2026 ÷ latest close price. Only verified declarations are included; coverage grows as more are confirmed.' +
+        (yRows.length ? ' Prices as of ' + (priceDate || 'the latest feed') + '.' : ' Price data unavailable — yields will appear when the feed loads.');
+    }
+    if (doc) markFeedOk('dividends', fmtDate(doc.updated));
   }, [doc, prices]);
 
   return null;

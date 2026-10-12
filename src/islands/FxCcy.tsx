@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getFx, fmtFx, fmtFxDate } from '../lib/fx.js';
+import { markFeedOk, lastUpdatedLine } from '../lib/feedState.js';
 import type { FxDoc, FxHistoryPoint } from '../lib/types.js';
 
 /* React-owned FX currency section. One mount per currency via
@@ -64,14 +65,27 @@ export default function FxCcy(props: FxCcyProps): null {
     const latest = doc.latest || {};
     const history = doc.history || {};
     const legs = latest[ccy];
+    const usable = !!(legs && (legs.official > 0 || legs.parallel > 0));
+    if (usable) markFeedOk('fx', fmtFxDate(legs!.official_date));
+    /* clear state on failure: never a permanent ₦— */
+    function unavailCard(valId: string, subId: string, label: string) {
+      const v = el(valId), d = el(subId);
+      const last = lastUpdatedLine('fx');
+      if (v) { v.innerHTML = '<span class="val-unavail">Unavailable</span>'; }
+      if (d) d.textContent = label + ' temporarily unavailable' + (last ? ' · ' + last : '.');
+    }
     if (legs) {
       if (legs.official > 0) {
         const o = el('fx' + P + 'Official'); if (o) o.textContent = fmtFx(legs.official);
         const od = el('fx' + P + 'OfficialDate'); if (od) od.textContent = 'NFEM · ' + fmtFxDate(legs.official_date);
+      } else {
+        unavailCard('fx' + P + 'Official', 'fx' + P + 'OfficialDate', 'Official rate');
       }
       if (legs.parallel > 0) {
         const pl = el('fx' + P + 'Parallel'); if (pl) pl.textContent = fmtFx(legs.parallel);
         const pd = el('fx' + P + 'ParallelDate'); if (pd) pd.textContent = 'Street rate · updated ' + fmtFxDate(legs.parallel_updated_at);
+      } else {
+        unavailCard('fx' + P + 'Parallel', 'fx' + P + 'ParallelDate', 'Parallel rate');
       }
       if (legs.official > 0 && legs.parallel > 0) {
         const spread = legs.parallel - legs.official;
@@ -79,17 +93,42 @@ export default function FxCcy(props: FxCcyProps): null {
         if (sp) sp.textContent = '₦' + Math.abs(spread).toLocaleString('en-NG', { maximumFractionDigits: 2 });
         const spct = el('fx' + P + 'SpreadPct');
         if (spct) spct.textContent = Math.abs(spread / legs.official * 100).toFixed(2) + (spread >= 0 ? '% above official' : '% below official');
+      } else {
+        const sp = el('fx' + P + 'Spread');
+        if (sp) sp.innerHTML = '<span class="val-unavail">Unavailable</span>';
+        const spct = el('fx' + P + 'SpreadPct');
+        if (spct) spct.textContent = '';
+      }
+    } else {
+      /* no legs at all: whole section is down */
+      unavailCard('fx' + P + 'Official', 'fx' + P + 'OfficialDate', 'Official rate');
+      unavailCard('fx' + P + 'Parallel', 'fx' + P + 'ParallelDate', 'Parallel rate');
+      const sp = el('fx' + P + 'Spread');
+      if (sp) sp.innerHTML = '<span class="val-unavail">Unavailable</span>';
+      const spct = el('fx' + P + 'SpreadPct');
+      if (spct) spct.textContent = '';
+    }
+    const svg = el('fx' + P + 'Chart');
+    if (svg) {
+      if (usable) {
+        const drawn = chartSVG(history[ccy]);
+        svg.innerHTML = drawn.svg;
+        const rg = el('fx' + P + 'ChartRange');
+        if (rg) rg.textContent = drawn.range;
+      } else {
+        const last = lastUpdatedLine('fx');
+        svg.innerHTML = '<text x="500" y="180" text-anchor="middle" class="fx-empty">Rate history temporarily unavailable' + (last ? ' · ' + last : '') + '.</text>';
       }
     }
-    const drawn = chartSVG(history[ccy]);
-    const svg = el('fx' + P + 'Chart');
-    if (svg) svg.innerHTML = drawn.svg;
-    const rg = el('fx' + P + 'ChartRange');
-    if (rg) rg.textContent = drawn.range;
     /* hero date pill: painted once by the first-mounted section */
     const hd = el('fxHeroDate') as HTMLElement | null;
-    if (hd && doc.pulled_at && !hd.dataset.fxPainted) {
-      hd.textContent = 'Updated ' + fmtFxDate(doc.pulled_at);
+    if (hd && !hd.dataset.fxPainted) {
+      if (doc.pulled_at) {
+        hd.textContent = 'Updated ' + fmtFxDate(doc.pulled_at);
+      } else {
+        const last = lastUpdatedLine('fx');
+        hd.textContent = last ? 'Rates unavailable · ' + last : 'Rates unavailable';
+      }
       hd.dataset.fxPainted = '1';
     }
   }, [doc, ccy, P]);

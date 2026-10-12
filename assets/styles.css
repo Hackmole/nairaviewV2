@@ -554,6 +554,11 @@ body.drawer-open { overflow: hidden; }
 /* IPO guide */
 .guide-h2 { font: 700 20px/1.3 "Barlow Semi Condensed", sans-serif; margin: 34px 0 6px; }
     .lab-note { color: var(--muted); font-size: 13px; line-height: 1.6; margin: 0 0 10px; max-width: 70ch; }
+    /* ---- Clear data states: every widget shows a real value or a useful message, never a permanent dash ---- */
+    .feed-unavailable { padding: 26px 18px; text-align: center; color: var(--muted); font-size: 13px; line-height: 1.7; border: 1px dashed var(--line-strong); }
+    .feed-unavailable strong { display: block; color: var(--ink); font: 600 14px/1.5 "Barlow", sans-serif; margin-bottom: 2px; }
+    .val-unavail { color: var(--muted); font-size: 0.55em; letter-spacing: .04em; }
+    .stale-note { color: var(--muted); font-size: 12px; }
     .check-list { list-style: none; margin: 0 0 10px; padding: 0; }
     .check-list li { padding: 8px 0 8px 26px; position: relative; font-size: 14px; line-height: 1.55; border-top: 1px solid var(--line); }
     .check-list li:first-child { border-top: 0; }

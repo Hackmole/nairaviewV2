@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { getJSON, toRow, dirArrow } from '../lib/api.js';
+import { markFeedOk, unavailableHTML, lastUpdatedDate } from '../lib/feedState.js';
 import type { DirectoryRow, PricesResponse } from '../lib/types.js';
 
 /* React-owned watchlist page. Mounts on #watchList (watchlist.html).
@@ -16,6 +17,8 @@ export default function Watchlist(): React.ReactElement {
   const [stocks, setStocks] = useState<DirectoryRow[]>(() =>
     Array.isArray(window.directory) ? window.directory.slice() : []);
   const [watch, setWatch] = useState<string[]>(readWatchlist);
+  const [liveStale, setLiveStale] = useState(false);
+  const [dataFailed, setDataFailed] = useState(false);
 
   /* refresh from the live API; baked snapshot stays on failure */
   useEffect(() => {
@@ -24,6 +27,9 @@ export default function Watchlist(): React.ReactElement {
       .then((doc) => {
         const list = doc && doc.stocks && doc.stocks.stocks;
         if (cancelled || !list || !list.length) return;
+        markFeedOk('prices');
+        setLiveStale(false);
+        setDataFailed(false);
         const bySym: Record<string, DirectoryRow> = {};
         list.map(toRow).forEach((r) => { bySym[r.s] = r; });
         setStocks((prev) => prev.map((e) => {
@@ -31,7 +37,14 @@ export default function Watchlist(): React.ReactElement {
           return liveR ? { ...e, p: liveR.p, m: liveR.m, d: liveR.d, pv: liveR.pv, cv: liveR.cv, vol: false, noSnap: false } : e;
         }));
       })
-      .catch(() => { /* keep baked snapshot */ });
+      .catch(() => {
+        if (cancelled) return;
+        setStocks((prev) => {
+          if (!prev.length) setDataFailed(true);
+          else setLiveStale(true);
+          return prev;
+        });
+      });
     return () => { cancelled = true; };
   }, []);
 
@@ -71,6 +84,10 @@ export default function Watchlist(): React.ReactElement {
     window.location.href = 'stocks/' + s + '.html';
   }
 
+  if (dataFailed) {
+    return <div dangerouslySetInnerHTML={{ __html: unavailableHTML('Watchlist data', 'prices') }} />;
+  }
+
   if (!watch.length) {
     return (
       <div className="empty-note">
@@ -80,8 +97,10 @@ export default function Watchlist(): React.ReactElement {
     );
   }
 
+  const staleDate = lastUpdatedDate('prices');
   return (
     <>
+      {liveStale && <p className="stale-note">Live prices unavailable — showing the last snapshot{staleDate ? ' (' + staleDate + ')' : ''}.</p>}
       {rows.map((r) => {
         const badgeHTML = window.nvBadgeHTML ? window.nvBadgeHTML(r.s) : '';
         return (

@@ -34,6 +34,9 @@ import FxConverter from './islands/FxConverter.js';
 import FxCcy from './islands/FxCcy.js';
 import Compare from './islands/Compare.js';
 import FeeCalculator from './islands/FeeCalculator.js';
+import FixedIncome from './islands/FixedIncome.js';
+import Earnings from './islands/Earnings.js';
+import Economy from './islands/Economy.js';
 
 type IslandComponent = React.ComponentType<Record<string, string | undefined>>;
 
@@ -50,6 +53,9 @@ const ISLANDS: Record<string, IslandComponent> = {
   'fx-ccy': FxCcy as IslandComponent,
   compare: Compare as IslandComponent,
   'fee-calculator': FeeCalculator as IslandComponent,
+  'fixed-income': FixedIncome as IslandComponent,
+  earnings: Earnings as IslandComponent,
+  economy: Economy as IslandComponent,
 };
 
 /* Islands that adopt existing DOM (return null) must not mount on the
@@ -62,6 +68,9 @@ const ADOPT: Record<string, boolean> = {
   'insider-deals': true,
   'fx-converter': true,
   'fx-ccy': true,
+  'fixed-income': true,
+  earnings: true,
+  economy: true,
 };
 
 function mount(): void {

@@ -1,0 +1,97 @@
+import { useEffect, useState } from 'react';
+
+/* Fixed income hub data. Adopt-style island: fetches the curated
+   assets/fixed-income.json (NTB auction results, savings bond offers) and
+   repaints the tables + trend chart. Static HTML stays as the fallback. */
+
+interface FiDoc {
+  as_of: string;
+  ntb_latest: { date: string; rates: Record<string, number>; changes: Record<string, string> };
+  ntb_history_364d: Array<{ date: string; rate: number }>;
+  savings_bonds: { offer: string; subscription: string; min_subscription: number; tenors: Array<{ tenor: string; coupon: number }> };
+  vs_stocks_note: string;
+}
+
+const TENORS = [['91d', '91-day'], ['182d', '182-day'], ['364d', '364-day']] as const;
+
+function fmtDate(iso: string): string {
+  const m = iso.match(/(\d{4})-(\d{2})-(\d{2})/);
+  if (!m) return iso;
+  const M = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  return Number(m[3]) + ' ' + M[Number(m[2]) - 1] + ' ' + m[1];
+}
+function fmtDateShort(iso: string): string {
+  const m = iso.match(/(\d{4})-(\d{2})-(\d{2})/);
+  if (!m) return iso;
+  const M = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  return Number(m[3]) + ' ' + M[Number(m[2]) - 1];
+}
+function esc(s: string): string {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+}
+
+function trendSVG(hist: Array<{ date: string; rate: number }>): string {
+  if (hist.length < 2) return '';
+  const W = 620, H = 240, L = 40, B = 200, T = 20;
+  const rates = hist.map((p) => p.rate);
+  const lo = Math.min(...rates), hi = Math.max(...rates);
+  const span = Math.max(hi - lo, 0.5);
+  const X = (i: number) => 60 + (i * (W - 60 - 30)) / (hist.length - 1);
+  const Y = (r: number) => T + (1 - (r - lo) / span) * (B - T - 10);
+  const pts = hist.map((p, i) => X(i).toFixed(0) + ',' + Y(p.rate).toFixed(0)).join(' ');
+  const dots = hist.map((p, i) =>
+    '<circle cx="' + X(i).toFixed(0) + '" cy="' + Y(p.rate).toFixed(0) + '" r="4" fill="#32D9EB"/>' +
+    '<text x="' + X(i).toFixed(0) + '" y="' + (Y(p.rate) - 12).toFixed(0) + '" fill="var(--ink)" font-size="11" font-family="IBM Plex Mono,monospace">' + p.rate.toFixed(2) + '%</text>' +
+    '<text x="' + (X(i) - 8).toFixed(0) + '" y="220" fill="var(--muted)" font-size="10" font-family="IBM Plex Mono,monospace">' + fmtDateShort(p.date) + '</text>'
+  ).join('');
+  const gridVals = [Math.ceil(lo), Math.ceil(lo + span / 2), Math.ceil(hi)];
+  const grid = gridVals.map((g) =>
+    '<text x="8" y="' + (Y(g) + 4).toFixed(0) + '" fill="var(--muted)" font-size="11" font-family="IBM Plex Mono,monospace">' + g + '%</text>'
+  ).join('');
+  return '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="364-day NTB stop rate trend" style="width:100%;height:auto;display:block">' +
+    '<line x1="' + L + '" y1="' + T + '" x2="' + L + '" y2="' + B + '" stroke="var(--line)" stroke-width="1"/>' +
+    '<line x1="' + L + '" y1="' + B + '" x2="' + W + '" y2="' + B + '" stroke="var(--line)" stroke-width="1"/>' +
+    grid + '<polyline points="' + pts + '" fill="none" stroke="#32D9EB" stroke-width="3"/>' + dots + '</svg>';
+}
+
+export default function FixedIncome(): null {
+  const [doc, setDoc] = useState<FiDoc | null>(null);
+
+  useEffect(() => {
+    let alive = true;
+    fetch('assets/fixed-income.json?v=20261011a')
+      .then((r) => { if (!r.ok) throw new Error('bad status'); return r.json() as Promise<FiDoc>; })
+      .then((d) => { if (alive) setDoc(d); })
+      .catch(() => { /* static fallback stays */ });
+    return () => { alive = false; };
+  }, []);
+
+  useEffect(() => {
+    if (!doc) return;
+    const set = (id: string, html: string) => { const el = document.getElementById(id); if (el) el.innerHTML = html; };
+    const setText = (id: string, t: string) => { const el = document.getElementById(id); if (el) el.textContent = t; };
+
+    setText('fiLatestH', 'Latest NTB auction \u2014 ' + fmtDate(doc.ntb_latest.date));
+    set('fiLatestBody', TENORS.map(([k, label]) =>
+      '<tr><td>' + label + '</td><td>' + doc.ntb_latest.rates[k].toFixed(2) + '%</td><td>' + esc(doc.ntb_latest.changes[k]) + '</td></tr>'
+    ).join(''));
+
+    const hist = doc.ntb_history_364d.slice().sort((a, b) => a.date.localeCompare(b.date));
+    set('fiTrendChart', '<div class="chart-wrap">' + trendSVG(hist) + '</div>');
+    if (hist.length >= 2) {
+      const first = hist[0], last = hist[hist.length - 1];
+      setText('fiTrendNote', 'From ' + last.rate.toFixed(2) + '% on ' + fmtDate(last.date) + ' vs ' + first.rate.toFixed(2) + '% on ' + fmtDate(first.date) + ' — the direction of the risk-free rate.');
+    }
+
+    setText('fiBondH', 'FGN Savings Bond \u2014 ' + esc(doc.savings_bonds.offer) + ' offer');
+    set('fiBondBody', doc.savings_bonds.tenors.map((t) =>
+      '<tr><td>' + esc(t.tenor) + '</td><td>' + t.coupon.toFixed(3) + '%</td><td>' + esc(doc.savings_bonds.offer) + '</td></tr>'
+    ).join(''));
+    setText('fiBondNote', 'Subscriptions ran ' + esc(doc.savings_bonds.subscription) + '. Minimum subscription \u20A6' + doc.savings_bonds.min_subscription.toLocaleString('en-NG') + '.');
+
+    setText('fiVsNote', doc.vs_stocks_note);
+    setText('fiVintage', 'Figures as of ' + fmtDate(doc.as_of) + '. Auction results update after each DMO/CBN primary market auction.');
+  }, [doc]);
+
+  return null;
+}

@@ -1023,7 +1023,7 @@
   var childToParent = {
     'highs-lows': 'stocks', 'watchlist': 'stocks', 'screener': 'stocks',
     'etfs': 'stocks', 'compare': 'stocks',
-    'dividends': 'calendar', 'corporate-actions': 'calendar',
+    'dividends': 'calendar', 'corporate-actions': 'calendar', 'earnings': 'calendar',
     'insider-dealings': 'news', 'ipo-tracker': 'offers'
   };
   var parent = childToParent[seg];

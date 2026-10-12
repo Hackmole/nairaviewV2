@@ -33,6 +33,7 @@ import Portfolio from './islands/Portfolio.js';
 import FxConverter from './islands/FxConverter.js';
 import FxCcy from './islands/FxCcy.js';
 import Compare from './islands/Compare.js';
+import FeeCalculator from './islands/FeeCalculator.js';
 
 type IslandComponent = React.ComponentType<Record<string, string | undefined>>;
 
@@ -48,6 +49,7 @@ const ISLANDS: Record<string, IslandComponent> = {
   'fx-converter': FxConverter as IslandComponent,
   'fx-ccy': FxCcy as IslandComponent,
   compare: Compare as IslandComponent,
+  'fee-calculator': FeeCalculator as IslandComponent,
 };
 
 /* Islands that adopt existing DOM (return null) must not mount on the

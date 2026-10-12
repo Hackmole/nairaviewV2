@@ -273,7 +273,7 @@ ec_body = SECTION.format(content="\n".join([
                 <li><strong>Consumer names</strong> benefit as easing inflation restores purchasing power.</li>
                 <li><strong>The naira</strong> matters too: the street rate sat near &#8358;1,415/$ in early October &mdash; check the <a href="fx">FX converter</a>.</li>
               </ul>''',
-    NOTE.format(t="Figures as of 11 October 2026. Macro data updates on NBS/CBN release days."),
+    NOTE.format(t="Figures as of 11 October 2026."),
 ]))
 
 PAGES = [

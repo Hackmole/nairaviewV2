@@ -120,11 +120,12 @@ export default function FxCcy(props: FxCcyProps): null {
         svg.innerHTML = '<text x="500" y="180" text-anchor="middle" class="fx-empty">Rate history temporarily unavailable' + (last ? ' · ' + last : '') + '.</text>';
       }
     }
-    /* hero date pill: painted once by the first-mounted section */
+    /* hero date pill: painted once by the first-mounted section.
+       Driven by actual usability — the /api/fx payload carries no pulled_at. */
     const hd = el('fxHeroDate') as HTMLElement | null;
     if (hd && !hd.dataset.fxPainted) {
-      if (doc.pulled_at) {
-        hd.textContent = 'Updated ' + fmtFxDate(doc.pulled_at);
+      if (usable) {
+        hd.textContent = 'Updated ' + fmtFxDate(legs!.official_date);
       } else {
         const last = lastUpdatedLine('fx');
         hd.textContent = last ? 'Rates unavailable · ' + last : 'Rates unavailable';

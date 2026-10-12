@@ -46,7 +46,7 @@ export default function Earnings(): null {
     const set = (id: string, html: string) => { const el = document.getElementById(id); if (el) el.innerHTML = html; };
     const setText = (id: string, t: string) => { const el = document.getElementById(id); if (el) el.textContent = t; };
 
-    setText('erSeasonNote', 'The ' + doc.season + ' quarter ended ' + fmtDate(doc.period_ended) + '. Unaudited statements are due on the NGX by ' + fmtDate(doc.deadline) + '. Filings typically cluster in the final two weeks of the window.');
+    setText('erSeasonNote', doc.season + ' ended ' + fmtDate(doc.period_ended) + '. Unaudited statements are due on the NGX by ' + fmtDate(doc.deadline) + ' — filings typically cluster in the final two weeks.');
 
     const rows = doc.delays.map((d) =>
       '<tr><td>' + esc(d.company) + '</td><td>' + esc(d.status) + '</td><td>' + esc(d.detail) + '</td></tr>'

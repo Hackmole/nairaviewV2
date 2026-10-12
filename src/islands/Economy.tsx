@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 interface EcDoc {
   as_of: string;
   mpr: { value: number; change: string };
-  inflation: { value: number; period: string; source: string };
+  inflation: { value: number; period: string; source: string; note?: string };
   gdp: { value: number; period: string };
   mpc_next: string;
 }
@@ -46,7 +46,7 @@ export default function Economy(): null {
       '<div class="stat-card"><div class="stat-label">Next MPC meeting</div><div class="stat-value">' + esc(doc.mpc_next) + '</div><div class="stat-sub">2026 \u2014 rate decision expected</div></div>'
     );
 
-    setText('ecInflNote', 'Headline inflation was ' + doc.inflation.value.toFixed(2) + '% in ' + esc(doc.inflation.period) + ' (' + esc(doc.inflation.source) + ').');
+    setText('ecInflNote', doc.inflation.note || ('Headline inflation was ' + doc.inflation.value.toFixed(2) + '% in ' + esc(doc.inflation.period) + ' (' + esc(doc.inflation.source) + ').'));
     setText('ecVintage', 'Figures as of ' + fmtDate(doc.as_of) + '.');
   }, [doc]);
 

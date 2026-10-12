@@ -212,7 +212,7 @@ fi_body = SECTION.format(content="\n".join([
 # ---------------------------------------------------------------- brokers
 br_body = SECTION.format(content="\n".join([
     h2("What will this trade cost me?", 0),
-    NOTE.format(t="Enter a trade value and your broker&rsquo;s commission. Fees follow the NGX schedule: brokerage 0.75&ndash;1.35% + 7.5% VAT; SEC 0.3% on buys (+VAT); NGX 0.3% and CSCS 0.3% on sells (+VAT); stamp duty 0.075%; &#8358;4 trade alert per transaction."),
+    NOTE.format(t="Enter a trade value and your broker&rsquo;s commission &mdash; fees follow the NGX schedule and the breakdown updates as you type."),
     '''              <div id="feeCalc" data-island="fee-calculator"></div>''',
     h2("Compare stockbrokers"),
     NOTE.format(t="All are NGX dealing members with online trading. Brokerage is negotiable within the 0.75&ndash;1.35% band &mdash; online trades usually price at the lower end. Confirm the exact rate with the broker before funding; it feeds straight into the calculator above."),
@@ -235,7 +235,7 @@ br_body = SECTION.format(content="\n".join([
 # ---------------------------------------------------------------- earnings
 er_body = SECTION.format(content="\n".join([
     h2("Q3 2026 season status", 0),
-    NOTE.format(t="The third quarter ended 30 September 2026. Unaudited Q3 statements are due on the NGX by 30 October 2026. Filings typically cluster in the final two weeks of October."),
+    NOTE.format(t="Q3 ended 30 September 2026. Unaudited statements are due on the NGX by 30 October 2026 — filings typically cluster in the final two weeks."),
     table(["Company", "Status", "Detail"],
           [["FCMB Group", "Delayed", "Q3 now due on or before 29 Dec 2026 &mdash; interim audit of First City Monument Bank is still running. H1 profit before tax was &#8358;157.3bn, up 99% year-on-year."],
            ["All other listed companies", "Due", "Q3 2026 statements expected by 30 Oct 2026."]]),
@@ -266,7 +266,7 @@ ec_body = SECTION.format(content="\n".join([
            ["21&ndash;22 September 2026", "Cut 350 bps to 23.00%"],
            ["23&ndash;24 November 2026", "Upcoming"]]),
     h2("Inflation picture"),
-    NOTE.format(t="Headline inflation eased to 15.39% in August 2026 (NBS). But the CBN&rsquo;s September household survey found 77.2% of households still perceive inflation as high, up from 67.2% in August &mdash; official easing hasn&rsquo;t reached the market yet."),
+    NOTE.format(t="The CBN&rsquo;s September household survey found 77.2% of households still perceive inflation as high, up from 67.2% in August &mdash; official easing hasn&rsquo;t reached the market yet."),
     h2("What it means for stocks"),
     '''              <ul class="check-list">
                 <li><strong>Rate cuts</strong> push T-bill and bond yields down, making dividend and growth stocks relatively more attractive.</li>

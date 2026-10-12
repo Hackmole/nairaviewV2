@@ -299,7 +299,7 @@
     .stk-badge.stk-logo { background: #fff; padding: 3px; }
     .stk-badge.stk-logo.sm { padding: 2px; }
     .stk-badge.stk-logo img { width: 100%; height: 100%; object-fit: contain; display: block; }
-    .site-nav a svg { width: 11px; height: 11px; vertical-align: -2px; margin-right: 5px; }
+    .site-nav a svg { width: 11px; height: 11px; margin-right: 5px; flex: none; }
     .row-main .stk-badge { margin: 0; }
     .modal-symbol { display: flex; align-items: center; gap: 14px; }
     .ticker-item .stk-badge { margin-right: 2px; }
@@ -509,7 +509,7 @@
 .brand img { height: 34px; width: auto; display: block; }
 .site-nav { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; flex: 1; justify-content: center; }
 .site-nav::-webkit-scrollbar { display: none; }
-.site-nav a { font: 600 8px/1 "IBM Plex Mono", monospace; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); text-decoration: none; padding: 12px 10px 10px; white-space: nowrap; border-bottom: 2px solid transparent; }
+.site-nav a { font: 600 8px/1 "IBM Plex Mono", monospace; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); text-decoration: none; padding: 12px 10px 10px; white-space: nowrap; border-bottom: 2px solid transparent; display: inline-flex; align-items: center; }
 .site-nav a:hover { color: var(--ink); }
 .site-nav a.active { color: var(--green-strong); border-bottom-color: var(--green-strong); }
 /* ---- Mobile hamburger drawer (built by site.js from the nav) ---- */

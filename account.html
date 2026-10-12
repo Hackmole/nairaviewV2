@@ -241,7 +241,7 @@
           return;
         }
         var okEl = document.getElementById('authSuccess');
-        okEl.textContent = authMode === 'signup' ? 'Account created — taking you to your portfolio…' : 'Signed in — taking you to your portfolio…';
+        okEl.textContent = authMode === 'signup' ? 'Account created. Taking you to your portfolio…' : 'Signed in. Taking you to your portfolio…';
         okEl.hidden = false;
         setTimeout(function () { window.location.href = 'portfolio'; }, 900);
       } catch (e) {

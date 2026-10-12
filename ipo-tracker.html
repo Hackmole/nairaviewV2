@@ -159,10 +159,10 @@
     fetch('assets/ipo-tracker.json?v=20261012a').then(function(r){return r.json();}).then(function(data){
       var entries = data.entries || [];
       paint(entries, null);
-      /* Dangote pill goes stale after the offer closes — flip it by date */
+      /* Dangote pill goes stale after the offer closes; flip it by date */
       var pill = document.querySelector('#dangoteSpotlight .offer-status');
       if (pill && new Date().toISOString().slice(0,10) > '2026-10-13') {
-        pill.textContent = 'Offer closed — listing expected November 2026';
+        pill.textContent = 'Offer closed. Listing expected November 2026';
         pill.classList.remove('st-open'); pill.classList.add('st-done');
       }
       var syms = entries.filter(function(e){return e.status==='listed' && e.ticker;}).map(function(e){return e.ticker;});

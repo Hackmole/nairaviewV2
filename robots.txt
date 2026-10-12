@@ -1,4 +1,5 @@
+# STAGING — do not index.
+# On V2 production launch, replace this file with robots.production.txt
+# (and verify in Search Console). See v2-pre-launch-audit-checklist.md B7.
 User-agent: *
-Allow: /
-
-Sitemap: https://nairaview.com/sitemap.xml
+Disallow: /

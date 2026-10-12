@@ -11,6 +11,7 @@ import json, os, html, re, urllib.request
 from datetime import datetime
 
 ROOT = os.path.expanduser('~/workspace/nairaviewV2')
+assert os.path.basename(ROOT) == 'nairaviewV2', 'gen_stock_pages.py must run against the V2 repo, not production'
 ASSET_V = '20261004a'
 API = 'https://nairaview-api.meetomidiora.workers.dev'
 SKIP = {'ACCESS', 'FBNH', 'GUARANTY'}  # ticker-alias redirect stubs

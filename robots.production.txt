@@ -1,0 +1,6 @@
+# PRODUCTION robots.txt — deploy as robots.txt on V2 launch day.
+# (Replaces the staging Disallow-all version. Verify in Search Console.)
+User-agent: *
+Allow: /
+
+Sitemap: https://nairaview.com/sitemap.xml

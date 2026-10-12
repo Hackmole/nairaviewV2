@@ -306,7 +306,7 @@ def main():
           {sectors}
         </ul>
         <h2 class="guide-h2">Corporate actions</h2>
-        <p class="guide-p">Dividends, listings, delistings and offers due in the coming sessions are tracked on our <a href="calendar">market calendar</a> &mdash; check qualification dates before acting.</p>
+        <p class="guide-p">Dividends, listings, delistings and offers due in the coming sessions are tracked on our <a href="calendar">market calendar</a>. Check qualification dates before acting.</p>
         <h2 class="guide-h2">Quick summary</h2>
         <ul class="guide-list">
           {quick}

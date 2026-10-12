@@ -27,7 +27,7 @@ interface DivDoc {
 }
 
 function fmtDate(iso: string | null): string {
-  if (!iso) return '—';
+  if (!iso) return '·';
   const m = iso.match(/(\d{4})-(\d{2})-(\d{2})/);
   if (!m) return iso;
   const M = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -120,12 +120,12 @@ export default function Dividends(): null {
         '<tr><td style="text-align:left;white-space:nowrap">' + badge(r.t) + ' <strong>' + r.t + '</strong><br><span style="color:var(--muted);font-size:12px">' + comp(r.t) + '</span></td>' +
         '<td class="num">' + money(r.dps) + '</td><td class="num">' + money(r.price as number) + '</td>' +
         '<td class="num"><strong>' + r.y.toFixed(2) + '%</strong></td></tr>'
-      )).join('') : '<tr><td colspan="4" style="text-align:center;color:var(--muted)">Price data unavailable — yields will appear when the feed loads.</td></tr>';
+      )).join('') : '<tr><td colspan="4" style="text-align:center;color:var(--muted)">Price data unavailable. Yields will appear when the feed loads.</td></tr>';
     }
     if (yn) {
       const priceDate = lastUpdatedDate('div-prices');
       yn.textContent = 'Yield = total dividends declared in 2026 ÷ latest close price. Only verified declarations are included; coverage grows as more are confirmed.' +
-        (yRows.length ? ' Prices as of ' + (priceDate || 'the latest feed') + '.' : ' Price data unavailable — yields will appear when the feed loads.');
+        (yRows.length ? ' Prices as of ' + (priceDate || 'the latest feed') + '.' : ' Price data unavailable. Yields will appear when the feed loads.');
     }
     if (doc) markFeedOk('dividends', fmtDate(doc.updated));
   }, [doc, prices]);

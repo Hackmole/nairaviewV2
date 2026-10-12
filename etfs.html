@@ -8,22 +8,22 @@
   <meta name="theme-color" content="#022126" />
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="Nairaview" />
-<meta property="og:title" content="NGX ETFs — All 12 Exchange-Traded Funds on the Nigerian Exchange | Nairaview" />
-<meta property="og:description" content="Every ETF listed on the NGX: index trackers, the gold ETF, the bond ETF and Shariah-compliant options — with hand-verified prices." />
+<meta property="og:title" content="NGX ETFs · All 12 Exchange-Traded Funds on the Nigerian Exchange | Nairaview" />
+<meta property="og:description" content="Every ETF listed on the NGX: index trackers, the gold ETF, the bond ETF and Shariah-compliant options, with hand-verified prices." />
 <meta property="og:url" content="https://nairaview.com/etfs" />
 <meta property="og:image" content="https://nairaview.com/assets/og-default.png" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="NGX ETFs — All 12 Exchange-Traded Funds | Nairaview" />
+<meta name="twitter:title" content="NGX ETFs · All 12 Exchange-Traded Funds | Nairaview" />
 <meta name="twitter:description" content="Every ETF listed on the NGX: index trackers, the gold ETF, the bond ETF and Shariah-compliant options." />
 <meta name="twitter:image" content="https://nairaview.com/assets/og-default.png" />
 <link rel="canonical" href="https://nairaview.com/etfs" />
-  <meta name="description" content="Every ETF listed on the NGX: index trackers, the gold ETF, the bond ETF and Shariah-compliant options — with hand-verified prices." />
+  <meta name="description" content="Every ETF listed on the NGX: index trackers, the gold ETF, the bond ETF and Shariah-compliant options, with hand-verified prices." />
   <link rel="icon" href="assets/logo-icon.svg" type="image/svg+xml">
   <link rel="icon" href="assets/favicon-32.png" sizes="32x32" type="image/png">
   <link rel="icon" href="assets/favicon-48.png" sizes="48x48" type="image/png">
   <link rel="icon" href="assets/favicon-96.png" sizes="96x96" type="image/png">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-  <title>NGX ETFs — All 12 Exchange-Traded Funds | Nairaview</title>
+  <title>NGX ETFs · All 12 Exchange-Traded Funds | Nairaview</title>
   <link rel="stylesheet" href="assets/styles.css?v=20261011f" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -59,7 +59,7 @@
         <div>
           <div class="eyebrow">Pooled investing</div>
           <h1>NGX ETFs.</h1>
-          <p class="lede">All 12 exchange-traded funds on the Nigerian Exchange &mdash; index trackers, gold, bonds and Shariah-compliant options.</p>
+          <p class="lede">All 12 exchange-traded funds on the Nigerian Exchange: index trackers, gold, bonds and Shariah-compliant options.</p>
         </div>
         <div><span class="status-pill"><span class="dot"></span>12 funds</span></div>
       </div>
@@ -77,9 +77,9 @@
 
       <section class="section">
         <h2 class="guide-h2">A note on ETF prices</h2>
-        <p class="guide-p">NGX ETFs can trade far above or below the value of what they hold. In early 2025, index-tracking ETFs soared to triple-digit premiums as retail demand overwhelmed supply &mdash; then fell by half in weeks when prices snapped back toward net asset value. Always check the premium or discount before buying; the fund's published NAV is the anchor, not the last traded price.</p>
+        <p class="guide-p">NGX ETFs can trade far above or below the value of what they hold. In early 2025, index-tracking ETFs soared to triple-digit premiums as retail demand overwhelmed supply, then fell by half in weeks when prices snapped back toward net asset value. Always check the premium or discount before buying; the fund's published NAV is the anchor, not the last traded price.</p>
         <h2 class="guide-h2">Frequently asked questions</h2>
-        <details class="faq-item"><summary class="faq-q">What is an ETF?</summary><div class="faq-a"><p class="guide-p">An exchange-traded fund is a basket of assets &mdash; stocks, bonds or gold &mdash; that trades on the stock exchange like a single share. You buy it through any stockbroker, exactly like a stock.</p></div></details>
+        <details class="faq-item"><summary class="faq-q">What is an ETF?</summary><div class="faq-a"><p class="guide-p">An exchange-traded fund is a basket of assets (stocks, bonds or gold) that trades on the stock exchange like a single share. You buy it through any stockbroker, exactly like a stock.</p></div></details>
         <details class="faq-item"><summary class="faq-q">How do I buy an ETF in Nigeria?</summary><div class="faq-a"><p class="guide-p">Open an account with an NGX-licensed stockbroker, fund it, and place a buy order using the ETF's symbol (for example STANBICETF30). Settlement and fees work like ordinary shares.</p></div></details>
         <details class="faq-item"><summary class="faq-q">Do NGX ETFs pay dividends?</summary><div class="faq-a"><p class="guide-p">Some distribute income from their holdings; others reinvest it. Check each fund's page and the manager's distribution notices.</p></div></details>
       </section>
@@ -126,11 +126,11 @@
       </div>
     </div>
   </footer>
-  <script src="assets/data.js?v=20261009adark39"></script>
+  <script src="assets/data.js?v=20261012c"></script>
   <script>
   (function(){
     function fmtP(n){ return '&#8358;' + Number(n).toLocaleString('en-NG',{minimumFractionDigits:2,maximumFractionDigits:2}); }
-    fetch('assets/etfs.json?v=20261011c').then(function(r){return r.json();}).then(function(data){
+    fetch('assets/etfs.json?v=20261012b').then(function(r){return r.json();}).then(function(data){
       var html = (data.etfs||[]).map(function(e){
         return '<tr><td><a href="etfs/'+e.symbol+'.html"><strong>'+e.name+'</strong></a></td>'
           + '<td class="mono">'+e.symbol+'</td><td>'+e.underlying+'</td><td>'+fmtP(e.close)+'</td></tr>';
@@ -141,8 +141,8 @@
     });
   })();
   </script>
-  <script src="assets/site.js?v=20261011e"></script>
-  <script src="assets/live.js?v=20261009adark39"></script>
+  <script src="assets/site.js?v=20261012c"></script>
+  <script src="assets/live.js?v=20261012c"></script>
   <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a9f4136dd40547a7b1acca41e62cc7a5"}'></script><!-- End Cloudflare Web Analytics -->
 </body>
 </html>

@@ -275,7 +275,7 @@ export default function Screener(): React.ReactElement {
   const staleDate = lastUpdatedDate('prices');
   return (
     <>
-      {liveStale && <p className="stale-note">Live prices unavailable — showing the last snapshot{staleDate ? ' (' + staleDate + ')' : ''}.</p>}
+      {liveStale && <p className="stale-note">Live prices unavailable. Showing the last snapshot{staleDate ? ' (' + staleDate + ')' : ''}.</p>}
       {rows.map((r) => {
         const starred = watch.indexOf(r.s) !== -1;
         const badgeHTML = window.nvBadgeHTML ? window.nvBadgeHTML(r.s) : '';
@@ -289,7 +289,7 @@ export default function Screener(): React.ReactElement {
             >{starred ? '★' : '☆'}</button>
             <button
               type="button" className="row-main"
-              aria-label={r.s + ', ' + r.c + ' — view details'}
+              aria-label={r.s + ', ' + r.c + ', view details'}
               onClick={(ev) => openStock(r.s, ev)}
             >
               <span dangerouslySetInnerHTML={{ __html: badgeHTML }} />
@@ -298,7 +298,7 @@ export default function Screener(): React.ReactElement {
                 <span className="company">{r.c}</span>
               </span>
             </button>
-            <div className="price">{r.p || '—'}</div>
+            <div className="price">{r.p || '·'}</div>
             <div className={'move ' + (r.d || '')}>
               {r.vol ? (r.m || '') + ' shares' : dirArrow(r.cv) + (r.m || '')}
             </div>

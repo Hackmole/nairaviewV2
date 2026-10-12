@@ -6,7 +6,7 @@ import type { FxDoc, FxHistoryPoint } from '../lib/types.js';
 /* React-owned FX currency section. One mount per currency via
    data-island="fx-ccy" data-ccy="USD|EUR|GBP". Paints the official/parallel/
    spread cards and draws the history SVG into the existing elements —
-   static "₦—" placeholders stay if the feed fails. Renders nothing itself. */
+   static "₦·" placeholders stay if the feed fails. Renders nothing itself. */
 
 function el(id: string): HTMLElement | null { return document.getElementById(id); }
 function cap(s: string): string { return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase(); }
@@ -15,7 +15,7 @@ function chartSVG(history: FxHistoryPoint[] | undefined): { svg: string; range: 
   const pts = (history || []).filter((p) => (p.official > 0) || (p.parallel > 0));
   if (pts.length < 2) {
     return {
-      svg: '<text x="500" y="180" text-anchor="middle" class="fx-empty">History is accumulating — the trend line appears after a few daily pulls.</text>',
+      svg: '<text x="500" y="180" text-anchor="middle" class="fx-empty">History is accumulating. The trend line appears after a few daily pulls.</text>',
       range: '',
     };
   }
@@ -67,7 +67,7 @@ export default function FxCcy(props: FxCcyProps): null {
     const legs = latest[ccy];
     const usable = !!(legs && (legs.official > 0 || legs.parallel > 0));
     if (usable) markFeedOk('fx', fmtFxDate(legs!.official_date));
-    /* clear state on failure: never a permanent ₦— */
+    /* clear state on failure: never a permanent ₦· */
     function unavailCard(valId: string, subId: string, label: string) {
       const v = el(valId), d = el(subId);
       const last = lastUpdatedLine('fx');

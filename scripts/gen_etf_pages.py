@@ -16,14 +16,14 @@ def fmt_p(n):
     try:
         return '₦' + format(float(n), ',.2f')
     except (TypeError, ValueError):
-        return '—'
+        return '·'
 
 def fmt_pct(n):
     try:
         v = float(n)
         return ('+' if v >= 0 else '−') + format(abs(v), '.2f') + '%'
     except (TypeError, ValueError):
-        return '—'
+        return '·'
 
 NAV = '''          <a href="../">Home</a>
           <div class="nav-item"><a href="../stocks" class="active">Stocks</a><div class="nav-dropdown" role="menu"><a href="../stocks">All listed stocks</a><a href="../screener">Stock screener</a><a href="../compare">Compare stocks</a><a href="../highs-lows">Highs &amp; lows</a><a href="../etfs">ETFs</a><a href="../watchlist">My watchlist</a></div></div>
@@ -116,7 +116,7 @@ TEMPLATE = '''<!doctype html>
         <div class="section-heading">
           <p class="kicker">ETF &middot; @@MANAGER@@</p>
           <div class="quote-top">
-            <div class="quote-id"><div><h1>@@SYM@@ &mdash; @@NAME@@</h1></div></div>
+            <div class="quote-id"><div><h1>@@SYM@@ &middot; @@NAME@@</h1></div></div>
             <div><span class="status-pill"><span class="dot"></span>Hand-verified</span></div>
           </div>
           <div class="quote-price">@@PRICE@@</div>
@@ -135,13 +135,13 @@ TEMPLATE = '''<!doctype html>
       <div class="section" style="padding-top:34px">
         <h2 class="guide-h2">About this fund</h2>
         <p class="guide-p">@@DESC@@</p>
-        <p class="guide-p">ETF prices on the NGX can trade at wide premiums or discounts to the value of what the fund holds. Check the fund manager's published net asset value before buying &mdash; the last traded price is not the whole story.</p>
+        <p class="guide-p">ETF prices on the NGX can trade at wide premiums or discounts to the value of what the fund holds. Check the fund manager's published net asset value before buying. The last traded price is not the whole story.</p>
         <h2 class="guide-h2">How to buy @@SYM@@</h2>
         <p class="guide-p">Open an account with an NGX-licensed stockbroker and place a buy order for <strong>@@SYM@@</strong>, exactly like an ordinary share. First time buying? <a href="../learn-buy-first-stock">This walkthrough</a> covers each step.</p>
         <h2 class="guide-h2">Frequently asked questions</h2>
         <details class="faq-item"><summary class="faq-q">What does @@SYM@@ track?</summary><div class="faq-a"><p class="guide-p">@@NAME@@ (@@SYM@@) tracks @@UNDERLYING@@. It is managed by @@MANAGER@@.</p></div></details>
-        <details class="faq-item"><summary class="faq-q">What is the current @@SYM@@ price?</summary><div class="faq-a"><p class="guide-p">The last hand-verified close was <strong>@@PRICE@@</strong> on @@CLOSE_DATE@@ (NGX Daily Official List). Prices move every trading day &mdash; confirm the live quote with your broker before trading.</p></div></details>
-        <details class="faq-item"><summary class="faq-q">Is @@SYM@@ a good investment?</summary><div class="faq-a"><p class="guide-p">Nairaview provides market data, not investment advice. Consider the fund's tracking, costs, and your goals &mdash; and speak to a licensed adviser before deciding.</p></div></details>
+        <details class="faq-item"><summary class="faq-q">What is the current @@SYM@@ price?</summary><div class="faq-a"><p class="guide-p">The last hand-verified close was <strong>@@PRICE@@</strong> on @@CLOSE_DATE@@ (NGX Daily Official List). Prices move every trading day. Confirm the live quote with your broker before trading.</p></div></details>
+        <details class="faq-item"><summary class="faq-q">Is @@SYM@@ a good investment?</summary><div class="faq-a"><p class="guide-p">Nairaview provides market data, not investment advice. Consider the fund's tracking, costs, and your goals, and speak to a licensed adviser before deciding.</p></div></details>
         <h2 class="guide-h2">Other NGX ETFs</h2>
         <ul class="guide-list">
 @@PEERS@@
@@ -187,7 +187,7 @@ for e in etfs:
         'mainEntity': [{'question': {'@type': 'Question', 'name': q},
                         'acceptedAnswer': {'@type': 'Answer', 'text': a}} for q, a in faq],
     }, ensure_ascii=False, indent=2)
-    og_title = '%s — %s ETF | Nairaview' % (sym, e['name'])
+    og_title = '%s · %s ETF | Nairaview' % (sym, e['name'])
     og_desc = '%s (%s) tracks %s. Last verified close %s (%s).' % (sym, e['name'], e['underlying'], fmt_p(e['close']), e['close_date'])
     vals = {
         'SYM': esc(sym), 'V': ASSET_V, 'NAV': NAV, 'FOOTER': FOOTER,
@@ -195,7 +195,7 @@ for e in etfs:
         'DESC': esc(e['desc']), 'PRICE': fmt_p(e['close']), 'CLOSE_DATE': esc(e['close_date']),
         'HI52': fmt_p(e.get('hi52')), 'LO52': fmt_p(e.get('lo52')),
         'YTD': fmt_pct(ytd), 'YTD_CLASS': 'up' if (ytd or 0) > 0 else ('down' if (ytd or 0) < 0 else ''),
-        'NINE_MO': fmt_pct(nine) if nine is not None else '—',
+        'NINE_MO': fmt_pct(nine) if nine is not None else '·',
         'NINE_CLASS': 'up' if (nine or 0) > 0 else ('down' if (nine or 0) < 0 else ''),
         'PEERS': peer_lis(sym),
         'OG_TITLE': esc(og_title), 'OG_DESC': esc(og_desc),

@@ -113,7 +113,7 @@ def spaced(s):
 
 def fmt_price(p):
     if p is None:
-        return "—"
+        return "·"
     if abs(p) >= 100:
         return "₦" + f"{p:,.0f}"
     return "₦" + f"{p:,.2f}"
@@ -121,7 +121,7 @@ def fmt_price(p):
 
 def fmt_pct(v):
     if v is None:
-        return "—"
+        return "·"
     return ("+" if v >= 0 else "") + f"{v:.2f}%"
 
 
@@ -195,7 +195,7 @@ def render_square(ov, tickers, stamp):
 
     label(ax, 0.5, 0.845, "ALL-SHARE INDEX", 19, weight="bold")
     asi = ov.get("asi")
-    ax.text(0.5, 0.762, f"{asi:,.2f}" if asi is not None else "—",
+    ax.text(0.5, 0.762, f"{asi:,.2f}" if asi is not None else "·",
             ha="center", va="center", fontsize=96, fontweight="bold",
             color=WHITE, transform=ax.transAxes, zorder=4)
     pc = ov.get("pct_change")
@@ -211,7 +211,7 @@ def render_square(ov, tickers, stamp):
     for x, val, name, color in ((0.24, ov.get("advancers"), "ADVANCERS", UP),
                                (0.50, ov.get("unchanged"), "UNCHANGED", MUTED),
                                (0.76, ov.get("decliners"), "DECLINERS", DOWN)):
-        ax.text(x, 0.565, str(val if val is not None else "—"), ha="center",
+        ax.text(x, 0.565, str(val if val is not None else "·"), ha="center",
                 va="center", fontsize=54, fontweight="bold", color=color,
                 transform=ax.transAxes, zorder=4)
         label(ax, x, 0.515, name, 17, weight="bold")
@@ -258,7 +258,7 @@ def render_wide(ov, tickers, stamp):
 
     label(ax, 0.045, 0.745, "ALL-SHARE INDEX", 17, ha="left", weight="bold")
     asi = ov.get("asi")
-    ax.text(0.045, 0.60, f"{asi:,.2f}" if asi is not None else "—",
+    ax.text(0.045, 0.60, f"{asi:,.2f}" if asi is not None else "·",
             ha="left", va="center", fontsize=52, fontweight="bold",
             color=WHITE, transform=ax.transAxes, zorder=4)
     pc = ov.get("pct_change")
@@ -273,7 +273,7 @@ def render_wide(ov, tickers, stamp):
     for x, val, name, color in ((0.05, ov.get("advancers"), "ADVANCERS", UP),
                                (0.18, ov.get("unchanged"), "UNCHANGED", MUTED),
                                (0.31, ov.get("decliners"), "DECLINERS", DOWN)):
-        ax.text(x, 0.30, str(val if val is not None else "—"), ha="left",
+        ax.text(x, 0.30, str(val if val is not None else "·"), ha="left",
                 va="center", fontsize=40, fontweight="bold", color=color,
                 transform=ax.transAxes, zorder=4)
         label(ax, x, 0.225, name, 14, ha="left", weight="bold")

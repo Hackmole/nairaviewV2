@@ -93,7 +93,7 @@
         function paint() {
           var st = state();
           btn.textContent = icons[st];
-          btn.setAttribute('aria-label', labels[st] + ' — activate to change');
+          btn.setAttribute('aria-label', labels[st] + ', activate to change');
           btn.title = labels[st];
         }
         btn.addEventListener('click', function () {
@@ -315,7 +315,7 @@
         var chgPct = pcts[pcts.length - 1];
         chartChange.textContent = fmtPct(chgPct) + ' since ' + plabel(points[0]);
         chartChange.className = 'chart-change ' + (chgPct < 0 ? 'down' : 'up');
-        periodLabel.textContent = plabel(points[0]) + ' — ' + plabel(points[points.length-1]);
+        periodLabel.textContent = plabel(points[0]) + ' · ' + plabel(points[points.length-1]);
       }
       document.querySelectorAll('.range-button').forEach(function (button) {
         button.addEventListener('click', function () {
@@ -362,7 +362,7 @@
           star.textContent = starred ? '★' : '☆';
           star.addEventListener('click', function (ev) { ev.stopPropagation(); toggleStar(r.s); });
           var main = document.createElement('button'); main.type = 'button'; main.className = 'row-main';
-          main.setAttribute('aria-label', r.s + ', ' + r.c + ' — view details');
+          main.setAttribute('aria-label', r.s + ', ' + r.c + ', view details');
           var symbol = document.createElement('span'); symbol.className = 'symbol'; symbol.textContent = r.s;
           var tag = document.createElement('span'); tag.className = 'list-tag'; tag.textContent = r.g;
           var sep1 = document.createElement('span'); sep1.className = 'sym-sep'; sep1.textContent = ' \u00b7 ';
@@ -516,7 +516,7 @@
       var modalStar = document.getElementById('modalStar');
       var currentModal = null, lastFocused = null;
       function paintModalStar(s) {
-        modalStar.textContent = isStarred(s) ? '★ Starred — tap to remove from watchlist' : '☆ Add to watchlist';
+        modalStar.textContent = isStarred(s) ? '★ Starred: tap to remove from watchlist' : '☆ Add to watchlist';
       }
       window.nvOpenModal = openModal;
       function openModal(s, opener) {
@@ -781,7 +781,7 @@
           star.textContent = starred ? '★' : '☆';
           star.addEventListener('click', function (ev) { ev.stopPropagation(); toggleStar(r.s); renderScreener(); });
           var main = document.createElement('button'); main.type = 'button'; main.className = 'row-main';
-          main.setAttribute('aria-label', r.s + ', ' + r.c + ' — view details');
+          main.setAttribute('aria-label', r.s + ', ' + r.c + ', view details');
           var symbol = document.createElement('span'); symbol.className = 'symbol'; symbol.textContent = r.s;
           var tag = document.createElement('span'); tag.className = 'list-tag'; tag.textContent = r.g;
           var sep1 = document.createElement('span'); sep1.className = 'sym-sep'; sep1.textContent = ' \u00b7 ';

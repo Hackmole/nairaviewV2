@@ -33,14 +33,14 @@ function baked(): SnapshotRow[] {
 }
 
 function fmtMcap(n: number | undefined): string {
-  if (n == null || !(n > 0)) return '—';
+  if (n == null || !(n > 0)) return '·';
   if (n >= 1e12) return '₦' + (n / 1e12).toFixed(2) + 'tn';
   if (n >= 1e9) return '₦' + (n / 1e9).toFixed(1) + 'bn';
   return '₦' + (n / 1e6).toFixed(1) + 'm';
 }
 
 function fmtVol(n: number | undefined): string {
-  if (n == null || !(n > 0)) return '—';
+  if (n == null || !(n > 0)) return '·';
   if (n >= 1e9) return (n / 1e9).toFixed(2) + 'bn';
   if (n >= 1e6) return (n / 1e6).toFixed(2) + 'm';
   if (n >= 1e3) return (n / 1e3).toFixed(1) + 'k';
@@ -145,7 +145,7 @@ export default function Compare(): React.JSX.Element {
             {matches.map((m) => (
               <li key={m.symbol}>
                 <button type="button" onClick={() => add(m.symbol)}>
-                  <strong>{esc(m.symbol)}</strong> — {esc(m.name)}
+                  <strong>{esc(m.symbol)}</strong> · {esc(m.name)}
                 </button>
               </li>
             ))}
@@ -192,7 +192,7 @@ export default function Compare(): React.JSX.Element {
               )}
               {metric('Volume', (s) => fmtVol(s.volume))}
               {metric('Market cap', (s) => fmtMcap(s.market_cap))}
-              {metric('Sector', (s) => esc(s.sector || '—'))}
+              {metric('Sector', (s) => esc(s.sector || '·'))}
             </tbody>
           </table>
         </div>

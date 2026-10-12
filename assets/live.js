@@ -27,9 +27,9 @@
   function fmt2(n) {
     return Number(n).toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
-  /* Nullable OHLC: corrupt/missing fields arrive as null — show "—", never ₦0.00. */
+  /* Nullable OHLC: corrupt/missing fields arrive as null; show "·", never ₦0.00. */
   function fmtN(n) {
-    return (n === null || n === undefined || n === '') ? '—' : '₦' + fmt2(n);
+    return (n === null || n === undefined || n === '') ? '·' : '₦' + fmt2(n);
   }
   function fmtInt(n) { return Math.round(Number(n)).toLocaleString('en-NG'); }
   function compact(n) {
@@ -306,7 +306,7 @@
     if (!data || data.length < 2) {
       if (head) head.style.display = 'none';
       if (pills) pills.style.display = 'none';
-      wrap.innerHTML = '<p class="guide-p" style="padding:26px 4px">Price history is still accumulating for this stock — check back after the next trading sessions.</p>';
+      wrap.innerHTML = '<p class="guide-p" style="padding:26px 4px">Price history is still accumulating for this stock. Check back after the next trading sessions.</p>';
       if (note) note.style.display = 'none';
       return;
     }
@@ -584,7 +584,7 @@
     try { initStockChart(); } catch (e) {}
   }
 
-  /* Homepage FX tiles (USD/EUR/GBP). Guarded: "—" stays if the feed fails. */
+  /* Homepage FX tiles (USD/EUR/GBP). Guarded: "·" stays if the feed fails. */
   function paintFxStrip(doc) {
     var latest = doc && doc.latest;
     if (!latest) return;

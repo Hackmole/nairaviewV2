@@ -88,8 +88,8 @@ def fmt2(p):
     return format(fnum(p), ',.2f')
 
 def fmt_ohlc(p):
-    """Nullable OHLC: corrupt/missing fields arrive as None — show "—", never ₦0.00."""
-    return '—' if p is None else '₦' + format(float(p), ',.2f')
+    """Nullable OHLC: corrupt/missing fields arrive as None; show "·", never ₦0.00."""
+    return '·' if p is None else '₦' + format(float(p), ',.2f')
 
 def fmt_date_iso(iso):
     m = re.match(r'^(\d{4})-(\d{2})-(\d{2})', str(iso or ''))
@@ -106,12 +106,12 @@ def fmt_int(n):
     try:
         return format(int(float(n)), ',d')
     except (TypeError, ValueError):
-        return '—'
+        return '·'
 
 def fmt_mcap(n):
     n = fnum(n)
     if n <= 0:
-        return '—'
+        return '·'
     if n >= 1e12:
         return '₦' + format(n / 1e12, '.2f') + ' trillion'
     if n >= 1e9:
@@ -123,7 +123,7 @@ def fmt_mcap(n):
 def fmt_vol(n):
     n = fnum(n)
     if n <= 0:
-        return '—'
+        return '·'
     if n >= 1e9:
         return format(n / 1e9, '.2f') + 'bn'
     if n >= 1e6:
@@ -153,7 +153,7 @@ def footer():
         <div class="footer-grid">
           <div class="footer-brand">
             <a class="brand" href="../" aria-label="Nairaview home"><img src="../assets/logo-dark.svg" alt="Nairaview" height="34"></a>
-            <p>The Nigerian Exchange, decoded daily. Prices, movers, offers and plain-language guides &mdash; built for first-time investors.</p>
+            <p>The Nigerian Exchange, decoded daily. Prices, movers, offers and plain-language guides, built for first-time investors.</p>
           </div>
           <div class="footer-col">
             <h4>Markets</h4>
@@ -269,7 +269,7 @@ TEMPLATE = '''<!doctype html>
         <details class="faq-item"><summary class="faq-q">What is the current @@SYM@@ share price?</summary><div class="faq-a"><p class="guide-p">@@NAME@@ (@@SYM@@) last closed at <strong>@@PRICE@@</strong> (@@DAY_CHG@@ on the day) on @@TRADE_DATE@@. Prices update here after each NGX trading session.</p></div></details>
         <details class="faq-item"><summary class="faq-q">What sector is @@SYM@@ in?</summary><div class="faq-a"><p class="guide-p">@@SYM@@ is listed on the NGX @@BOARD@@ under the @@SECTOR@@ sector.</p></div></details>
         <details class="faq-item"><summary class="faq-q">Where can I see @@SYM@@&rsquo;s recent price trend?</summary><div class="faq-a"><p class="guide-p">@@TREND_ANSWER@@</p></div></details>
-        <details class="faq-item"><summary class="faq-q">Is @@SYM@@ a good investment?</summary><div class="faq-a"><p class="guide-p">Nairaview provides market data, not investment advice. Consider the company&rsquo;s financials, your goals and risk tolerance &mdash; and speak to a licensed adviser before deciding.</p></div></details>
+        <details class="faq-item"><summary class="faq-q">Is @@SYM@@ a good investment?</summary><div class="faq-a"><p class="guide-p">Nairaview provides market data, not investment advice. Consider the company&rsquo;s financials, your goals and risk tolerance, and speak to a licensed adviser before deciding.</p></div></details>
         <h2 class="guide-h2">Related stocks</h2>
         <ul class="guide-list">
 @@PEERS@@
@@ -322,7 +322,7 @@ for s in stocks:
     try:
         h = get_json('/api/history?symbol=' + sym, timeout=15)
         def _nn(x):
-            # nullable OHLC: keep None as None so the page can show "—"
+            # nullable OHLC: keep None as None so the page can show "·"
             try:
                 v = float(x)
             except (TypeError, ValueError):
@@ -392,12 +392,12 @@ for s in stocks:
                       '<div style="overflow-x:auto"><table class="hist-table"><thead><tr>'
                       '<th>Date</th><th>Open</th><th>High</th><th>Low</th><th>Close</th><th>Change</th><th>Volume</th>'
                       '</tr></thead><tbody id="histBody">' + ''.join(rows) + '</tbody></table></div></div>')
-        trend_answer = ('The interactive chart above covers all %d tracked sessions for %s — hover any point for the day&rsquo;s open, high, low and volume. Use the '
+        trend_answer = ('The interactive chart above covers all %d tracked sessions for %s. Hover any point for the day&rsquo;s open, high, low and volume. Use the '
                         '<a href="../screener">stock screener</a> to compare %s against '
                         'its sector peers.' % (n_hist, sym, sym))
     else:
         nochart.append(sym)
-        d_open = d_high = d_low = d_prev = d_avgv = d_hit = d_lot = d_valtraded = '—'
+        d_open = d_high = d_low = d_prev = d_avgv = d_hit = d_lot = d_valtraded = '·'
         d_vol = volume
         d_wchg, d_wcls = w_chg, ('up' if w > 0 else ('down' if w < 0 else ''))
         n_hist, chart_ret, chart_rcls = 0, '', ''
@@ -448,7 +448,7 @@ for s in stocks:
         '          <li><a href="%s" target="_blank" rel="noopener noreferrer">%s</a></li>' % (h, t)
         for h, t in CURATED.get(sym, []))
 
-    og_title = '%s — %s | Nairaview' % (sym, name)
+    og_title = '%s · %s | Nairaview' % (sym, name)
     og_desc = ('%s (%s) share price %s (%s) at the %s close. 7-day change %s, market cap %s. '
                'Daily-close NGX data on Nairaview.' % (sym, name, fmt_price(price), day_chg, trade_date, w_chg, mcap))
     title = '%s Share Price Today (%s) | Nairaview' % (sym, name)

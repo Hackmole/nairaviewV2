@@ -20,9 +20,9 @@ export function fmtFx(n: number | null | undefined): string {
 }
 
 export function fmtFxDate(iso: string | null | undefined): string {
-  if (!iso) return '—';
+  if (!iso) return '·';
   const d = new Date(iso.length <= 10 ? iso + 'T12:00:00Z' : iso);
-  if (isNaN(d.getTime())) return '—';
+  if (isNaN(d.getTime())) return '·';
   const M = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   return d.getUTCDate() + ' ' + M[d.getUTCMonth()] + ' ' + d.getUTCFullYear();
 }

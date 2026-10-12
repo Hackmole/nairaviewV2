@@ -59,7 +59,7 @@ export default function FixedIncome(): null {
 
   useEffect(() => {
     let alive = true;
-    fetch('assets/fixed-income.json?v=20261011a')
+    fetch('assets/fixed-income.json?v=20261012b')
       .then((r) => { if (!r.ok) throw new Error('bad status'); return r.json() as Promise<FiDoc>; })
       .then((d) => { if (alive) setDoc(d); })
       .catch(() => { /* static fallback stays */ });
@@ -71,7 +71,7 @@ export default function FixedIncome(): null {
     const set = (id: string, html: string) => { const el = document.getElementById(id); if (el) el.innerHTML = html; };
     const setText = (id: string, t: string) => { const el = document.getElementById(id); if (el) el.textContent = t; };
 
-    setText('fiLatestH', 'Latest NTB auction \u2014 ' + fmtDate(doc.ntb_latest.date));
+    setText('fiLatestH', 'Latest NTB auction: ' + fmtDate(doc.ntb_latest.date));
     set('fiLatestBody', TENORS.map(([k, label]) =>
       '<tr><td>' + label + '</td><td>' + doc.ntb_latest.rates[k].toFixed(2) + '%</td><td>' + esc(doc.ntb_latest.changes[k]) + '</td></tr>'
     ).join(''));
@@ -80,10 +80,10 @@ export default function FixedIncome(): null {
     set('fiTrendChart', '<div class="chart-wrap">' + trendSVG(hist) + '</div>');
     if (hist.length >= 2) {
       const first = hist[0], last = hist[hist.length - 1];
-      setText('fiTrendNote', 'From ' + last.rate.toFixed(2) + '% on ' + fmtDate(last.date) + ' vs ' + first.rate.toFixed(2) + '% on ' + fmtDate(first.date) + ' — the direction of the risk-free rate.');
+      setText('fiTrendNote', 'From ' + last.rate.toFixed(2) + '% on ' + fmtDate(last.date) + ' vs ' + first.rate.toFixed(2) + '% on ' + fmtDate(first.date) + '. The direction of the risk-free rate.');
     }
 
-    setText('fiBondH', 'FGN Savings Bond \u2014 ' + esc(doc.savings_bonds.offer) + ' offer');
+    setText('fiBondH', 'FGN Savings Bond: ' + esc(doc.savings_bonds.offer) + ' offer');
     set('fiBondBody', doc.savings_bonds.tenors.map((t) =>
       '<tr><td>' + esc(t.tenor) + '</td><td>' + t.coupon.toFixed(3) + '%</td><td>' + esc(doc.savings_bonds.offer) + '</td></tr>'
     ).join(''));

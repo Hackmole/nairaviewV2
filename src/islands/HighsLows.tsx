@@ -78,7 +78,7 @@ export default function HighsLows(): null {
       const arrow = up ? '▲' : '▼';
       const cls = up ? 'up' : 'down';
       return '<div class="market-row">' +
-        '<button type="button" class="row-main" data-sym="' + s + '" aria-label="' + s + ', ' + name.replace(/"/g, '') + ' — view details">' +
+        '<button type="button" class="row-main" data-sym="' + s + '" aria-label="' + s + ', ' + name.replace(/"/g, '') + ', view details">' +
         badge +
         '<span class="row-text"><span class="symbol">' + s + '</span><span class="company">' + name + '</span></span></button>' +
         '<div class="price">' + money(e.close) + '</div>' +
@@ -112,7 +112,7 @@ export default function HighsLows(): null {
     const lede = document.getElementById('hlLede');
     if (lede) lede.textContent = 'Stocks trading at or near the top and bottom of their tracked range (' + fmtDate(doc.window_start) + ' – ' + fmtDate(doc.as_of) + ').';
     const note = document.getElementById('hlNote');
-    if (note) note.textContent = 'Range is built from Nairaview\u2019s tracked daily closes and grows as history accumulates — not a full 52-week window yet. Data as of ' + fmtDate(doc.as_of) + '.';
+    if (note) note.textContent = 'Range is built from Nairaview\u2019s tracked daily closes and grows as history accumulates. Not a full 52-week window yet. Data as of ' + fmtDate(doc.as_of) + '.';
     markFeedOk('highs-lows', fmtDate(doc.as_of));
 
     return () => { if (section) section.removeEventListener('click', onClick); };

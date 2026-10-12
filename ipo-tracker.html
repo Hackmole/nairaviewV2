@@ -8,12 +8,12 @@
   <meta name="theme-color" content="#022126" />
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="Nairaview" />
-<meta property="og:title" content="IPO Performance Tracker — How NGX Listings Fared After Day One | Nairaview" />
+<meta property="og:title" content="IPO Performance Tracker · How NGX Listings Fared After Day One | Nairaview" />
 <meta property="og:description" content="Offer price to today: how recent NGX IPOs and listings have performed since listing, with live prices. Dangote Refinery listing watch included." />
 <meta property="og:url" content="https://nairaview.com/ipo-tracker" />
 <meta property="og:image" content="https://nairaview.com/assets/og-default.png" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="IPO Performance Tracker — How NGX Listings Fared After Day One | Nairaview" />
+<meta name="twitter:title" content="IPO Performance Tracker · How NGX Listings Fared After Day One | Nairaview" />
 <meta name="twitter:description" content="Offer price to today: how recent NGX IPOs and listings have performed since listing, with live prices." />
 <meta name="twitter:image" content="https://nairaview.com/assets/og-default.png" />
 <link rel="canonical" href="https://nairaview.com/ipo-tracker" />
@@ -23,7 +23,7 @@
   <link rel="icon" href="assets/favicon-48.png" sizes="48x48" type="image/png">
   <link rel="icon" href="assets/favicon-96.png" sizes="96x96" type="image/png">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-  <title>IPO Performance Tracker — How NGX Listings Fared | Nairaview</title>
+  <title>IPO Performance Tracker · How NGX Listings Fared | Nairaview</title>
   <link rel="stylesheet" href="assets/styles.css?v=20261011f" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -59,7 +59,7 @@
         <div>
           <div class="eyebrow">Aftermarket accountability</div>
           <h1>IPO performance tracker.</h1>
-          <p class="lede">Offer price to today &mdash; how recent NGX listings have actually fared since day one.</p>
+          <p class="lede">Offer price to today: how recent NGX listings have actually fared since day one.</p>
         </div>
         <div><span class="status-pill"><span class="dot"></span>Live prices</span></div>
       </div>
@@ -69,7 +69,7 @@
         <article class="offer-card offer-featured" id="dangoteSpotlight">
           <div class="offer-top"><span class="offer-type">IPO</span><span class="offer-status st-open">Offer closes 13 Oct 2026</span></div>
           <h3>Dangote Petroleum Refinery &amp; Petrochemicals FZE</h3>
-          <p class="offer-detail">4.1 billion shares at &#8358;525 &middot; about &#8358;2.15 trillion if fully subscribed. Listing expected November 2026 &mdash; this tracker will follow it from day one.</p>
+          <p class="offer-detail">4.1 billion shares at &#8358;525 &middot; about &#8358;2.15 trillion if fully subscribed. Listing expected November 2026. This tracker will follow it from day one.</p>
           <p class="offer-dates"><a href="dangote-refinery-ipo-guide">Read the IPO guide &rarr;</a></p>
         </article>
       </section>
@@ -90,8 +90,8 @@
 
       <section class="section">
         <h2 class="guide-h2">Frequently asked questions</h2>
-        <details class="faq-item"><summary class="faq-q">What is the difference between an IPO and a listing by introduction?</summary><div class="faq-a"><p class="guide-p">An IPO sells new shares to the public to raise capital. A listing by introduction simply lists existing shares for trading &mdash; no new money is raised, and the &ldquo;offer price&rdquo; is the price the shares are introduced at.</p></div></details>
-        <details class="faq-item"><summary class="faq-q">Why do newly listed stocks often jump on day one?</summary><div class="faq-a"><p class="guide-p">First-day pops usually reflect pent-up demand meeting limited supply. Both Transcorp Power and Aradel closed about 10% above their listing prices on day one &mdash; then traded on fundamentals afterwards.</p></div></details>
+        <details class="faq-item"><summary class="faq-q">What is the difference between an IPO and a listing by introduction?</summary><div class="faq-a"><p class="guide-p">An IPO sells new shares to the public to raise capital. A listing by introduction simply lists existing shares for trading. No new money is raised, and the &ldquo;offer price&rdquo; is the price the shares are introduced at.</p></div></details>
+        <details class="faq-item"><summary class="faq-q">Why do newly listed stocks often jump on day one?</summary><div class="faq-a"><p class="guide-p">First-day pops usually reflect pent-up demand meeting limited supply. Both Transcorp Power and Aradel closed about 10% above their listing prices on day one, then traded on fundamentals afterwards.</p></div></details>
         <details class="faq-item"><summary class="faq-q">When will Dangote Refinery shares start trading?</summary><div class="faq-a"><p class="guide-p">The offer closes 13 October 2026 and the listing is expected in November 2026. This page will track it from its first trading day.</p></div></details>
       </section>
     </main>
@@ -137,16 +137,16 @@
       </div>
     </div>
   </footer>
-  <script src="assets/data.js?v=20261009adark39"></script>
+  <script src="assets/data.js?v=20261012c"></script>
   <script>
   (function(){
-    function fmtP(n){ return n==null ? '&mdash;' : '&#8358;' + Number(n).toLocaleString('en-NG',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+    function fmtP(n){ return n==null ? '·' : '&#8358;' + Number(n).toLocaleString('en-NG',{minimumFractionDigits:2,maximumFractionDigits:2}); }
     function fmtD(iso){ var d=new Date(iso+'T00:00:00'); return d.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}); }
     function row(e, live){
       var cur = live && live[e.ticker] ? live[e.ticker] : null;
       var ret = (cur!=null && e.listing_price) ? (cur/e.listing_price-1)*100 : null;
       var cls = ret==null ? '' : (ret>0?'up':(ret<0?'down':''));
-      var retTxt = ret==null ? '&mdash;' : (ret>=0?'+':'&minus;') + Math.abs(ret).toFixed(1) + '%';
+      var retTxt = ret==null ? '·' : (ret>=0?'+':'&minus;') + Math.abs(ret).toFixed(1) + '%';
       return '<tr><td><strong>'+e.name+'</strong><br><span class="pc-note">'+e.blurb+'</span></td>'
         + '<td>'+e.type+'</td><td>'+fmtP(e.listing_price)+'</td><td>'+fmtD(e.listing_date)+'</td>'
         + '<td>'+fmtP(e.day1_close)+'</td><td>'+fmtP(cur)+'</td>'
@@ -178,8 +178,8 @@
     });
   })();
   </script>
-  <script src="assets/site.js?v=20261011e"></script>
-  <script src="assets/live.js?v=20261009adark39"></script>
+  <script src="assets/site.js?v=20261012c"></script>
+  <script src="assets/live.js?v=20261012c"></script>
   <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a9f4136dd40547a7b1acca41e62cc7a5"}'></script><!-- End Cloudflare Web Analytics -->
 </body>
 </html>

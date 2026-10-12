@@ -66,7 +66,7 @@ def fmt_price(v):
 
 def fmt_vol(v):
     if not v:
-        return "\u2014"
+        return "\u2013"
     if v >= 1e9:
         return f"{v / 1e9:.2f}bn"
     return f"{v / 1e6:.1f}m"
@@ -74,7 +74,7 @@ def fmt_vol(v):
 
 def fmt_mcap(v):
     if not v:
-        return "\u2014"
+        return "\u2013"
     if v >= 1e12:
         return f"\u20a6{v / 1e12:.2f} trillion"
     if v >= 1e9:
@@ -101,7 +101,7 @@ def direction(v):
 
 
 def arrow(v):
-    return "\u25b2" if v > 0 else ("\u25bc" if v < 0 else "\u2014")
+    return "\u25b2" if v > 0 else ("\u25bc" if v < 0 else "\u2013")
 
 
 def compact_py(n):
@@ -209,7 +209,7 @@ def main():
                                    else (x.get("change_percent") or 0)))[:5]
     byvol = sorted([x for x in prices if x.get("volume")], key=lambda x: x["volume"],
                    reverse=True)[:5]
-    vol_rows = [("          { s: '%s', c: '%s', p: '\u2014', m: '%s', d: 'up', pv: null, cv: %.2f, vol: true },"
+    vol_rows = [("          { s: '%s', c: '%s', p: '\u2013', m: '%s', d: 'up', pv: null, cv: %.2f, vol: true },"
                  % (x["symbol"], x["name"].replace("'", "\\'"),
                     f"{x['volume'] / 1e6:.2f}m", x["volume"] / 1e6)) for x in byvol]
     tables_new = ("var tables = {\n        gainers: [\n" + "\n".join(row_gainer(x) for x in gainers)
@@ -272,8 +272,8 @@ def main():
                rf"\g<1>{deals_s}\g<2>", t)
     t = re.sub(r'(<span class="metric-value" id="metricYtd">).*?(</span>)',
                rf"\g<1>{ytd_s}\g<2>", t)
-    t = re.sub(r'(<span id="periodLabel">)31 Dec 2025 \u2014 \d{1,2} [A-Z][a-z]{2} \d{4}(</span>)',
-               rf"\g<1>31 Dec 2025 — {d_short}\g<2>", t)
+    t = re.sub(r'(<span id="periodLabel">)31 Dec 2025 \u2013 \d{1,2} [A-Z][a-z]{2} \d{4}(</span>)',
+               rf"\g<1>31 Dec 2025 – {d_short}\g<2>", t)
     t = re.sub(r'(<span class="noteDate">)\d{1,2} [A-Z][a-z]{2} \d{4}(</span>)',
                rf"\g<1>{d_short}\g<2>", t)
     t = re.sub(r'(<div class="date" id="wrapDate">)MARKET WRAP \u00b7 \d{1,2} [A-Z]{3}(</div>)',

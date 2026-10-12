@@ -125,7 +125,7 @@ export default function ChartLab(): null {
       s.setData(hist.map((p) => ({ time: p.date, value: Number(p.value) })));
       c.asi.timeScale().fitContent();
       const asof = el('asi-asof');
-      if (asof) asof.textContent = 'NGX All-Share Index · ' + hist.length + ' sessions (' + fmtDate(hist[0].date) + ' – ' + fmtDate(hist[hist.length - 1].date) + ') · Nairaview market feed, daily closes — not live.';
+      if (asof) asof.textContent = 'NGX All-Share Index · ' + hist.length + ' sessions (' + fmtDate(hist[0].date) + ' – ' + fmtDate(hist[hist.length - 1].date) + ') · Nairaview market feed, daily closes. Not live.';
     }).catch((e: unknown) => {
       const err = el('asi-err');
       if (err) err.textContent = 'Could not load ASI data (' + ((e as Error)?.message || 'error') + ').';
@@ -150,7 +150,7 @@ export default function ChartLab(): null {
         knownSyms.current[String(s.symbol).toUpperCase()] = true;
         const opt = document.createElement('option');
         opt.value = s.symbol;
-        opt.textContent = s.symbol + (s.name ? ' — ' + s.name : '');
+        opt.textContent = s.symbol + (s.name ? ' · ' + s.name : '');
         dl.appendChild(opt);
       });
     }).catch(() => { /* search stays empty; quick picks still work */ });
@@ -293,7 +293,7 @@ export default function ChartLab(): null {
         if (map[d.time] !== undefined && map[d.time] !== null) { sd.push(d.time); sv.push(d.close); av.push(map[d.time]); }
       });
       if (!asiReady) {
-        notes.push('ASI data still loading — comparison will appear in a moment.');
+        notes.push('ASI data still loading. Comparison will appear in a moment.');
       } else if (sv.length < 2) {
         notes.push('Not enough overlapping ASI sessions to compare.');
       } else {
@@ -322,11 +322,11 @@ export default function ChartLab(): null {
     if (!ind.compare) {
       if (ind.sma5) {
         if (closes.length >= 5) addOverlayLine(sma(closes, 5), '#f59e0b');
-        else notes.push('SMA 5 needs 5 sessions — history accumulates daily.');
+        else notes.push('SMA 5 needs 5 sessions. History accumulates daily.');
       }
       if (ind.sma20) {
         if (closes.length >= 20) addOverlayLine(sma(closes, 20), '#2563eb');
-        else notes.push('SMA 20 needs 20 sessions — history accumulates daily.');
+        else notes.push('SMA 20 needs 20 sessions. History accumulates daily.');
       }
     }
 
@@ -348,7 +348,7 @@ export default function ChartLab(): null {
       if (closes.length < 15) {
         if (c.rsi) { try { c.rsi.remove(); } catch { /* noop */ } c.rsi = null; c.rsiSeries = null; }
         hideRsi();
-        notes.push('RSI 14 needs 15 sessions — history accumulates daily.');
+        notes.push('RSI 14 needs 15 sessions. History accumulates daily.');
       } else {
         if (rsiWrap) rsiWrap.hidden = false;
         if (!c.rsi && rsiWrap) {
@@ -367,7 +367,7 @@ export default function ChartLab(): null {
           c.rsiSeries.setData(rd);
           c.rsi.timeScale().fitContent();
           if (rsiCap) {
-            rsiCap.textContent = 'RSI (14)' + (last !== null ? ' · ' + (last as number).toFixed(2) : '') + ' — above 70 often reads overbought, below 30 oversold. Educational only, not advice.';
+            rsiCap.textContent = 'RSI (14)' + (last !== null ? ' · ' + (last as number).toFixed(2) : '') + '. Above 70 often reads overbought, below 30 oversold. Educational only, not advice.';
             rsiCap.hidden = false;
           }
         }
@@ -381,7 +381,7 @@ export default function ChartLab(): null {
       if (closes.length < 26) {
         if (c.macd) { try { c.macd.remove(); } catch { /* noop */ } c.macd = null; c.macdLine = c.macdSig = c.macdHist = null; }
         hideMacd();
-        notes.push('MACD needs 26 sessions — history accumulates daily.');
+        notes.push('MACD needs 26 sessions. History accumulates daily.');
       } else {
         if (macdWrap) macdWrap.hidden = false;
         if (!c.macd && macdWrap) {
@@ -408,7 +408,7 @@ export default function ChartLab(): null {
           c.macdHist.setData(hd);
           c.macd.timeScale().fitContent();
           if (macdCap) {
-            macdCap.textContent = 'MACD (12, 26, 9) — blue MACD line, amber signal line. Educational only, not advice.';
+            macdCap.textContent = 'MACD (12, 26, 9): blue MACD line, amber signal line. Educational only, not advice.';
             macdCap.hidden = false;
           }
         }
@@ -436,7 +436,7 @@ export default function ChartLab(): null {
     if (asofEl) asofEl.textContent = sym + ' · ' + data.length + ' sessions (' + fmtDate(first.time) + ' – ' + fmtDate(last.time) + ') · ' +
       money(last.close) + ' (' + arrow + ' ' + Math.abs(chg).toFixed(2) + '%)' +
       (active.length ? ' · ' + active.join(', ') : '') +
-      ' · Nairaview market feed, daily closes — not live.';
+      ' · Nairaview market feed, daily closes. Not live.';
   });
 
   return null;

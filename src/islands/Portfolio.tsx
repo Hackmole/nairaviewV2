@@ -171,10 +171,10 @@ export default function Portfolio(): React.ReactElement | null {
       </div>
       <p className="asof" id="priceNote">
         {!valued
-          ? 'Prices temporarily unavailable — valuation appears when the feed loads. Holdings still show cost below.'
+          ? 'Prices temporarily unavailable. Valuation appears when the feed loads. Holdings still show cost below.'
           : liveCount
           ? 'Valued at the latest daily-close prices, refreshed after each market close. Gain/loss is calculated on covered holdings only.'
-          : 'Valued at Nairaview\u2019s latest daily-close snapshot prices — not live. Gain/loss is calculated on covered holdings only; other holdings show cost only.'}
+          : 'Valued at Nairaview\u2019s latest daily-close snapshot prices. Not live. Gain/loss is calculated on covered holdings only; other holdings show cost only.'}
       </p>
       <p className="form-note"><a href="account">Account settings &amp; log out</a></p>
       <div className="movers-col">
@@ -196,12 +196,12 @@ export default function Portfolio(): React.ReactElement | null {
                   </td>
                   <td className="num">{Number(h.shares).toLocaleString('en-NG')}</td>
                   <td className="num">{naira(h.avg_cost)}</td>
-                  <td className="num">{r.price !== undefined ? naira(r.price) : '—'}</td>
-                  <td className="num">{r.value !== null ? naira(r.value as number) : '—'}</td>
+                  <td className="num">{r.price !== undefined ? naira(r.price) : '·'}</td>
+                  <td className="num">{r.value !== null ? naira(r.value as number) : '·'}</td>
                   <td className="num">
                     {r.gain !== null
                       ? <span style={{ color: gainColor }}>{((r.gain as number) >= 0 ? '+' : '') + naira(r.gain as number)}</span>
-                      : '—'}
+                      : '·'}
                   </td>
                   <td>
                     <button
@@ -216,7 +216,7 @@ export default function Portfolio(): React.ReactElement | null {
           </tbody>
         </table>
       </div>
-      {holdings.length === 0 && <p className="guide-p" id="emptyMsg">You have no holdings yet — add your first one below.</p>}
+      {holdings.length === 0 && <p className="guide-p" id="emptyMsg">You have no holdings yet. Add your first one below.</p>}
       <h2 className="guide-h2">Add or update a holding</h2>
       <form id="holdingForm" className="auth-form" onSubmit={submitHolding}>
         <label>Ticker
@@ -230,7 +230,7 @@ export default function Portfolio(): React.ReactElement | null {
         </label>
         {formError && <p className="form-error" id="holdingError" role="alert">{formError}</p>}
         <button type="submit" className="btn-primary" disabled={saving}>{saving ? 'Saving…' : 'Save holding'}</button>
-        <p className="form-note">Saving the same ticker again updates it. This is a personal tracker — not connected to your broker.</p>
+        <p className="form-note">Saving the same ticker again updates it. This is a personal tracker. Not connected to your broker.</p>
       </form>
     </>
   );

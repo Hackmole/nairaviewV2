@@ -27,7 +27,7 @@ export default function Economy(): null {
 
   useEffect(() => {
     let alive = true;
-    fetch('assets/economy.json?v=20261011a')
+    fetch('assets/economy.json?v=20261012b')
       .then((r) => { if (!r.ok) throw new Error('bad status'); return r.json() as Promise<EcDoc>; })
       .then((d) => { if (alive) setDoc(d); })
       .catch(() => { /* static fallback stays */ });
@@ -43,7 +43,7 @@ export default function Economy(): null {
       '<div class="stat-card"><div class="stat-label">MPR (CBN)</div><div class="stat-value">' + doc.mpr.value.toFixed(2) + '%</div><div class="stat-sub">' + esc(doc.mpr.change) + '</div></div>' +
       '<div class="stat-card"><div class="stat-label">Inflation (' + esc(doc.inflation.source) + ')</div><div class="stat-value">' + doc.inflation.value.toFixed(2) + '%</div><div class="stat-sub">' + esc(doc.inflation.period) + '</div></div>' +
       '<div class="stat-card"><div class="stat-label">GDP growth</div><div class="stat-value">+' + doc.gdp.value.toFixed(2) + '%</div><div class="stat-sub">' + esc(doc.gdp.period) + ', year-on-year</div></div>' +
-      '<div class="stat-card"><div class="stat-label">Next MPC meeting</div><div class="stat-value">' + esc(doc.mpc_next) + '</div><div class="stat-sub">2026 \u2014 rate decision expected</div></div>'
+      '<div class="stat-card"><div class="stat-label">Next MPC meeting</div><div class="stat-value">' + esc(doc.mpc_next) + '</div><div class="stat-sub">2026: rate decision expected</div></div>'
     );
 
     setText('ecInflNote', doc.inflation.note || ('Headline inflation was ' + doc.inflation.value.toFixed(2) + '% in ' + esc(doc.inflation.period) + ' (' + esc(doc.inflation.source) + ').'));

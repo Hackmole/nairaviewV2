@@ -66,11 +66,11 @@
 
         <div id="portfolioApp" data-island="portfolio" hidden>
           <div class="facts" id="portfolioTotals">
-            <div class="fact"><span>Total value</span><strong id="totValue">&mdash;</strong></div>
-            <div class="fact"><span>Total cost</span><strong id="totCost">&mdash;</strong></div>
-            <div class="fact"><span>Gain / loss (covered)</span><strong id="totGain">&mdash;</strong></div>
+            <div class="fact"><span>Total value</span><strong id="totValue">&middot;</strong></div>
+            <div class="fact"><span>Total cost</span><strong id="totCost">&middot;</strong></div>
+            <div class="fact"><span>Gain / loss (covered)</span><strong id="totGain">&middot;</strong></div>
           </div>
-          <p class="asof" id="priceNote">Valued at Nairaview&rsquo;s latest daily-close snapshot prices &mdash; not live. Gain/loss is calculated on covered holdings only; other holdings show cost only.</p>
+          <p class="asof" id="priceNote">Valued at Nairaview&rsquo;s latest daily-close snapshot prices. Not live. Gain/loss is calculated on covered holdings only; other holdings show cost only.</p>
           <p class="form-note"><a href="account">Account settings &amp; log out</a></p>
 
           <div class="movers-col">
@@ -78,7 +78,7 @@
               <tr><th style="text-align:left">Ticker</th><th>Shares</th><th>Avg cost</th><th>Price</th><th>Value</th><th>Gain/loss</th><th></th></tr>
             </table>
           </div>
-          <p class="guide-p" id="emptyMsg" hidden>You have no holdings yet &mdash; add your first one below.</p>
+          <p class="guide-p" id="emptyMsg" hidden>You have no holdings yet. Add your first one below.</p>
 
           <h2 class="guide-h2">Add or update a holding</h2>
           <form id="holdingForm" class="auth-form">
@@ -87,7 +87,7 @@
             <label>Average cost per share (&#8358;)<input name="avg_cost" required type="number" min="0" step="any" placeholder="120.50" /></label>
             <p class="form-error" id="holdingError" role="alert" hidden></p>
             <button type="submit" class="btn-primary">Save holding</button>
-            <p class="form-note">Saving the same ticker again updates it. This is a personal tracker &mdash; not connected to your broker.</p>
+            <p class="form-note">Saving the same ticker again updates it. This is a personal tracker. Not connected to your broker.</p>
           </form>
         </div>
       </section>
@@ -132,12 +132,12 @@
       </div>
     </div>
   </footer>
-  <script src="assets/data.js?v=20261009adark39"></script>
+  <script src="assets/data.js?v=20261012c"></script>
   <script src="assets/logos.js"></script>
   <script src="assets/stock-pages.js"></script>
-  <script src="assets/site.js?v=20261011e"></script>
-  <script src="assets/islands.js?v=20261012b"></script>
-  <script src="assets/live.js?v=20261009adark39"></script>
+  <script src="assets/site.js?v=20261012c"></script>
+  <script src="assets/islands.js?v=20261012c"></script>
+  <script src="assets/live.js?v=20261012c"></script>
   <script>
   <script>window.NV_ISLANDS = window.NV_ISLANDS || {}; window.NV_ISLANDS.portfolio = true;</script>
   (function () {
@@ -189,7 +189,7 @@
         var price = PRICES[h.ticker];
         var cost = h.shares * h.avg_cost;
         totCost += cost;
-        var valueCell = '&mdash;', gainCell = '&mdash;';
+        var valueCell = '·', gainCell = '·';
         if (price !== undefined) {
           var value = h.shares * price;
           totValue += value; totCoveredCost += cost; valued = true;
@@ -204,7 +204,7 @@
           '<td style="text-align:left;white-space:nowrap">' + badgeHtml + '<strong>' + tickHtml + '</strong></td>' +
           '<td class="num">' + Number(h.shares).toLocaleString('en-NG') + '</td>' +
           '<td class="num">' + naira(h.avg_cost) + '</td>' +
-          '<td class="num">' + (price !== undefined ? naira(price) : '&mdash;') + '</td>' +
+          '<td class="num">' + (price !== undefined ? naira(price) : '·') + '</td>' +
           '<td class="num">' + valueCell + '</td>' +
           '<td class="num">' + gainCell + '</td>' +
           '<td><button type="button" class="btn-ghost btn-sm" data-del="' + h.ticker + '">Remove</button></td>';

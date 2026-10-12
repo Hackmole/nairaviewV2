@@ -23,7 +23,7 @@ export function fmt2(n: number | null | undefined): string {
 }
 
 export function fmtN(n: number | null | undefined | ''): string {
-  return n === null || n === undefined || n === '' ? '—' : '₦' + fmt2(n as number);
+  return n === null || n === undefined || n === '' ? '·' : '₦' + fmt2(n as number);
 }
 
 export function signedPct(chg: number | null | undefined): string {

@@ -76,7 +76,7 @@ def spaced(s):
 
 
 def fmt_rate(v):
-    return "₦" + f"{v:,.2f}" if v else "—"
+    return "₦" + f"{v:,.2f}" if v else "·"
 
 
 def new_canvas(w, h):

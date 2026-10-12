@@ -140,11 +140,11 @@ var tables = {
           { s: 'OMATEK', c: 'Omatek Ventures Plc', p: '₦1.34', m: '−6.94%', d: 'down', pv: 1.34, cv: -6.94 , mc: 3941997892},
         ],
         volume: [
-          { s: 'ZENITHBANK', c: 'Zenith Bank Plc', p: '—', m: '31.69m', d: 'up', pv: null, cv: 31.69, vol: true },
-          { s: 'GTCO', c: 'Guaranty Trust Holding Company Plc', p: '—', m: '23.52m', d: 'up', pv: null, cv: 23.52, vol: true },
-          { s: 'ACCESSCORP', c: 'Access Holdings Plc', p: '—', m: '19.19m', d: 'up', pv: null, cv: 19.19, vol: true },
-          { s: 'FIDELITYBK', c: 'Fidelity Bank Plc', p: '—', m: '17.55m', d: 'up', pv: null, cv: 17.55, vol: true },
-          { s: 'GUINEAINS', c: 'Guinea Insurance Plc', p: '—', m: '13.60m', d: 'up', pv: null, cv: 13.60, vol: true },
+          { s: 'ZENITHBANK', c: 'Zenith Bank Plc', p: '·', m: '31.69m', d: 'up', pv: null, cv: 31.69, vol: true },
+          { s: 'GTCO', c: 'Guaranty Trust Holding Company Plc', p: '·', m: '23.52m', d: 'up', pv: null, cv: 23.52, vol: true },
+          { s: 'ACCESSCORP', c: 'Access Holdings Plc', p: '·', m: '19.19m', d: 'up', pv: null, cv: 19.19, vol: true },
+          { s: 'FIDELITYBK', c: 'Fidelity Bank Plc', p: '·', m: '17.55m', d: 'up', pv: null, cv: 17.55, vol: true },
+          { s: 'GUINEAINS', c: 'Guinea Insurance Plc', p: '·', m: '13.60m', d: 'up', pv: null, cv: 13.60, vol: true },
         ]
       };
       var listNames = { gainers: 'Top gainer', losers: 'Top loser', volume: 'Most traded', directory: 'Market directory' };
@@ -301,5 +301,5 @@ var tables = {
       directory.forEach(function (e) {
         var snap = snapBySymbol[e.s];
         if (snap) { e.p = snap.p; e.m = snap.m; e.d = snap.d; e.pv = snap.pv; e.cv = snap.cv; e.vol = !!snap.vol; e.noSnap = false; }
-        else { e.p = '—'; e.m = e.g; e.d = ''; e.pv = null; e.cv = 0; e.noSnap = true; }
+        else { e.p = '·'; e.m = e.g; e.d = ''; e.pv = null; e.cv = 0; e.noSnap = true; }
       });

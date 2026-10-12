@@ -25,7 +25,7 @@ interface InsiderDoc {
 }
 
 function fmtDate(iso: string | null): string {
-  if (!iso) return '—';
+  if (!iso) return '·';
   const m = iso.match(/(\d{4})-(\d{2})-(\d{2})/);
   if (!m) return iso;
   const M = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];

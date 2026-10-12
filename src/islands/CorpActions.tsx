@@ -43,7 +43,7 @@ export default function CorpActions(): null {
 
   useEffect(() => {
     let alive = true;
-    fetch('assets/corporate-actions.json?v=20261008a')
+    fetch('assets/corporate-actions.json?v=20261012b')
       .then((r) => { if (!r.ok) throw new Error('bad status'); return r.json() as Promise<CaDoc>; })
       .then((d) => { if (alive) setDoc(d); })
       .catch(() => {
@@ -64,7 +64,7 @@ export default function CorpActions(): null {
         return '<article class="news-card" style="margin-bottom:14px">' +
           '<div><span class="otag" style="border-color:' + st.color + ';color:' + st.color + '">' + st.label + '</span> ' +
           '<span style="color:var(--muted);font-size:12px">' + fmtDate(a.date) + ' · ' + a.status + '</span></div>' +
-          '<h3 style="margin:10px 0 6px">' + badge + ' ' + a.title + ' — ' + a.company + '</h3>' +
+          '<h3 style="margin:10px 0 6px">' + badge + ' ' + a.title + ' · ' + a.company + '</h3>' +
           '<p style="color:var(--muted);font-size:14px;line-height:1.6">' + a.detail + '</p>' +
           '<p style="font-size:12px;color:var(--muted)">Source: ' + a.source + '</p></article>';
       }).join('');

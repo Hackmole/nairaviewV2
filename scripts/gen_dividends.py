@@ -56,7 +56,7 @@ def get_json(path, timeout=30):
 
 def fmt_date(iso):
     if not iso:
-        return "—"
+        return "·"
     m = re.match(r"(\d{4})-(\d{2})-(\d{2})", iso)
     if not m:
         return iso
@@ -118,11 +118,11 @@ def generate_month_page(divs, year, month):
             "<td class=\"num\">{amt}</td><td>{q}</td><td>{p}</td>"
             "<td style=\"text-align:left\">{src}</td></tr>".format(
                 co=htmlmod.escape(d["company"]), tk=htmlmod.escape(d["ticker"]),
-                per=htmlmod.escape(d.get("period") or "—"),
+                per=htmlmod.escape(d.get("period") or "·"),
                 amt=money(d["amount"]),
                 q=fmt_date(d.get("qualification_date")),
                 p=fmt_date(d.get("payment_date")),
-                src=htmlmod.escape(d.get("source") or "—"))
+                src=htmlmod.escape(d.get("source") or "·"))
             for d in rows)
         table = f"""            <div class="movers-col"><table class="movers-table">
               <thead><tr><th style="text-align:left">Company</th><th>Period</th><th>DPS</th><th>Qualifies</th><th>Paid</th><th style="text-align:left">Source</th></tr></thead>
@@ -131,7 +131,7 @@ def generate_month_page(divs, year, month):
               </tbody>
             </table></div>"""
     else:
-        table = ('            <p class="guide-p">Nothing confirmed yet — check the '
+        table = ('            <p class="guide-p">Nothing confirmed yet. Check the '
                  '<a href="dividends">dividends hub</a> for upcoming payouts.</p>')
 
     canon = f"https://nairaview.com/{fname[:-5]}"
@@ -149,11 +149,11 @@ def generate_month_page(divs, year, month):
         <h2 class="guide-h2">Declared dividends</h2>
 {table}
         <h2 class="guide-h2">How to read this</h2>
-        <p class="guide-p">Buy and hold through the <strong>qualification date</strong> to receive the payout; it lands on the <strong>payment date</strong>. Figures come from verified NGX corporate disclosures — the <a href="dividends">dividends hub</a> always has the latest list.</p>
+        <p class="guide-p">Buy and hold through the <strong>qualification date</strong> to receive the payout; it lands on the <strong>payment date</strong>. Figures come from verified NGX corporate disclosures. The <a href="dividends">dividends hub</a> always has the latest list.</p>
         <div class="nextbox">
           <h3>Related</h3>
           <ul>
-            <li><a href="dividends">Dividends hub &mdash; upcoming payouts and yield rankings</a></li>
+            <li><a href="dividends">Dividends hub: upcoming payouts and yield rankings</a></li>
             <li><a href="calendar">Market calendar &mdash; all upcoming dividend and corporate-action dates</a></li>
             <li><a href="learn-how-shares-work">Learn: how dividends work</a></li>
           </ul>
@@ -213,7 +213,7 @@ def scan_news_candidates():
         if (DIV_RE.search(text) and AMT_RE.search(text) and ACT_RE.search(text)
                 and link and link not in seen):
             lines.append(
-                f"\n## {pub_s} — {it.get('title', '').strip()}\n"
+                f"\n## {pub_s}: {it.get('title', '').strip()}\n"
                 f"- Source: {it.get('source', '')}\n- Link: {link}\n"
                 f"- Snippet: {it.get('description', '')[:300].strip()}\n"
                 f"- Status: UNVERIFIED — confirm amount and dates against the NGX filing before adding to assets/dividends.json\n")

@@ -132,7 +132,7 @@ export default function FxConverter(): null {
         res.innerHTML = '<span class="val-unavail">Rate unavailable</span>';
         if (note) note.textContent = 'Rate temporarily unavailable' + (last ? ' · ' + last : '.');
       } else {
-        res.textContent = '₦—';
+        res.textContent = '₦·';
         if (note) note.textContent = 'Rate loading…';
       }
       return;

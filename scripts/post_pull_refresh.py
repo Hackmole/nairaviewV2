@@ -134,8 +134,8 @@ def main():
                rf"\g<1>+{ytd:.2f}% since 31 Dec 2025\g<2>", s)
     s = re.sub(r'(<p class="hero-meta" id="heroNote">)As of the \d{1,2} [A-Z][a-z]{2} \d{4} close(</p>)',
                rf"\g<1>As of the {d} {mon} {yyyy} close\g<2>", s)
-    s = re.sub(r'(<span id="periodLabel">)31 Dec 2025 \u2014 \d{1,2} [A-Z][a-z]{2} \d{4}(</span>)',
-               rf"\g<1>31 Dec 2025 — {d} {mon} {yyyy}\g<2>", s)
+    s = re.sub(r'(<span id="periodLabel">)31 Dec 2025 \u2013 \d{1,2} [A-Z][a-z]{2} \d{4}(</span>)',
+               rf"\g<1>31 Dec 2025 – {d} {mon} {yyyy}\g<2>", s)
     s = re.sub(r'(<span class="noteDate">)\d{1,2} [A-Z][a-z]{2} \d{4}(</span>)',
                rf"\g<1>{d} {mon} {yyyy}\g<2>", s)
 

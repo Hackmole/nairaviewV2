@@ -190,7 +190,7 @@ ntb_svg = '''              <div class="chart-wrap">
               </div>'''
 
 fi_body = SECTION.format(content="\n".join([
-    h2("Latest NTB auction &mdash; 7 October 2026", 0),
+    h2("Latest NTB auction: 7 October 2026", 0),
     NOTE.format(t="Stop rates set by the DMO/CBN at the primary market auction. Rates are annualised."),
     table(["Tenor", "Stop rate", "Change"],
           [["91-day", "15.50%", "unchanged"],
@@ -199,23 +199,23 @@ fi_body = SECTION.format(content="\n".join([
     h2("364-day stop rate trend"),
     NOTE.format(t="Four straight cuts since the 8 July peak of 17.70%, after the CBN cut the MPR by 350 bps to 23.00% in September."),
     ntb_svg,
-    h2("FGN Savings Bond &mdash; October 2026 offer"),
+    h2("FGN Savings Bond: October 2026 offer"),
     NOTE.format(t="Subscriptions ran 5&ndash;9 October 2026. Minimum subscription &#8358;5,000."),
     table(["Tenor", "Coupon", "Offer"],
           [["2-year", "13.071%", "October 2026"],
            ["3-year", "14.071%", "October 2026"]]),
     h2("T-bills vs stocks"),
-    NOTE.format(t="The 364-day T-bill now yields 15.85% against August inflation of 15.39% &mdash; the risk-free return barely beats inflation. Falling T-bill yields (as now) usually make equities look more attractive, since the &lsquo;safe&rsquo; alternative pays less. Rising yields do the opposite."),
+    NOTE.format(t="The 364-day T-bill now yields 15.85% against August inflation of 15.39%. The risk-free return barely beats inflation. Falling T-bill yields (as now) usually make equities look more attractive, since the &lsquo;safe&rsquo; alternative pays less. Rising yields do the opposite."),
     NOTE.format(t="Figures as of 11 October 2026. Auction results update after each DMO/CBN primary market auction."),
 ]))
 
 # ---------------------------------------------------------------- brokers
 br_body = SECTION.format(content="\n".join([
     h2("What will this trade cost me?", 0),
-    NOTE.format(t="Enter a trade value and your broker&rsquo;s commission &mdash; fees follow the NGX schedule and the breakdown updates as you type."),
+    NOTE.format(t="Enter a trade value and your broker&rsquo;s commission. Fees follow the NGX schedule and the breakdown updates as you type."),
     '''              <div id="feeCalc" data-island="fee-calculator"></div>''',
     h2("Compare stockbrokers"),
-    NOTE.format(t="All are NGX dealing members with online trading. Brokerage is negotiable within the 0.75&ndash;1.35% band &mdash; online trades usually price at the lower end. Confirm the exact rate with the broker before funding; it feeds straight into the calculator above."),
+    NOTE.format(t="All are NGX dealing members with online trading. Brokerage is negotiable within the 0.75&ndash;1.35% band. Online trades usually price at the lower end. Confirm the exact rate with the broker before funding; it feeds straight into the calculator above."),
     table(["Broker", "Online trading", "Commission guide"],
           [["Meristem Stockbrokers", "Web + mobile app", "0.75&ndash;1.35% + VAT"],
            ["CardinalStone Securities", "Web + mobile app", "0.75&ndash;1.35% + VAT"],
@@ -224,7 +224,7 @@ br_body = SECTION.format(content="\n".join([
            ["Vetiva Capital", "Web + mobile app", "0.75&ndash;1.35% + VAT"]]),
     h2("Before you choose"),
     '''              <ul class="check-list">
-                <li>Ask for the exact commission rate in writing &mdash; &ldquo;negotiable&rdquo; means it moves.</li>
+                <li>Ask for the exact commission rate in writing: &ldquo;negotiable&rdquo; means it moves.</li>
                 <li>Check you get a CSCS statement and can track dividends in your own name.</li>
                 <li>Test the app during a trading session, not just the demo.</li>
                 <li>Ask how corporate actions (bonuses, rights) are handled and what they cost.</li>
@@ -235,12 +235,12 @@ br_body = SECTION.format(content="\n".join([
 # ---------------------------------------------------------------- earnings
 er_body = SECTION.format(content="\n".join([
     h2("Q3 2026 season status", 0),
-    NOTE.format(t="Q3 ended 30 September 2026. Unaudited statements are due on the NGX by 30 October 2026 — filings typically cluster in the final two weeks."),
+    NOTE.format(t="Q3 ended 30 September 2026. Unaudited statements are due on the NGX by 30 October 2026. Filings typically cluster in the final two weeks."),
     table(["Company", "Status", "Detail"],
-          [["FCMB Group", "Delayed", "Q3 now due on or before 29 Dec 2026 &mdash; interim audit of First City Monument Bank is still running. H1 profit before tax was &#8358;157.3bn, up 99% year-on-year."],
+          [["FCMB Group", "Delayed", "Q3 now due on or before 29 Dec 2026. Interim audit of First City Monument Bank is still running. H1 profit before tax was &#8358;157.3bn, up 99% year-on-year."],
            ["All other listed companies", "Due", "Q3 2026 statements expected by 30 Oct 2026."]]),
-    h2("The H1 backlog &mdash; context"),
-    NOTE.format(t="Several big banks needed extra time for audited half-year accounts while awaiting CBN clearance: GTCO, Access Holdings, UBA and Fidelity Bank pushed to 30 September; Zenith Bank to 9 October; Stanbic IBTC flagged a possible delay. Late filings are common in earnings season &mdash; the deadline that matters is the one in the filing notice."),
+    h2("The H1 backlog: context"),
+    NOTE.format(t="Several big banks needed extra time for audited half-year accounts while awaiting CBN clearance: GTCO, Access Holdings, UBA and Fidelity Bank pushed to 30 September; Zenith Bank to 9 October; Stanbic IBTC flagged a possible delay. Late filings are common in earnings season. The deadline that matters is the one in the filing notice."),
     h2("How to read a result"),
     '''              <ul class="check-list">
                 <li><strong>Revenue / gross earnings</strong> &mdash; is the top line growing?</li>
@@ -262,7 +262,7 @@ ec_body = SECTION.format(content="\n".join([
               </div>''',
     h2("MPR path in 2026"),
     table(["MPC meeting", "Decision"],
-          [["Held through mid-2026", "26.50% &mdash; on hold"],
+          [["Held through mid-2026", "26.50%: on hold"],
            ["21&ndash;22 September 2026", "Cut 350 bps to 23.00%"],
            ["23&ndash;24 November 2026", "Upcoming"]]),
     h2("Inflation picture"),
@@ -278,30 +278,30 @@ ec_body = SECTION.format(content="\n".join([
 ]))
 
 PAGES = [
-    dict(slug="fixed-income", title="Fixed Income \u2014 T-Bill Rates & FGN Savings Bond",
-         ogtitle="Fixed Income \u2014 T-Bill Rates & FGN Savings Bond | Nairaview",
+    dict(slug="fixed-income", title="Fixed Income \u00b7 T-Bill Rates & FGN Savings Bond",
+         ogtitle="Fixed Income \u00b7 T-Bill Rates & FGN Savings Bond | Nairaview",
          ogdesc="Latest NTB auction stop rates, 364-day yield trend and FGN Savings Bond offers.",
          eyebrow="Rates", h1="Fixed income",
          lede="Treasury bill auction results, FGN Savings Bond offers and the risk-free rates every equity investor should watch.",
          body=fi_body, nvisland=""),
-    dict(slug="brokers", title="Stockbrokers \u2014 Compare & Fee Calculator",
-         ogtitle="Stockbrokers \u2014 Compare & Fee Calculator | Nairaview",
+    dict(slug="brokers", title="Stockbrokers \u00b7 Compare & Fee Calculator",
+         ogtitle="Stockbrokers \u00b7 Compare & Fee Calculator | Nairaview",
          ogdesc="Compare Nigerian stockbrokers and calculate exactly what a buy or sell order costs.",
          eyebrow="Start here", h1="Stockbrokers",
          lede="Compare Nigerian stockbrokers and see exactly what a trade costs before you place it.",
          body=br_body,
          nvisland='  <script>window.NV_ISLANDS = window.NV_ISLANDS || {}; window.NV_ISLANDS["fee-calculator"] = true;</script>'),
-    dict(slug="earnings", title="Earnings Dashboard \u2014 Q3 2026 Season",
-         ogtitle="Earnings Dashboard \u2014 Q3 2026 Season | Nairaview",
+    dict(slug="earnings", title="Earnings Dashboard \u00b7 Q3 2026 Season",
+         ogtitle="Earnings Dashboard \u00b7 Q3 2026 Season | Nairaview",
          ogdesc="Who's due, who's filed and who's late in the Q3 2026 NGX earnings season.",
          eyebrow="Q3 2026 season", h1="Earnings dashboard",
-         lede="Who\u2019s due, who\u2019s filed and who\u2019s late \u2014 tracking the Q3 2026 earnings season on the NGX.",
+         lede="Who\u2019s due, who\u2019s filed and who\u2019s late \u00b7 tracking the Q3 2026 earnings season on the NGX.",
          body=er_body, nvisland=""),
-    dict(slug="economy", title="Economy \u2014 Rates, Inflation & Growth",
-         ogtitle="Economy \u2014 Rates, Inflation & Growth | Nairaview",
-         ogdesc="MPR, inflation, GDP and the MPC calendar \u2014 the macro numbers that move the NGX.",
+    dict(slug="economy", title="Economy \u00b7 Rates, Inflation & Growth",
+         ogtitle="Economy \u00b7 Rates, Inflation & Growth | Nairaview",
+         ogdesc="MPR, inflation, GDP and the MPC calendar \u00b7 the macro numbers that move the NGX.",
          eyebrow="Macro", h1="Economy",
-         lede="Interest rates, inflation and growth \u2014 the macro numbers that move the NGX.",
+         lede="Interest rates, inflation and growth \u00b7 the macro numbers that move the NGX.",
          body=ec_body, nvisland=""),
 ]
 

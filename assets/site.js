@@ -1064,12 +1064,47 @@
     if (node.classList && node.classList.contains('nav-item')) {
       var plink = node.querySelector(':scope > a');
       if (!plink) return;
-      drawer.appendChild(linkEl(plink.textContent, plink.getAttribute('href'),
-        'd-sec' + (plink.classList.contains('active') ? ' on' : '')));
-      Array.prototype.forEach.call(node.querySelectorAll(':scope > .nav-dropdown a'), function (s) {
-        drawer.appendChild(linkEl(s.textContent, s.getAttribute('href'),
-          'd-sub' + (s.classList.contains('active') ? ' on' : '')));
-      });
+      var subs = node.querySelectorAll(':scope > .nav-dropdown a');
+      var pcls = 'd-sec' + (plink.classList.contains('active') ? ' on' : '');
+      if (subs.length) {
+        /* Section with sub-pages: label navigates, chevron collapses/expands */
+        var group = document.createElement('div');
+        group.className = 'd-group';
+        var row = document.createElement('div');
+        row.className = 'd-sec-row';
+        row.appendChild(linkEl(plink.textContent, plink.getAttribute('href'), pcls));
+        var tg = document.createElement('button');
+        tg.type = 'button'; tg.className = 'd-toggle';
+        tg.setAttribute('aria-expanded', 'false');
+        tg.setAttribute('aria-label', 'Show ' + plink.textContent + ' pages');
+        row.appendChild(tg); group.appendChild(row);
+        var wrap = document.createElement('div');
+        wrap.className = 'd-subs';
+        var hasOn = false;
+        Array.prototype.forEach.call(subs, function (s) {
+          if (s.classList.contains('active')) hasOn = true;
+          wrap.appendChild(linkEl(s.textContent, s.getAttribute('href'),
+            'd-sub' + (s.classList.contains('active') ? ' on' : '')));
+        });
+        group.appendChild(wrap);
+        if (hasOn) { group.classList.add('open'); tg.setAttribute('aria-expanded', 'true'); }
+        tg.addEventListener('click', function () {
+          var isOpen = group.classList.toggle('open');
+          tg.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+          if (isOpen) {
+            Array.prototype.forEach.call(drawer.querySelectorAll('.d-group.open'), function (g) {
+              if (g !== group) {
+                g.classList.remove('open');
+                var bt = g.querySelector('.d-toggle');
+                if (bt) bt.setAttribute('aria-expanded', 'false');
+              }
+            });
+          }
+        });
+        drawer.appendChild(group);
+      } else {
+        drawer.appendChild(linkEl(plink.textContent, plink.getAttribute('href'), pcls));
+      }
     } else if (node.tagName === 'A') {
       drawer.appendChild(linkEl(node.textContent, node.getAttribute('href'),
         'd-sec' + (node.classList.contains('active') ? ' on' : '')));

@@ -553,9 +553,9 @@ body.drawer-open { overflow: hidden; }
 .d-sec-row { display: flex; align-items: stretch; }
 .d-sec-row .d-sec { flex: 1 1 auto; }
 .d-toggle { flex: 0 0 auto; border: 0; background: none; color: var(--muted); font: 700 18px/1 "IBM Plex Mono", monospace; padding: 0 20px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
-.d-toggle::after { content: "+"; }
+.d-toggle::after { content: ">"; display: inline-block; transition: transform .2s; }
 .d-group.open .d-toggle { color: var(--green-strong); }
-.d-group.open .d-toggle::after { content: "\2212"; }
+.d-group.open .d-toggle::after { transform: rotate(90deg); }
 .d-subs { display: none; }
 .d-group.open .d-subs { display: block; padding-bottom: 6px; }
 .page-kicker { margin: 26px 0 0; }

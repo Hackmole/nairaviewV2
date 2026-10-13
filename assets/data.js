@@ -124,28 +124,29 @@ var asiHistory = [
         { d: '2026-10-08', label: '8 Oct 2026', v: 248042.50 },
         { d: '2026-10-09', label: '9 Oct 2026', v: 248363.55 },
         { d: '2026-10-12', label: '12 Oct 2026', v: 247144.27 },
+        { d: '2026-10-13', label: '13 Oct 2026', v: 247513.63 },
       ];
 var tables = {
         gainers: [
-          { s: 'UPDCREIT', c: 'UPDC Real Estate Investment Trust', p: '₦26.40', m: '+10.00%', d: 'up', pv: 26.40, cv: 10.00 , mc: 70442314800},
-          { s: 'NEIMETH', c: 'Neimeth International Pharmaceuticals Plc', p: '₦7.70', m: '+10.00%', d: 'up', pv: 7.70, cv: 10.00 , mc: 32902905481},
-          { s: 'GUINNESS', c: 'Guinness Nigeria Plc', p: '₦423.00', m: '+9.93%', d: 'up', pv: 423.00, cv: 9.93 , mc: 926531932437},
-          { s: 'LIVESTOCK', c: 'Livestock Feeds Plc', p: '₦14.45', m: '+9.89%', d: 'up', pv: 14.45, cv: 9.89 , mc: 43349991590},
-          { s: 'MULTITREX', c: 'Multi-Trex Integrated Foods Plc', p: '₦0.46', m: '+9.52%', d: 'up', pv: 0.46, cv: 9.52 , mc: 2866128381},
+          { s: 'ETRANZACT', c: 'eTranzact International Plc', p: '₦14.35', m: '+9.96%', d: 'up', pv: 14.35, cv: 9.96 , mc: 132019997359},
+          { s: 'WAPIC', c: 'Coronation Insurance Plc', p: '₦2.48', m: '+7.83%', d: 'up', pv: 2.48, cv: 7.83 , mc: 59499365174},
+          { s: 'DAARCOMM', c: 'DAAR Communications Plc', p: '₦1.48', m: '+7.25%', d: 'up', pv: 1.48, cv: 7.25 , mc: 17760000000},
+          { s: 'LIVESTOCK', c: 'Livestock Feeds Plc', p: '₦15.45', m: '+6.92%', d: 'up', pv: 15.45, cv: 6.92 , mc: 46349991008},
+          { s: 'CHAMS', c: 'Chams Holding Company Plc', p: '₦3.60', m: '+5.88%', d: 'up', pv: 3.60, cv: 5.88 , mc: 32400000000},
         ],
         losers: [
-          { s: 'SUNUASSUR', c: 'Sunu Assurances Nigeria Plc', p: '₦2.93', m: '−9.85%', d: 'down', pv: 2.93, cv: -9.85 , mc: 17025644000},
-          { s: 'CMFC', c: 'DEAP Capital Management & Trust Plc', p: '₦3.23', m: '−9.78%', d: 'down', pv: 3.23, cv: -9.78 , mc: 4845000000},
-          { s: 'STERLINGNG', c: 'Sterling Financial Holdings Company Plc', p: '₦70.00', m: '−9.09%', d: 'down', pv: 70.00, cv: -9.09 , mc: 479514000000},
-          { s: 'FIRSTHOLDCO', c: 'First HoldCo Plc', p: '₦132.80', m: '−7.55%', d: 'down', pv: 132.80, cv: -7.55 , mc: 5903450448195},
-          { s: 'OANDO', c: 'Oando Plc', p: '₦33.65', m: '−7.55%', d: 'down', pv: 33.65, cv: -7.55 , mc: 418317029985},
+          { s: 'LEGENDINT', c: 'Legend Internet Plc', p: '₦3.40', m: '−6.85%', d: 'down', pv: 3.40, cv: -6.85 , mc: 6800000000},
+          { s: 'OMATEK', c: 'Omatek Ventures Plc', p: '₦1.31', m: '−6.43%', d: 'down', pv: 1.31, cv: -6.43 , mc: 3853744208},
+          { s: 'ROYALEX', c: 'Royal Exchange Plc', p: '₦1.04', m: '−5.77%', d: 'down', pv: 1.04, cv: -5.77 , mc: 8597366897},
+          { s: 'NSLTECH', c: 'Secure Electronic Technology Plc', p: '₦0.66', m: '−5.71%', d: 'down', pv: 0.66, cv: -5.71 , mc: 3716816400},
+          { s: 'MBENEFIT', c: 'Mutual Benefits Assurance Plc', p: '₦3.10', m: '−5.49%', d: 'down', pv: 3.10, cv: -5.49 , mc: 62191029430},
         ],
         volume: [
-          { s: 'ACCESSCORP', c: 'Access Holdings Plc', p: '–', m: '31.39m', d: 'up', pv: null, cv: 31.39, vol: true },
-          { s: 'JAIZBANK', c: 'Jaiz Bank Plc', p: '–', m: '27.27m', d: 'up', pv: null, cv: 27.27, vol: true },
-          { s: 'REGALINS', c: 'Regency Alliance Insurance Plc', p: '–', m: '26.97m', d: 'up', pv: null, cv: 26.97, vol: true },
-          { s: 'ZENITHBANK', c: 'Zenith Bank Plc', p: '–', m: '26.90m', d: 'up', pv: null, cv: 26.90, vol: true },
-          { s: 'FCMB', c: 'FCMB Group Plc', p: '–', m: '25.35m', d: 'up', pv: null, cv: 25.35, vol: true },
+          { s: 'ACCESSCORP', c: 'Access Holdings Plc', p: '–', m: '57.02m', d: 'up', pv: null, cv: 57.02, vol: true },
+          { s: 'LIVESTOCK', c: 'Livestock Feeds Plc', p: '–', m: '48.03m', d: 'up', pv: null, cv: 48.03, vol: true },
+          { s: 'GTCO', c: 'Guaranty Trust Holding Company Plc', p: '–', m: '24.42m', d: 'up', pv: null, cv: 24.42, vol: true },
+          { s: 'UBA', c: 'United Bank for Africa Plc', p: '–', m: '22.75m', d: 'up', pv: null, cv: 22.75, vol: true },
+          { s: 'ZENITHBANK', c: 'Zenith Bank Plc', p: '–', m: '16.67m', d: 'up', pv: null, cv: 16.67, vol: true },
         ]
       };
       var listNames = { gainers: 'Top gainer', losers: 'Top loser', volume: 'Most traded', directory: 'Market directory' };

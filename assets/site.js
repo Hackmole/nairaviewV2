@@ -1558,7 +1558,7 @@
   try {
     var hero = document.querySelector(".quote-hero");
     if (!hero || hero.querySelector(".share-row")) return;
-    var sym = (window.location.pathname.match(/\/stocks\/([A-Z0-9]+)\.html/) || [])[1] || "";
+    var sym = (window.location.pathname.match(/\/stocks\/([A-Z0-9]+?)(?:\.html)?\/?$/) || [])[1] || "";
     if (!sym) return;
     var priceEl = hero.querySelector(".quote-price");
     var chgEl = hero.querySelector(".quote-chg");

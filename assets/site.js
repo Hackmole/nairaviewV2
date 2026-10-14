@@ -530,7 +530,7 @@
         if (!rows.length) {
           var empty = document.createElement('div'); empty.className = 'empty-note';
           empty.textContent = (state.view === 'watchlist' && !state.query.trim())
-            ? 'Your watchlist is empty. Tap the \u2606 on any stock \u2014 or star it inside its details \u2014 to pin it here. It stays saved in this browser.'
+            ? 'Your watchlist is empty. Tap the \u2606 on any stock, or star it inside its details, to pin it here. It stays saved in this browser.'
             : 'No stocks match your search.';
           marketList.appendChild(empty);
           return;
@@ -948,7 +948,7 @@
         if (!mine.length) { listEl.innerHTML = ''; return; }
         listEl.innerHTML = mine.map(function (a) {
           var label = a.active === false
-            ? 'Triggered at ' + money(a.triggered_price) + ' \u2014 now off'
+            ? 'Triggered at ' + money(a.triggered_price) + ' · now off'
             : (a.direction === 'below' ? 'At or below ' : 'At or above ') + money(a.target);
           return '<div class="alert-row"><span>' + esc(label) + '</span>' +
             '<button type="button" class="btn-ghost alert-del" data-id="' + esc(a.id) + '">Remove</button></div>';
@@ -1637,7 +1637,7 @@
       if (!mine.length) { listEl.innerHTML = ""; return; }
       listEl.innerHTML = mine.map(function (a) {
         var label = a.active === false
-          ? "Triggered at " + money(a.triggered_price) + " — now off"
+          ? "Triggered at " + money(a.triggered_price) + " · now off"
           : (a.direction === "below" ? "At or below " : "At or above ") + money(a.target);
         return '<div class="alert-row"><span>' + esc(label) + '</span>' +
           '<button type="button" class="btn-ghost alert-del" data-id="' + esc(a.id) + '">Remove</button></div>';

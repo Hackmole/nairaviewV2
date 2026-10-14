@@ -1699,20 +1699,12 @@
     var steps = document.querySelector("#start-here .guide-steps");
     if (steps) {
       var done = getProgress();
-      var items = steps.querySelectorAll("li");
-      items.forEach(function (li, i) {
+      /* Mark completed steps via the CSS counter (add .done to li) */
+      steps.querySelectorAll("li").forEach(function (li) {
         var a = li.querySelector("a");
         if (!a) return;
         var slug = a.getAttribute("href").replace(/^\.\//, "");
-        var badge = document.createElement("span");
-        badge.className = "step-badge";
-        if (done.indexOf(slug) !== -1) {
-          badge.textContent = "✓";
-          badge.classList.add("done");
-        } else {
-          badge.textContent = String(i + 1);
-        }
-        li.insertBefore(badge, li.firstChild);
+        if (done.indexOf(slug) !== -1) li.classList.add("step-done");
       });
       var pct = Math.round((done.filter(function (s) { return PATH.indexOf(s) !== -1; }).length / PATH.length) * 100);
       var bar = document.createElement("div");

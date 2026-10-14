@@ -1721,8 +1721,8 @@
       steps.parentNode.insertBefore(bar, steps);
     }
     /* Guide pages: mark-as-complete button */
-    var crumbs = document.querySelector("nav.crumbs");
-    if (crumbs && crumbs.textContent.indexOf("Learn") !== -1) {
+    var kicker = document.querySelector("main .section .kicker");
+    if (kicker && kicker.textContent.indexOf("LEARN") === 0) {
       var path = window.location.pathname;
       var slug = (path.match(/\/([^\/]+?)(?:\.html)?$/) || [])[1] || "";
       if (PATH.indexOf(slug) !== -1) {

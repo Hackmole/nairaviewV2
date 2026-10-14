@@ -472,17 +472,17 @@
     set('chg7d', signedPct(wchg), wchg > 0 ? 'up' : (wchg < 0 ? 'down' : ''));
     set('hitracked', '₦' + fmt2(hiT));
     set('lotracked', '₦' + fmt2(loT));
-    /* rebuild the history table from live data */
+    /* rebuild the history table from live data (data-th labels for mobile cards, brief 8) */
     var tb = document.getElementById('histBody');
     if (tb) {
       var html = '';
       for (var i = prices.length - 1; i >= 0; i--) {
         var p = prices[i];
         var pc = i > 0 ? (Number(p.close) / Number(prices[i - 1].close) - 1) * 100 : 0;
-        html += '<tr><td>' + esc(fmtDate(p.date)) + '</td><td>' + fmtN(p.open) + '</td><td>' + fmtN(p.high) +
-          '</td><td>' + fmtN(p.low) + '</td><td>₦' + fmt2(p.close) + '</td>' +
-          '<td class="' + (pc > 0 ? 'up' : (pc < 0 ? 'down' : '')) + '">' + signedPct(pc) + '</td>' +
-          '<td>' + fmtVolShort(p.volume) + '</td></tr>';
+        html += '<tr><td data-th="Date">' + esc(fmtDate(p.date)) + '</td><td data-th="Open">' + fmtN(p.open) + '</td><td data-th="High">' + fmtN(p.high) +
+          '</td><td data-th="Low">' + fmtN(p.low) + '</td><td data-th="Close">₦' + fmt2(p.close) + '</td>' +
+          '<td data-th="Change" class="' + (pc > 0 ? 'up' : (pc < 0 ? 'down' : '')) + '">' + signedPct(pc) + '</td>' +
+          '<td data-th="Volume">' + fmtVolShort(p.volume) + '</td></tr>';
       }
       tb.innerHTML = html;
     }

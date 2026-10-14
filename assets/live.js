@@ -667,6 +667,10 @@
         '<span class="tape-value">' + it.value + '</span>' +
         (it.change ? ' <span class="tape-change ' + (it.cls || '') + '">' + it.change + '</span>' : '') + '</span><span class="tape-sep">·</span>';
     }).join('');
+    /* skip rebuild if the items are unchanged (avoids restarting the scroll animation) */
+    var sig = half;
+    if (track.getAttribute('data-sig') === sig) return;
+    track.setAttribute('data-sig', sig);
     /* two identical halves for a seamless loop */
     track.innerHTML = '<div class="tape-half">' + half + '</div><div class="tape-half" aria-hidden="true">' + half + '</div>';
   }

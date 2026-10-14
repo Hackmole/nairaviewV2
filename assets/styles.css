@@ -259,6 +259,10 @@
     /* Confused-user links (brief 14). */
     .faq-confused { margin-top: 14px; font-size: 13.5px; color: var(--muted); }
     .faq-confused a { color: var(--green-strong); text-decoration: underline; text-underline-offset: 3px; }
+    /* Share utilities (brief 15). */
+    .share-row { display: flex; gap: 8px; margin-top: 10px; }
+    .share-btn { display: inline-flex; align-items: center; gap: 7px; background: none; border: 1px solid var(--line); color: var(--muted); font: 600 12px/1 "IBM Plex Mono", monospace; letter-spacing: .04em; padding: 8px 12px; cursor: pointer; text-decoration: none; }
+    .share-btn:hover { color: var(--ink); border-color: var(--green-strong); }
     /* IPO closing countdown banner (Dangote Refinery offer, closes 13 Oct 2026). */
     .ipo-countdown {
       display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap;

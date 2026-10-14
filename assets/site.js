@@ -1552,3 +1552,53 @@
     last.parentNode.insertBefore(p, last.nextSibling);
   } catch (e) {}
 }());
+
+/* ---- Share utilities (brief 15): copy link + share on X ---- */
+(function () {
+  try {
+    var hero = document.querySelector(".quote-hero");
+    if (!hero || hero.querySelector(".share-row")) return;
+    var sym = (window.location.pathname.match(/\/stocks\/([A-Z0-9]+)\.html/) || [])[1] || "";
+    if (!sym) return;
+    var priceEl = hero.querySelector(".quote-price");
+    var chgEl = hero.querySelector(".quote-chg");
+    var price = priceEl ? priceEl.textContent.trim() : "";
+    var chg = chgEl ? chgEl.textContent.trim() : "";
+    var row = document.createElement("div");
+    row.className = "share-row";
+    var copyBtn = document.createElement("button");
+    copyBtn.type = "button";
+    copyBtn.className = "share-btn";
+    copyBtn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span>Copy link</span>';
+    copyBtn.addEventListener("click", function () {
+      function done(ok) {
+        copyBtn.querySelector("span").textContent = ok ? "Copied!" : "Copy failed";
+        setTimeout(function () { copyBtn.querySelector("span").textContent = "Copy link"; }, 1800);
+      }
+      var url = window.location.href;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(function () { done(true); }, function () { done(false); });
+      } else {
+        var ta = document.createElement("textarea");
+        ta.value = url; ta.style.position = "fixed"; ta.style.opacity = "0";
+        document.body.appendChild(ta); ta.select();
+        try { done(document.execCommand("copy")); } catch (e) { done(false); }
+        document.body.removeChild(ta);
+      }
+    });
+    var xLink = document.createElement("a");
+    xLink.className = "share-btn";
+    xLink.target = "_blank";
+    xLink.rel = "noopener";
+    var text = sym + " " + price + (chg ? " (" + chg + ")" : "") + " via @naira_view";
+    xLink.href = "https://x.com/intent/post?text=" + encodeURIComponent(text) + "&url=" + encodeURIComponent(window.location.href);
+    xLink.setAttribute("aria-label", "Share " + sym + " on X");
+    xLink.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>Share on X</span>';
+    row.appendChild(copyBtn);
+    row.appendChild(xLink);
+    /* place after the source attribution (brief 7) or the asof line */
+    var anchor = hero.querySelector(".src-attr") || hero.querySelector("p.asof");
+    if (anchor) anchor.parentNode.insertBefore(row, anchor.nextSibling);
+    else hero.appendChild(row);
+  } catch (e) {}
+}());

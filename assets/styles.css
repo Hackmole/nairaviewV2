@@ -248,6 +248,14 @@
     .breadth-num.up { color: var(--green-strong); }
     .breadth-num.down { color: var(--red); }
     .breadth-lab { font: 600 10.5px/1 "IBM Plex Mono", monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+    /* News ticker chips (brief 13). */
+    .ticker-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+    .ticker-chip { display: inline-flex; align-items: baseline; gap: 6px; background: var(--surface-2); border: 1px solid var(--line); padding: 4px 10px; font: 600 11px/1.4 "IBM Plex Mono", monospace; letter-spacing: .03em; cursor: pointer; color: var(--ink); }
+    .ticker-chip:hover { border-color: var(--green-strong); }
+    .ticker-chip .tc-sym { font-weight: 700; }
+    .ticker-chip .tc-move { font-weight: 600; }
+    .ticker-chip.up .tc-move { color: var(--green-strong); }
+    .ticker-chip.down .tc-move { color: var(--red); }
     /* IPO closing countdown banner (Dangote Refinery offer, closes 13 Oct 2026). */
     .ipo-countdown {
       display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap;

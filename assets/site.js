@@ -1517,3 +1517,39 @@
     card.parentNode.insertBefore(b, card.nextSibling);
   } catch (e) {}
 }());
+
+/* ---- News ticker chips (brief 13): symbol + day move on news cards ---- */
+(function () {
+  try {
+    var dir = window.directory || [];
+    if (!dir.length) return;
+    var bySym = {};
+    dir.forEach(function (e) { bySym[e.s] = e; });
+    var prefix = window.location.pathname.indexOf("/stocks/") !== -1 ? "../" : "";
+    document.querySelectorAll(".news-card[data-tickers]").forEach(function (card) {
+      if (card.querySelector(".ticker-chips")) return;
+      var syms = (card.getAttribute("data-tickers") || "").split(",").map(function (s) { return s.trim(); }).filter(Boolean);
+      if (!syms.length) return;
+      var wrap = document.createElement("div");
+      wrap.className = "ticker-chips";
+      wrap.setAttribute("aria-label", "Mentioned stocks");
+      syms.slice(0, 4).forEach(function (sym) {
+        var e = bySym[sym];
+        if (!e) return;
+        var b = document.createElement("button");
+        b.type = "button";
+        b.className = "ticker-chip" + (e.d ? " " + e.d : "");
+        var move = (e.d === "up" || e.d === "down") ? " " + e.m : "";
+        b.innerHTML = '<span class="tc-sym">' + sym + '</span><span class="tc-move">' + move + '</span>';
+        b.setAttribute("aria-label", sym + (move ? ", " + move.trim() : "") + ", view stock page");
+        b.addEventListener("click", function (ev) {
+          ev.stopPropagation();
+          ev.preventDefault();
+          window.location.href = prefix + "stocks/" + sym + ".html";
+        });
+        wrap.appendChild(b);
+      });
+      if (wrap.children.length) card.appendChild(wrap);
+    });
+  } catch (e) {}
+}());

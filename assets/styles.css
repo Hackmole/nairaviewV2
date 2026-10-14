@@ -263,6 +263,15 @@
     .share-row { display: flex; gap: 8px; margin-top: 10px; }
     .share-btn { display: inline-flex; align-items: center; gap: 7px; background: none; border: 1px solid var(--line); color: var(--muted); font: 600 12px/1 "IBM Plex Mono", monospace; letter-spacing: .04em; padding: 8px 12px; cursor: pointer; text-decoration: none; }
     .share-btn:hover { color: var(--ink); border-color: var(--green-strong); }
+    /* FX rate alerts (brief 16). */
+    .fx-alert-box { background: var(--surface); border: 1px solid var(--line); padding: 20px; margin-top: 18px; }
+    .fx-alert-box .alert-form { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; margin-top: 12px; }
+    .fx-alert-box .alert-form label { display: flex; flex-direction: column; gap: 6px; font-size: 12.5px; color: var(--muted); }
+    .fx-alert-box .alert-form input, .fx-alert-box .alert-form select { padding: 9px 12px; border: 1px solid var(--line); background: var(--surface-2); color: var(--ink); font-size: 14px; }
+    .fx-alert-box .alert-list { margin-top: 12px; }
+    .fx-alert-box .alert-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 13.5px; }
+    .fx-alert-box .alert-row:last-child { border-bottom: none; }
+    .fx-alert-box .form-error { color: var(--red); font-size: 13px; margin: 8px 0 0; width: 100%; }
     /* IPO closing countdown banner (Dangote Refinery offer, closes 13 Oct 2026). */
     .ipo-countdown {
       display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap;

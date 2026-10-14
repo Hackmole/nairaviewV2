@@ -1602,3 +1602,84 @@
     else hero.appendChild(row);
   } catch (e) {}
 }());
+
+/* ---- FX rate alerts (brief 16): alert signup on currency pages ---- */
+(function () {
+  try {
+    var section = document.querySelector('[data-island="fx-ccy"]');
+    if (!section || document.querySelector(".fx-alert-box")) return;
+    var ccy = section.getAttribute("data-ccy") || "USD";
+    var pair = ccy + "/NGN";
+    var grid = section.querySelector(".fx-grid");
+    if (!grid) return;
+    var API = "https://nairaview-api.meetomidiora.workers.dev";
+    var box = document.createElement("div");
+    box.className = "fx-alert-box";
+    box.innerHTML = '<div class="kstats-title">Rate alerts &middot; ' + pair + '</div>' +
+      '<p class="guide-p">Get an email when ' + pair + ' crosses your target. Uses the indicative parallel rate.</p>' +
+      '<div class="alert-signin" hidden><a href="account">Sign in</a> to set rate alerts.</div>' +
+      '<form class="alert-form" hidden>' +
+      '<label>Target rate (₦)<input type="number" name="alerttarget" step="0.01" min="0" required></label>' +
+      '<label>Direction<select name="alertdirection"><option value="above">At or above</option><option value="below">At or below</option></select></label>' +
+      '<button type="submit" class="btn-gold">Set alert</button>' +
+      '<p class="form-error" hidden></p></form>' +
+      '<div class="alert-list"></div>';
+    grid.parentNode.insertBefore(box, grid.nextSibling);
+    var form = box.querySelector(".alert-form");
+    var signin = box.querySelector(".alert-signin");
+    var listEl = box.querySelector(".alert-list");
+    var errEl = box.querySelector(".form-error");
+    function showErr(msg) { errEl.textContent = msg || ""; errEl.hidden = !msg; }
+    function money(n) { return "₦" + Number(n).toLocaleString("en-NG", { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+    function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+    function renderAlerts(alerts) {
+      var mine = (alerts || []).filter(function (a) { return a && a.pair === pair; });
+      if (!mine.length) { listEl.innerHTML = ""; return; }
+      listEl.innerHTML = mine.map(function (a) {
+        var label = a.active === false
+          ? "Triggered at " + money(a.triggered_price) + " — now off"
+          : (a.direction === "below" ? "At or below " : "At or above ") + money(a.target);
+        return '<div class="alert-row"><span>' + esc(label) + '</span>' +
+          '<button type="button" class="btn-ghost alert-del" data-id="' + esc(a.id) + '">Remove</button></div>';
+      }).join("");
+    }
+    function readJson(res) { return res.json().then(function (j) { return { ok: res.ok, j: j }; }); }
+    listEl.addEventListener("click", function (e) {
+      var b = e.target && e.target.closest ? e.target.closest(".alert-del") : null;
+      if (!b) return;
+      showErr("");
+      fetch(API + "/api/alerts?id=" + encodeURIComponent(b.getAttribute("data-id")),
+        { method: "DELETE", credentials: "include" })
+        .then(readJson)
+        .then(function (r) { if (!r.ok) throw new Error((r.j && r.j.error) || "Could not remove."); load(); })
+        .catch(function (e2) { showErr(e2.message); });
+    });
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      showErr("");
+      var target = Number(form.querySelector("[name=alerttarget]").value);
+      var direction = form.querySelector("[name=alertdirection]").value;
+      fetch(API + "/api/alerts", {
+        method: "POST", credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pair: pair, target: target, direction: direction })
+      })
+        .then(readJson)
+        .then(function (r) { if (!r.ok) throw new Error((r.j && r.j.error) || "Could not save."); form.reset(); load(); })
+        .catch(function (e2) { showErr(e2.message); });
+    });
+    function load() {
+      fetch(API + "/api/alerts", { credentials: "include" })
+        .then(function (r) { if (!r.ok) throw new Error("load"); return r.json(); })
+        .then(function (j) { renderAlerts(j.alerts); })
+        .catch(function () { renderAlerts([]); });
+    }
+    fetch(API + "/api/auth/me", { credentials: "include" })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (me) {
+        if (me && me.email) { form.hidden = false; load(); }
+        else { signin.hidden = false; }
+      })
+      .catch(function () { signin.hidden = false; });
+  } catch (e) {}
+}());

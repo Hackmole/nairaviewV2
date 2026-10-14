@@ -1422,7 +1422,7 @@ a, button { -webkit-tap-highlight-color: transparent; }
 .pchart-ret.up { color: var(--green-strong); }
 .pchart-ret.down { color: var(--red); }
 .pchart-pills { display: flex; gap: 8px; margin: 12px 0 4px; flex-wrap: wrap; }
-.pchart-pill { font: 600 11px/1 "IBM Plex Mono", "Noto Sans", monospace; letter-spacing: .06em; padding: 8px 14px; border: 1px solid var(--line-strong); border-radius: 0; background: transparent; color: var(--muted); cursor: pointer; }
+.pchart-pill { font: 600 11px/1 "IBM Plex Mono", "Noto Sans", monospace; letter-spacing: .06em; padding: 8px 14px; border: 1px solid var(--line-strong); border-radius: 0; background: transparent; color: var(--muted); cursor: pointer; flex-shrink: 0; }
 .pchart-pill[aria-pressed="true"] { background: var(--green); border-color: var(--green); color: #022126; }
 :root[data-theme="dark"] .pchart-pill[aria-pressed="true"] { color: #022126; }
 .pchart-pill:disabled { opacity: .35; cursor: default; }

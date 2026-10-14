@@ -349,8 +349,8 @@
     var col = up ? 'var(--green-strong)' : 'var(--red)';
     var ret = (closes[n - 1] / closes[0] - 1) * 100;
 
-    var W = 760, H = 320, padL = 6, padR = 64, padT = 10;
-    var pxTop = padT, pxBot = 272, xBot = 300;
+    var W = 760, H = 320, padL = 6, padR = 64, padT = 10, padB = 12;
+    var pxTop = padT, pxBot = 272 - padB, xBot = 300;
     function X(i) { return padL + (W - padL - padR) * (n === 1 ? 0.5 : i / (n - 1)); }
     function Y(v) { return pxBot - (pxBot - pxTop) * (v - lo) / rng; }
 

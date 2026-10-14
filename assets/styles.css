@@ -193,6 +193,15 @@
     .snapshot-note a { display: inline-flex; align-items: center; gap: 6px; color: var(--green-strong); font-weight: 700; font-size: 13px; text-decoration: none; }
     .snapshot-note a:hover { text-decoration: underline; text-underline-offset: 4px; }
     .metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 26px; }
+    /* Market narrative: "Today on the NGX" ambient summary (brief 6). */
+    .market-narrative { margin-top: 22px; background: var(--surface-2); border: 1px solid var(--line); padding: 18px 22px; }
+    .market-narrative .kicker { margin-bottom: 6px; }
+    .market-narrative p { margin: 0; font-size: 15px; line-height: 1.6; max-width: 78ch; }
+    /* Sparklines in the leaders/laggards rows (brief 6). */
+    .market-row .spark { flex: 0 0 auto; width: 64px; height: 22px; }
+    .market-row .spark svg { display: block; width: 100%; height: 100%; }
+    .market-row .spark.up { color: var(--green-strong); }
+    .market-row .spark.down { color: var(--red); }
     /* IPO closing countdown banner (Dangote Refinery offer, closes 13 Oct 2026). */
     .ipo-countdown {
       display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap;

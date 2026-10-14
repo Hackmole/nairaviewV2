@@ -128,18 +128,18 @@ var asiHistory = [
       ];
 var tables = {
         gainers: [
-          { s: 'ETRANZACT', c: 'eTranzact International Plc', p: '₦14.35', m: '+9.96%', d: 'up', pv: 14.35, cv: 9.96 , mc: 132019997359},
-          { s: 'WAPIC', c: 'Coronation Insurance Plc', p: '₦2.48', m: '+7.83%', d: 'up', pv: 2.48, cv: 7.83 , mc: 59499365174},
-          { s: 'DAARCOMM', c: 'DAAR Communications Plc', p: '₦1.48', m: '+7.25%', d: 'up', pv: 1.48, cv: 7.25 , mc: 17760000000},
-          { s: 'LIVESTOCK', c: 'Livestock Feeds Plc', p: '₦15.45', m: '+6.92%', d: 'up', pv: 15.45, cv: 6.92 , mc: 46349991008},
-          { s: 'CHAMS', c: 'Chams Holding Company Plc', p: '₦3.60', m: '+5.88%', d: 'up', pv: 3.60, cv: 5.88 , mc: 32400000000},
+          { s: 'ETRANZACT', c: 'eTranzact International Plc', p: '₦14.35', m: '+9.96%', d: 'up', pv: 14.35, cv: 9.96 , mc: 132019997359, sp: [12.50,12.50,12.50,12.35,12.20,12.20,11.00,11.00,11.00,11.00,12.10,12.10,15.75]},
+          { s: 'WAPIC', c: 'Coronation Insurance Plc', p: '₦2.48', m: '+7.83%', d: 'up', pv: 2.48, cv: 7.83 , mc: 59499365174, sp: [2.23,2.20,2.32,2.21,2.43,2.36,2.36,2.21,2.38,2.60,2.48,2.33]},
+          { s: 'DAARCOMM', c: 'DAAR Communications Plc', p: '₦1.48', m: '+7.25%', d: 'up', pv: 1.48, cv: 7.25 , mc: 17760000000, sp: [1.44,1.50,1.52,1.50,1.44,1.46,1.45,1.45,1.50,1.51]},
+          { s: 'LIVESTOCK', c: 'Livestock Feeds Plc', p: '₦15.45', m: '+6.92%', d: 'up', pv: 15.45, cv: 6.92 , mc: 46349991008, sp: [9.75,10.70,11.00,12.00,13.15,14.45,15.70,16.00]},
+          { s: 'CHAMS', c: 'Chams Holding Company Plc', p: '₦3.60', m: '+5.88%', d: 'up', pv: 3.60, cv: 5.88 , mc: 32400000000, sp: [3.23,3.39,3.60,3.60,3.43,3.43,3.40,3.50]},
         ],
         losers: [
-          { s: 'LEGENDINT', c: 'Legend Internet Plc', p: '₦3.40', m: '−6.85%', d: 'down', pv: 3.40, cv: -6.85 , mc: 6800000000},
-          { s: 'OMATEK', c: 'Omatek Ventures Plc', p: '₦1.31', m: '−6.43%', d: 'down', pv: 1.31, cv: -6.43 , mc: 3853744208},
-          { s: 'ROYALEX', c: 'Royal Exchange Plc', p: '₦1.04', m: '−5.77%', d: 'down', pv: 1.04, cv: -5.77 , mc: 8597366897},
-          { s: 'NSLTECH', c: 'Secure Electronic Technology Plc', p: '₦0.66', m: '−5.71%', d: 'down', pv: 0.66, cv: -5.71 , mc: 3716816400},
-          { s: 'MBENEFIT', c: 'Mutual Benefits Assurance Plc', p: '₦3.10', m: '−5.49%', d: 'down', pv: 3.10, cv: -5.49 , mc: 62191029430},
+          { s: 'LEGENDINT', c: 'Legend Internet Plc', p: '₦3.40', m: '−6.85%', d: 'down', pv: 3.40, cv: -6.85 , mc: 6800000000, sp: [3.35,3.65,3.65,3.65,3.65,3.65,3.65,3.65,3.45,3.65,3.30,3.40]},
+          { s: 'OMATEK', c: 'Omatek Ventures Plc', p: '₦1.31', m: '−6.43%', d: 'down', pv: 1.31, cv: -6.43 , mc: 3853744208, sp: [1.45,1.45,1.42,1.38,1.41,1.44,1.34,1.31]},
+          { s: 'ROYALEX', c: 'Royal Exchange Plc', p: '₦1.04', m: '−5.77%', d: 'down', pv: 1.04, cv: -5.77 , mc: 8597366897, sp: [1.08,1.05,1.15,1.06,1.00,1.00,1.08,1.01,1.00,1.04]},
+          { s: 'NSLTECH', c: 'Secure Electronic Technology Plc', p: '₦0.66', m: '−5.71%', d: 'down', pv: 0.66, cv: -5.71 , mc: 3716816400, sp: []},
+          { s: 'MBENEFIT', c: 'Mutual Benefits Assurance Plc', p: '₦3.10', m: '−5.49%', d: 'down', pv: 3.10, cv: -5.49 , mc: 62191029430, sp: [3.44,3.28,3.31,3.20,3.11,3.13,3.15,3.20,3.20,3.10,3.05]},
         ],
         volume: [
           { s: 'ACCESSCORP', c: 'Access Holdings Plc', p: '–', m: '57.02m', d: 'up', pv: null, cv: 57.02, vol: true },

@@ -24,7 +24,7 @@
   <link rel="icon" href="assets/favicon-96.png" sizes="96x96" type="image/png">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
   <title>Nairaview · Nigerian Stock Exchange (NGX) Market Data, News & Tools</title>
-  <link rel="stylesheet" href="assets/styles.css?v=20261013m" />
+  <link rel="stylesheet" href="assets/styles.css?v=20261013n" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Barlow+Semi+Condensed:wght@600;700&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -87,6 +87,37 @@
               <article class="metric"><span class="metric-label">Deals</span><span class="metric-value" id="metricDeals">38,707</span></article>
               <article class="metric"><span class="metric-label">YTD</span><span class="metric-value" id="metricYtd">+58.16%</span></article>
             </section>
+            <!-- MARKETNARRATIVE -->
+      <section class="market-narrative" aria-label="Today on the NGX">
+        <div class="kicker">Today on the NGX</div>
+        <p id="marketNarrative">The ASI slipped 0.09% to 247,513.63 on 13 Oct 2026, with 27 advancers against 27 decliners. ETRANZACT led the gainers at +9.96%, while LEGENDINT paced the losers at −6.85%.</p>
+      </section>
+      <!-- /MARKETNARRATIVE -->
+<section class="section card-section" id="leaders">
+              <div class="section-heading">
+                <div><div class="kicker">Market breadth</div><h2>Gainers and losers</h2></div>
+              </div>
+              <div class="table-tools">
+                <input class="stock-search" id="stockSearch" type="search" placeholder="Search stocks: try “bank” or “FIDELITYBK”" aria-label="Search stocks" autocomplete="off" />
+              </div>
+              <div class="breadth-toggle" role="tablist" aria-label="Market breadth views">
+                <button role="tab" id="view-breadth" aria-controls="market-list" aria-selected="true" data-view="breadth">Leaders &amp; laggards</button>
+                <button role="tab" id="view-volume" aria-controls="market-list" aria-selected="false" data-view="volume">Volume</button>
+                <button role="tab" id="view-watchlist" aria-controls="market-list" aria-selected="false" data-view="watchlist">Watchlist <span class="watch-count" id="watchCount"></span></button>
+              </div>
+              <div class="breadth-cols" id="breadthCols">
+                <div class="breadth-col">
+                  <h3 class="breadth-title"><span class="b-arrow up" aria-hidden="true">▲</span> Leaders</h3>
+                  <div class="market-table" id="leadersList"></div>
+                </div>
+                <div class="breadth-col">
+                  <h3 class="breadth-title"><span class="b-arrow down" aria-hidden="true">▼</span> Laggards</h3>
+                  <div class="market-table" id="laggardsList"></div>
+                </div>
+              </div>
+              <div class="market-table" id="market-list" role="tabpanel" aria-labelledby="view-breadth" hidden></div>
+              <p class="table-note">Fixed at the <span class="noteDate">13 Oct 2026</span> close · ~30-min delayed during sessions.</p>
+            </section>
       <section class="fx-tiles" aria-label="Currency to naira rates">
         <div class="fx-tiles-head">
           <span class="eyebrow">FX rates</span>
@@ -137,31 +168,6 @@
                 </div>
                 <div class="chart-caption"><span id="periodLabel">31 Dec 2025 – 13 Oct 2026</span></div>
               </div>
-            </section>
-      <section class="section card-section" id="leaders">
-              <div class="section-heading">
-                <div><div class="kicker">Market breadth</div><h2>Gainers and losers</h2></div>
-              </div>
-              <div class="table-tools">
-                <input class="stock-search" id="stockSearch" type="search" placeholder="Search stocks: try “bank” or “FIDELITYBK”" aria-label="Search stocks" autocomplete="off" />
-              </div>
-              <div class="breadth-toggle" role="tablist" aria-label="Market breadth views">
-                <button role="tab" id="view-breadth" aria-controls="market-list" aria-selected="true" data-view="breadth">Leaders &amp; laggards</button>
-                <button role="tab" id="view-volume" aria-controls="market-list" aria-selected="false" data-view="volume">Volume</button>
-                <button role="tab" id="view-watchlist" aria-controls="market-list" aria-selected="false" data-view="watchlist">Watchlist <span class="watch-count" id="watchCount"></span></button>
-              </div>
-              <div class="breadth-cols" id="breadthCols">
-                <div class="breadth-col">
-                  <h3 class="breadth-title"><span class="b-arrow up" aria-hidden="true">▲</span> Leaders</h3>
-                  <div class="market-table" id="leadersList"></div>
-                </div>
-                <div class="breadth-col">
-                  <h3 class="breadth-title"><span class="b-arrow down" aria-hidden="true">▼</span> Laggards</h3>
-                  <div class="market-table" id="laggardsList"></div>
-                </div>
-              </div>
-              <div class="market-table" id="market-list" role="tabpanel" aria-labelledby="view-breadth" hidden></div>
-              <p class="table-note">Fixed at the <span class="noteDate">13 Oct 2026</span> close · ~30-min delayed during sessions.</p>
             </section>
       <section class="section card-section" id="heatmap">
               <div class="section-heading">
@@ -265,10 +271,10 @@
 </script>
 <script src="https://www.highrevenueformat.com/2c91ae62a5b6daf76d6821ebc779a810/invoke.js"></script>
     </div>
-  <script src="assets/data.js?v=20261013a"></script>
+  <script src="assets/data.js?v=20261013b"></script>
   <script src="assets/logos.js"></script>
   <script src="assets/stock-pages.js"></script>
-  <script src="assets/site.js?v=20261013g"></script>
+  <script src="assets/site.js?v=20261013h"></script>
   <script src="assets/live.js?v=20261013a"></script>
     <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a9f4136dd40547a7b1acca41e62cc7a5"}'></script><!-- End Cloudflare Web Analytics -->
 </body>

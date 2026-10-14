@@ -100,6 +100,38 @@ def direction(v):
     return "up" if v > 0 else ("down" if v < 0 else "flat")
 
 
+def market_narrative(asi, day_chg, d_short, adv, dec, gainers, losers):
+    """One-paragraph 'Today on the NGX' ambient summary (brief 6)."""
+    if abs(day_chg) < 0.005:
+        s1 = f"The ASI closed flat at {asi:,.2f} on {d_short}"
+    else:
+        verb = "rose" if day_chg > 0 else "slipped"
+        s1 = f"The ASI {verb} {abs(day_chg):.2f}% to {asi:,.2f} on {d_short}"
+    s1 += f", with {adv} advancers against {dec} decliners."
+    parts = [s1]
+    def chgof(x):
+        c = x.get("official_change_percent")
+        return c if c is not None else (x.get("change_percent") or 0)
+    if gainers and losers:
+        parts.append(f"{gainers[0]['symbol']} led the gainers at {disp_pct(chgof(gainers[0]))}, "
+                     f"while {losers[0]['symbol']} paced the losers at {disp_pct(chgof(losers[0]))}.")
+    elif gainers:
+        parts.append(f"{gainers[0]['symbol']} led the gainers at {disp_pct(chgof(gainers[0]))}.")
+    elif losers:
+        parts.append(f"{losers[0]['symbol']} paced the losers at {disp_pct(chgof(losers[0]))}.")
+    return " ".join(parts)
+
+
+def spark_closes(sym, n=15):
+    """Last n daily closes for a ticker, for homepage sparklines (brief 6)."""
+    try:
+        h = get_json(f"/api/history?symbol={sym}")
+        closes = [p["close"] for p in (h.get("prices") or []) if p.get("close")]
+        return [round(v, 2) for v in closes[-n:]] if len(closes) >= 2 else []
+    except Exception:
+        return []
+
+
 def whats_happening(sym, st, hlinfo, d_short, has_chart):
     """Plain-English 2-3 sentence market summary for a stock page (brief 3).
 
@@ -237,9 +269,11 @@ def main():
         chg = st.get("official_change_percent")
         chg = chg if chg is not None else (st.get("change_percent") or 0)
         px = st.get("current_price") or 0
-        return ("          { s: '%s', c: '%s', p: '%s', m: '%s', d: '%s', pv: %.2f, cv: %.2f , mc: %d},"
+        sp = SPARKS.get(st["symbol"], [])
+        sp_str = ",".join(f"{v:.2f}" for v in sp)
+        return ("          { s: '%s', c: '%s', p: '%s', m: '%s', d: '%s', pv: %.2f, cv: %.2f , mc: %d, sp: [%s]},"
                 % (st["symbol"], st["name"].replace("'", "\\'"), fmt_price(px),
-                   disp_pct(chg), direction(chg), px, chg, int(st.get("market_cap") or 0)))
+                   disp_pct(chg), direction(chg), px, chg, int(st.get("market_cap") or 0), sp_str))
 
     gainers = sorted([x for x in prices if (x.get("official_change_percent")
                                             if x.get("official_change_percent") is not None
@@ -255,6 +289,13 @@ def main():
                                    else (x.get("change_percent") or 0)))[:5]
     byvol = sorted([x for x in prices if x.get("volume")], key=lambda x: x["volume"],
                    reverse=True)[:5]
+    # sparkline closes for the 10 movers shown on the homepage (brief 6)
+    SPARKS = {}
+    for _sym in [x["symbol"] for x in gainers + losers]:
+        _sp = spark_closes(_sym)
+        if _sp:
+            SPARKS[_sym] = _sp
+    log(f"spark histories baked for {len(SPARKS)} movers")
     vol_rows = [("          { s: '%s', c: '%s', p: '\u2013', m: '%s', d: 'up', pv: null, cv: %.2f, vol: true },"
                  % (x["symbol"], x["name"].replace("'", "\\'"),
                     f"{x['volume'] / 1e6:.2f}m", x["volume"] / 1e6)) for x in byvol]
@@ -342,6 +383,10 @@ def main():
     t = re.sub(r'(<a class="btn-gold wrap-cta" href=")[^"]*(">).*?(</a>)',
                lambda m: m.group(1) + cta_href + m.group(2) + cta_text + ' <span aria-hidden="true">&rarr;</span>' + m.group(3),
                t, flags=re.S)
+    # "Today on the NGX" ambient narrative (brief 6)
+    narr = market_narrative(asi, day_chg, d_short, adv, dec, gainers, losers)
+    t = re.sub(r'(<p id="marketNarrative">).*?(</p>)',
+               lambda m: m.group(1) + narr + m.group(2), t, flags=re.S)
     open(idx, "w", encoding="utf-8").write(t)
     changed.add("index.html")
 

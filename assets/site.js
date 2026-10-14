@@ -450,8 +450,31 @@
         var move = document.createElement('div');
         move.className = 'move' + (r.vol ? '' : ' ' + (r.d || ''));
         move.textContent = r.vol ? r.m + ' shares' : dirArrow(r) + r.m;
-        item.appendChild(star); item.appendChild(main); item.appendChild(price); item.appendChild(move);
+        item.appendChild(star); item.appendChild(main);
+        var spark = sparkEl(r.sp);
+        if (spark) item.appendChild(spark);
+        item.appendChild(price); item.appendChild(move);
         return item;
+      }
+      /* Mini sparkline from baked closes (brief 6); skipped when no data. */
+      function sparkEl(closes) {
+        if (!closes || closes.length < 2) return null;
+        var w = 64, h = 22;
+        var min = Math.min.apply(null, closes), max = Math.max.apply(null, closes);
+        var rng = (max - min) || 1;
+        var pts = [];
+        for (var i = 0; i < closes.length; i++) {
+          var x = (i / (closes.length - 1) * w).toFixed(1);
+          var y = (h - 2 - (closes[i] - min) / rng * (h - 4)).toFixed(1);
+          pts.push(x + "," + y);
+        }
+        var up = closes[closes.length - 1] >= closes[0];
+        var wrap = document.createElement("span");
+        wrap.className = "spark " + (up ? "up" : "down");
+        wrap.setAttribute("aria-hidden", "true");
+        wrap.innerHTML = '<svg viewBox="0 0 ' + w + ' ' + h + '">' +
+          '<polyline points="' + pts.join(" ") + '" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>';
+        return wrap;
       }
       function renderBreadth() {
         if (!breadthCols || !leadersList || !laggardsList) return;

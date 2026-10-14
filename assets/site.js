@@ -1509,7 +1509,7 @@
     var bySym = {};
     dir.forEach(function (e) { bySym[e.s] = e; });
     var prefix = window.location.pathname.indexOf("/stocks/") !== -1 ? "../" : "";
-    document.querySelectorAll(".news-card[data-tickers]").forEach(function (card) {
+    document.querySelectorAll(".news-card[data-tickers], .news-feature[data-tickers]").forEach(function (card) {
       if (card.querySelector(".ticker-chips")) return;
       var syms = (card.getAttribute("data-tickers") || "").split(",").map(function (s) { return s.trim(); }).filter(Boolean);
       if (!syms.length) return;

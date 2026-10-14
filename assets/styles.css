@@ -731,7 +731,7 @@ body.drawer-open { overflow: hidden; }
 .calc-note { font-size: 12.5px; color: var(--muted); margin: 8px 0 0; }
 .nextbox { border-left: 4px solid var(--green-strong); background: var(--surface); border-radius: 0; padding: 16px 18px; margin: 26px 0; max-width: 860px; }
 .nextbox h3 { margin: 0 0 8px; font-size: 16px; }
-.nextbox ul { margin: 0; padding-left: 20px; font-size: 14.5px; line-height: 1.9; }
+.nextbox ul { margin: 0; padding-left: 0; list-style: none; font-size: 14.5px; line-height: 1.9; }
 .nextbox a { color: var(--green-strong); font-weight: 600; }
 .movers-duo { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
 .movers-col h3 { font-size: 15px; margin: 0 0 8px; }

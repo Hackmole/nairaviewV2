@@ -1747,3 +1747,15 @@
     }
   } catch (e) {}
 }());
+
+/* ---- Hide empty stats (audit fix): kstat with only · placeholder ---- */
+(function () {
+  try {
+    document.querySelectorAll(".kstat .v").forEach(function (v) {
+      if (v.textContent.trim() === "·" || v.textContent.trim() === "") {
+        var kstat = v.closest(".kstat");
+        if (kstat) kstat.style.display = "none";
+      }
+    });
+  } catch (e) {}
+}());

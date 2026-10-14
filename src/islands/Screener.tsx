@@ -63,6 +63,8 @@ function applyFilters(rows: DirectoryRow[], f: FilterState): DirectoryRow[] {
   const priceOn = !isNaN(minP) || !isNaN(maxP);
   const chgOn = !isNaN(minC) || !isNaN(maxC);
   const out = rows.filter((e) => {
+    /* Exclude rows with no price data (e.g. UHOMREIT) */
+    if (e.pv === null || e.pv === undefined) return false;
     if (f.mover === 'gainers' && !(!e.vol && e.d === 'up')) return false;
     if (f.mover === 'losers' && e.d !== 'down') return false;
     if (f.mover === 'volume' && !e.vol) return false;

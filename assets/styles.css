@@ -272,6 +272,17 @@
     .fx-alert-box .alert-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 13.5px; }
     .fx-alert-box .alert-row:last-child { border-bottom: none; }
     .fx-alert-box .form-error { color: var(--red); font-size: 13px; margin: 8px 0 0; width: 100%; }
+    /* Learn path (brief 18). */
+    .learn-progress { margin-bottom: 18px; }
+    .lp-bar { height: 6px; background: var(--surface-2); border: 1px solid var(--line); }
+    .lp-fill { height: 100%; background: var(--green-strong); transition: width 0.3s; }
+    .lp-label { font-size: 12.5px; color: var(--muted); margin-top: 8px; }
+    .step-badge { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border: 1px solid var(--line); font: 600 13px/1 "IBM Plex Mono", monospace; margin-right: 12px; flex-shrink: 0; }
+    .step-badge.done { background: var(--green-strong); border-color: var(--green-strong); color: #fff; }
+    #start-here .guide-steps li { display: flex; align-items: flex-start; }
+    .complete-btn { display: inline-block; margin-top: 24px; padding: 12px 24px; background: var(--green-strong); color: #fff; border: none; font: 600 14px/1 "Barlow", sans-serif; cursor: pointer; }
+    .complete-btn:disabled { opacity: 0.7; cursor: default; }
+    .next-lesson { margin-top: 16px; font-size: 14px; }
     /* IPO closing countdown banner (Dangote Refinery offer, closes 13 Oct 2026). */
     .ipo-countdown {
       display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap;

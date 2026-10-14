@@ -1683,3 +1683,75 @@
       .catch(function () { signin.hidden = false; });
   } catch (e) {}
 }());
+
+/* ---- Learn path progress (brief 18): structured product ---- */
+(function () {
+  try {
+    var PATH = ["learn-what-is-ngx", "learn-how-shares-work", "learn-stockbroker-cscs", "learn-buy-first-stock", "learn-beginner-mistakes"];
+    var KEY = "nv-learn-progress";
+    function getProgress() {
+      try { return JSON.parse(localStorage.getItem(KEY) || "[]"); } catch (e) { return []; }
+    }
+    function setProgress(arr) {
+      try { localStorage.setItem(KEY, JSON.stringify(arr)); } catch (e) {}
+    }
+    /* Learn hub: progress bar + step numbers */
+    var steps = document.querySelector("#start-here .guide-steps");
+    if (steps) {
+      var done = getProgress();
+      var items = steps.querySelectorAll("li");
+      items.forEach(function (li, i) {
+        var a = li.querySelector("a");
+        if (!a) return;
+        var slug = a.getAttribute("href").replace(/^\.\//, "");
+        var badge = document.createElement("span");
+        badge.className = "step-badge";
+        if (done.indexOf(slug) !== -1) {
+          badge.textContent = "✓";
+          badge.classList.add("done");
+        } else {
+          badge.textContent = String(i + 1);
+        }
+        li.insertBefore(badge, li.firstChild);
+      });
+      var pct = Math.round((done.filter(function (s) { return PATH.indexOf(s) !== -1; }).length / PATH.length) * 100);
+      var bar = document.createElement("div");
+      bar.className = "learn-progress";
+      bar.innerHTML = '<div class="lp-bar"><div class="lp-fill" style="width:' + pct + '%"></div></div><div class="lp-label">' + pct + '% complete · ' + done.filter(function (s) { return PATH.indexOf(s) !== -1; }).length + ' of ' + PATH.length + ' lessons</div>';
+      steps.parentNode.insertBefore(bar, steps);
+    }
+    /* Guide pages: mark-as-complete button */
+    var crumbs = document.querySelector("nav.crumbs");
+    if (crumbs && crumbs.textContent.indexOf("Learn") !== -1) {
+      var path = window.location.pathname;
+      var slug = (path.match(/\/([^\/]+?)(?:\.html)?$/) || [])[1] || "";
+      if (PATH.indexOf(slug) !== -1) {
+        var main = document.querySelector("main .section");
+        if (main && !document.querySelector(".complete-btn")) {
+          var done = getProgress();
+          var btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "complete-btn";
+          btn.textContent = done.indexOf(slug) !== -1 ? "✓ Completed" : "Mark as complete";
+          if (done.indexOf(slug) !== -1) btn.disabled = true;
+          btn.addEventListener("click", function () {
+            var d = getProgress();
+            if (d.indexOf(slug) === -1) d.push(slug);
+            setProgress(d);
+            btn.textContent = "✓ Completed";
+            btn.disabled = true;
+            /* suggest next */
+            var idx = PATH.indexOf(slug);
+            if (idx < PATH.length - 1) {
+              var next = document.createElement("p");
+              next.className = "next-lesson";
+              next.innerHTML = 'Next: <a href="' + PATH[idx + 1] + '">' + PATH[idx + 1].replace("learn-", "").replace(/-/g, " ") + '</a>';
+              btn.parentNode.insertBefore(next, btn.nextSibling);
+            }
+          });
+          main.appendChild(btn);
+        }
+      }
+    }
+  } catch (e) {}
+}());

@@ -100,6 +100,52 @@ def direction(v):
     return "up" if v > 0 else ("down" if v < 0 else "flat")
 
 
+def whats_happening(sym, st, hlinfo, d_short, has_chart):
+    """Plain-English 2-3 sentence market summary for a stock page (brief 3).
+
+    Built from fresh pull data only (day move, 7-day trend, tracked-range
+    position). Regenerated on every refresh between the WHATHAPPENING
+    markers; chips link to the sections that exist on the page."""
+    price = st["current_price"]
+    prev = st.get("previous_close") or price
+    chg = st.get("official_change_percent")
+    chg = chg if chg is not None else (st.get("change_percent") or 0.0)
+    move = price - prev
+    w7 = st.get("pct_change_7d") or 0.0
+    parts = []
+    if abs(chg) < 0.005:
+        parts.append(f"{sym} closed flat at {fmt_price(price)} on {d_short}, unchanged on the day.")
+    else:
+        verb = "rose" if chg > 0 else "fell"
+        mv = f"{'+' if move >= 0 else MINUS}\u20a6{abs(move):,.2f}"
+        parts.append(f"{sym} {verb} {abs(chg):.2f}% to {fmt_price(price)} on {d_short} ({mv} on the day).")
+    if abs(w7) >= 0.05:
+        wverb = "up" if w7 > 0 else "down"
+        parts.append(f"It\u2019s {wverb} {abs(w7):.2f}% over the last 7 days.")
+    hi = (hlinfo or {}).get("high")
+    lo = (hlinfo or {}).get("low")
+    if hi and lo and hi > lo:
+        pos = (price - lo) / (hi - lo)
+        if pos >= 0.8:
+            parts.append(f"It trades near its tracked high of {fmt_price(hi)}.")
+        elif pos <= 0.2:
+            parts.append(f"It trades near its tracked low of {fmt_price(lo)}.")
+    text = " ".join(parts)
+    if has_chart:
+        chips = ('<a href="#pchartMount">Price chart</a>'
+                 '<a href="#history">Historical data</a>'
+                 '<a href="#buy">How to buy</a>')
+    else:
+        chips = ('<a href="#buy">How to buy</a>'
+                 '<a href="#faq">FAQ</a>'
+                 '<a href="#related">Related stocks</a>')
+    return ("<!-- WHATHAPPENING -->\n<div class=\"whathap\">\n"
+            f"  <div class=\"kstats-title\">What\u2019s happening with {sym}?</div>\n"
+            f"  <p class=\"guide-p\">{text}</p>\n"
+            f"  <div class=\"whathap-chips\">{chips}</div>\n</div>\n"
+            "<!-- /WHATHAPPENING -->")
+
+
 def arrow(v):
     return "\u25b2" if v > 0 else ("\u25bc" if v < 0 else "\u2013")
 
@@ -389,6 +435,10 @@ def main():
                    rf"\g<1>{d_short}\g<2>", t)
         t = re.sub(r'(<p class="asof">As of the )\d{1,2} [A-Z][a-z]{2} \d{4}( close · 16:00 WAT\.</p>)',
                    rf"\g<1>{d_short}\g<2>", t)
+        # "What's happening" summary block (brief 3): regenerated each refresh
+        wh = whats_happening(sym, st, hlinfo, d_short, 'id="pchartMount"' in t)
+        t = re.sub(r'<!-- WHATHAPPENING -->.*?<!-- /WHATHAPPENING -->',
+                   lambda m: wh, t, flags=re.S)
         # meta descriptions + JSON-LD (recomputed, then blanket date swap for leftovers)
         meta_new = (f"{sym} ({name}) share price is {fmt_price(price)} ({daystr}) as of the "
                     f"{d_short} NGX close. 7-day change {w7str}, market cap {fmt_mcap(mcap)}, "

@@ -1230,6 +1230,12 @@ a, button { -webkit-tap-highlight-color: transparent; }
 .ticker-nav a:hover { color: var(--ink); }
 .ticker-nav a.active { color: var(--green-strong); border-bottom-color: var(--green-strong); }
 #overview, #pchartMount, #history, #buy, #faq, #related { scroll-margin-top: 130px; }
+/* ---- What's happening block (stock pages, brief 3) ---- */
+.whathap { margin: 20px 0 0; background: var(--surface-2); border: 1px solid var(--line); padding: 20px 22px; }
+.whathap .guide-p { margin: 10px 0 0; max-width: 70ch; }
+.whathap-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.whathap-chips a { font: 600 11px/1 "IBM Plex Mono", monospace; text-transform: uppercase; letter-spacing: .08em; color: var(--ink); text-decoration: none; border: 1px solid var(--line); padding: 10px 14px; background: var(--paper); }
+.whathap-chips a:hover { border-color: var(--green-strong); color: var(--green-strong); }
 .quote-actions { display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
 
 /* ---- Session facts: headline stat cards ---- */

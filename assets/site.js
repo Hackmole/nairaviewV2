@@ -1536,3 +1536,19 @@
     });
   } catch (e) {}
 }());
+
+/* ---- Confused-user links (brief 14): link guides from stock FAQs ---- */
+(function () {
+  try {
+    var faq = document.getElementById("faq");
+    if (!faq || document.querySelector(".faq-confused")) return;
+    var prefix = window.location.pathname.indexOf("/stocks/") !== -1 ? "../" : "";
+    var p = document.createElement("p");
+    p.className = "faq-confused";
+    p.innerHTML = 'Confused? <a href="' + prefix + 'learn-why-did-my-stock-fall">Why did my stock fall?</a> · <a href="' + prefix + 'learn-what-is-ex-div">What is ex-div?</a> · <a href="' + prefix + 'learn-why-is-my-order-pending">Why is my order pending?</a>';
+    /* insert after the last faq-item */
+    var items = faq.parentNode.querySelectorAll(".faq-item");
+    var last = items.length ? items[items.length - 1] : faq;
+    last.parentNode.insertBefore(p, last.nextSibling);
+  } catch (e) {}
+}());

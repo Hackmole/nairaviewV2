@@ -256,6 +256,9 @@
     .ticker-chip .tc-move { font-weight: 600; }
     .ticker-chip.up .tc-move { color: var(--green-strong); }
     .ticker-chip.down .tc-move { color: var(--red); }
+    /* Confused-user links (brief 14). */
+    .faq-confused { margin-top: 14px; font-size: 13.5px; color: var(--muted); }
+    .faq-confused a { color: var(--green-strong); text-decoration: underline; text-underline-offset: 3px; }
     /* IPO closing countdown banner (Dangote Refinery offer, closes 13 Oct 2026). */
     .ipo-countdown {
       display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap;

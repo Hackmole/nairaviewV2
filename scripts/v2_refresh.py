@@ -387,7 +387,7 @@ def main():
                    rf"\g<1>{ws_label}", t)
         t = re.sub(r'(<div class="kstats-title">Key statistics &middot; )\d{1,2} [A-Z][a-z]{2} \d{4}( close</div>)',
                    rf"\g<1>{d_short}\g<2>", t)
-        t = re.sub(r'(<p class="asof">As of the )\d{1,2} [A-Z][a-z]{2} \d{4}( close\.</p>)',
+        t = re.sub(r'(<p class="asof">As of the )\d{1,2} [A-Z][a-z]{2} \d{4}( close · 16:00 WAT\.</p>)',
                    rf"\g<1>{d_short}\g<2>", t)
         # meta descriptions + JSON-LD (recomputed, then blanket date swap for leftovers)
         meta_new = (f"{sym} ({name}) share price is {fmt_price(price)} ({daystr}) as of the "

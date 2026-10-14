@@ -1223,6 +1223,13 @@ a, button { -webkit-tap-highlight-color: transparent; }
 .quote-chg.up { color: var(--green-strong); }
 .quote-chg.down { color: var(--red); }
 .quote-ts { font: 600 11px/1.6 "IBM Plex Mono", monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-top: 10px; }
+/* ---- Ticker sub-nav (stock pages): sticky section rail ---- */
+.ticker-nav { position: sticky; top: 55px; z-index: 55; display: flex; gap: 2px; overflow-x: auto; background: var(--paper); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin: 20px 0 0; padding: 0 12px; scrollbar-width: none; }
+.ticker-nav::-webkit-scrollbar { display: none; }
+.ticker-nav a { flex: 0 0 auto; padding: 13px 14px 11px; font: 600 11px/1 "IBM Plex Mono", monospace; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); text-decoration: none; border-bottom: 2px solid transparent; white-space: nowrap; }
+.ticker-nav a:hover { color: var(--ink); }
+.ticker-nav a.active { color: var(--green-strong); border-bottom-color: var(--green-strong); }
+#overview, #pchartMount, #history, #buy, #faq, #related { scroll-margin-top: 130px; }
 .quote-actions { display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
 
 /* ---- Session facts: headline stat cards ---- */

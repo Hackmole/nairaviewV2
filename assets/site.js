@@ -1151,3 +1151,26 @@
   drawer.addEventListener('click', function (e) { if (e.target.closest('a')) shut(); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') shut(); });
 }());
+
+/* ---- Ticker sub-nav scroll-spy (stock pages; no-op elsewhere) ---- */
+(function () {
+  var tnav = document.querySelector('.ticker-nav');
+  if (!tnav) return;
+  var links = Array.prototype.slice.call(tnav.querySelectorAll('a'));
+  var secs = [];
+  links.forEach(function (a) {
+    var s = document.querySelector(a.getAttribute('href'));
+    if (s) secs.push({ link: a, el: s });
+  });
+  if (!secs.length) return;
+  function spy() {
+    var y = window.scrollY + 140;
+    var cur = secs[0];
+    for (var i = 0; i < secs.length; i++) {
+      if (secs[i].el.getBoundingClientRect().top + window.scrollY <= y) cur = secs[i];
+    }
+    links.forEach(function (a) { a.classList.toggle('active', a === cur.link); });
+  }
+  window.addEventListener('scroll', spy, { passive: true });
+  spy();
+}());

@@ -579,6 +579,7 @@
     getJSON('/api/market').then(function (market) {
       if (market) {
         try { paintMarket(market); } catch (e) {}
+        try { tapeData.market = market; paintTape(); } catch (e2) {}
         var ov = market.overview && market.overview.data;
         if (ov && ov.trade_date) window.NVLiveAsOf = ov.trade_date;
       } else {
@@ -602,6 +603,7 @@
     getJSON('/api/prices').then(function (prices) {
       if (prices) {
         try { paintStocks(prices); } catch (e) {}
+        try { tapeData.prices = prices; paintTape(); } catch (e2) {}
         try { paintStockPage(window.NVLivePrices || {}); } catch (e) {}
       }
     });
@@ -609,7 +611,10 @@
       if (doc) { try { paintAsi(doc); } catch (e) {} }
     });
     getJSON('/api/fx').then(function (doc) {
-      if (doc) { try { paintFxStrip(doc); } catch (e) {} }
+      if (doc) {
+        try { paintFxStrip(doc); } catch (e) {}
+        try { tapeData.fx = doc; paintTape(); } catch (e2) {}
+      }
     });
     try { initStockChart(); } catch (e) {}
   }
@@ -629,6 +634,41 @@
         spr.textContent = '₦' + fmt2(Math.abs(ccy.parallel - ccy.official));
       }
     });
+  }
+
+  /* Ticker tape (brief 10): ASI, mkt cap, USD/NGN, top mover, breadth. */
+  var tapeData = {};
+  function paintTape() {
+    var track = document.getElementById('tapeTrack');
+    if (!track) return;
+    var items = [];
+    var m = tapeData.market && tapeData.market.overview && tapeData.market.overview.data;
+    if (m) {
+      var pct = Number(m.pct_change) || 0;
+      var pts = (Number(m.asi) || 0) * pct / 100;
+      items.push({ label: 'ASI', value: fmt2(m.asi),
+        change: (pct < 0 ? '▼ ' : '▲ ') + signedPct(pct) + ' (' + (pts < 0 ? '−' : '+') + fmt2(Math.abs(pts)) + ' pts)',
+        cls: pct < 0 ? 'down' : 'up' });
+      if (m.market_cap) items.push({ label: 'Mkt Cap', value: '₦' + compact(m.market_cap) });
+      if (m.advancers != null) items.push({ label: 'Breadth', value: m.advancers + '▲ / ' + m.decliners + '▼' });
+    }
+    var fx = tapeData.fx && tapeData.fx.latest && tapeData.fx.latest.USD;
+    if (fx && fx.official > 0) items.push({ label: 'USD/NGN', value: '₦' + fmt2(fx.official) });
+    var pr = tapeData.prices && tapeData.prices.stocks && tapeData.prices.stocks.stocks;
+    if (pr && pr.length) {
+      var sorted = pr.slice().sort(function (a, b) { return (b.change_percent || 0) - (a.change_percent || 0); });
+      var g = sorted[0], l = sorted[sorted.length - 1];
+      if (g && g.change_percent > 0) items.push({ label: 'Top gainer', value: g.symbol + ' +' + g.change_percent.toFixed(2) + '%', cls: 'up' });
+      if (l && l.change_percent < 0) items.push({ label: 'Top loser', value: l.symbol + ' ' + l.change_percent.toFixed(2) + '%', cls: 'down' });
+    }
+    if (!items.length) return;
+    var half = items.map(function (it) {
+      return '<span class="tape-item"><span class="tape-label">' + it.label + '</span> ' +
+        '<span class="tape-value">' + it.value + '</span>' +
+        (it.change ? ' <span class="tape-change ' + (it.cls || '') + '">' + it.change + '</span>' : '') + '</span><span class="tape-sep">·</span>';
+    }).join('');
+    /* two identical halves for a seamless loop */
+    track.innerHTML = '<div class="tape-half">' + half + '</div><div class="tape-half" aria-hidden="true">' + half + '</div>';
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', main);

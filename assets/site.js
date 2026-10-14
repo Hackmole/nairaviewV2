@@ -326,6 +326,23 @@
           draw(currentRange);
         });
       });
+      /* Return-embedded range chips (brief 11): each pill shows its period return. */
+      function paintRangeReturns() {
+        document.querySelectorAll('.range-button').forEach(function (btn) {
+          var range = btn.getAttribute('data-range');
+          var pts = rangePoints(range);
+          if (pts.length < 2) return;
+          var ret = (pts[pts.length - 1].v - pts[0].v) / pts[0].v * 100;
+          var sign = ret < 0 ? '−' : '+';
+          var label = range + ' ' + sign + Math.abs(ret).toFixed(1) + '%';
+          /* keep the range name for screen readers */
+          btn.innerHTML = '<span class="rb-range">' + range + '</span> <span class="rb-ret ' + (ret < 0 ? 'down' : 'up') + '">' + sign + Math.abs(ret).toFixed(1) + '%</span>';
+          btn.setAttribute('aria-label', 'Show ' + range + ', return ' + label);
+        });
+      }
+      paintRangeReturns();
+      window.NV = window.NV || {};
+      window.NV.paintRangeReturns = paintRangeReturns;
 
       
       var dirState = { query: '', sector: 'All' };
@@ -880,7 +897,7 @@
       /* Live-data hooks: assets/live.js swaps in fresh market data after load
          and calls these to repaint without a page reload. */
       window.NV = window.NV || {};
-      window.NV.redrawAsi = function (r) { if (document.getElementById('asiChart')) draw(r || currentRange); };
+      window.NV.redrawAsi = function (r) { if (document.getElementById('asiChart')) draw(r || currentRange); if (window.NV.paintRangeReturns) window.NV.paintRangeReturns(); };
       window.NV.renderTape = function () { renderTape(); };
       window.NV.renderHeatmap = function () { renderHeatmap(); };
       window.NV.renderTables = function () { render(); };

@@ -231,6 +231,12 @@
     .tape-nav { background: none; border: none; border-left: 1px solid var(--line); color: var(--muted); font-size: 18px; padding: 0 14px; cursor: pointer; }
     .tape-nav:first-child { border-left: none; border-right: 1px solid var(--line); }
     .tape-nav:hover { color: var(--ink); background: var(--surface-2); }
+    /* Return-embedded range chips (brief 11). */
+    .range-button .rb-ret { font-weight: 700; font-size: 11px; }
+    .range-button .rb-ret.up { color: var(--green-strong); }
+    .range-button .rb-ret.down { color: var(--red); }
+    .range-button[aria-pressed="true"] .rb-ret.up { color: #a7f3d0; }
+    .range-button[aria-pressed="true"] .rb-ret.down { color: #fca5a5; }
     /* IPO closing countdown banner (Dangote Refinery offer, closes 13 Oct 2026). */
     .ipo-countdown {
       display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap;

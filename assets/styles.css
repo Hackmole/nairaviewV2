@@ -549,15 +549,13 @@ body.drawer-open { overflow: hidden; }
 .d-sec.on { color: var(--green-strong); }
 .d-sub { display: block; padding: 7px 20px 7px 32px; font-size: 14px; line-height: 1.4; color: var(--muted); text-decoration: none; }
 .d-sub.on { color: var(--green-strong); }
-/* ---- Mobile drawer: sub-pages collapse under their section ---- */
-.d-sec-row { display: flex; align-items: stretch; }
-.d-sec-row .d-sec { flex: 1 1 auto; }
-.d-toggle { flex: 0 0 auto; border: 0; background: none; color: var(--muted); font: 700 18px/1 "IBM Plex Mono", monospace; padding: 0 20px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
-.d-toggle::after { content: ">"; display: inline-block; transition: transform .2s; }
-.d-group.open .d-toggle { color: var(--green-strong); }
-.d-group.open .d-toggle::after { transform: rotate(90deg); }
+/* ---- Mobile drawer: sections grouped into collapsible hubs ---- */
+.d-hub { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 13px 20px; font: 600 10px/1.4 "IBM Plex Mono", monospace; text-transform: uppercase; letter-spacing: .12em; color: var(--ink); background: none; border: 0; cursor: pointer; text-align: left; -webkit-tap-highlight-color: transparent; }
+.d-hub::after { content: ">"; font-size: 14px; color: var(--muted); display: inline-block; transition: transform .2s; }
+.d-group.open .d-hub::after { transform: rotate(90deg); color: var(--green-strong); }
 .d-subs { display: none; }
 .d-group.open .d-subs { display: block; padding-bottom: 6px; }
+.d-subs .d-sec { margin-top: 2px; }
 .page-kicker { margin: 26px 0 0; }
 
 /* IPO guide */

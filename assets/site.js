@@ -1060,55 +1060,84 @@
     a.className = cls; a.setAttribute('href', href); a.textContent = text;
     return a;
   }
-  Array.prototype.forEach.call(nav.children, function (node) {
-    if (node.classList && node.classList.contains('nav-item')) {
-      var plink = node.querySelector(':scope > a');
-      if (!plink) return;
-      var subs = node.querySelectorAll(':scope > .nav-dropdown a');
-      var pcls = 'd-sec' + (plink.classList.contains('active') ? ' on' : '');
-      if (subs.length) {
-        /* Section with sub-pages: label navigates, chevron collapses/expands */
-        var group = document.createElement('div');
-        group.className = 'd-group';
-        var row = document.createElement('div');
-        row.className = 'd-sec-row';
-        row.appendChild(linkEl(plink.textContent, plink.getAttribute('href'), pcls));
-        var tg = document.createElement('button');
-        tg.type = 'button'; tg.className = 'd-toggle';
-        tg.setAttribute('aria-expanded', 'false');
-        tg.setAttribute('aria-label', 'Show ' + plink.textContent + ' pages');
-        row.appendChild(tg); group.appendChild(row);
-        var wrap = document.createElement('div');
-        wrap.className = 'd-subs';
-        var hasOn = false;
-        Array.prototype.forEach.call(subs, function (s) {
-          if (s.classList.contains('active')) hasOn = true;
-          wrap.appendChild(linkEl(s.textContent, s.getAttribute('href'),
-            'd-sub' + (s.classList.contains('active') ? ' on' : '')));
-        });
-        group.appendChild(wrap);
-        if (hasOn) { group.classList.add('open'); tg.setAttribute('aria-expanded', 'true'); }
-        tg.addEventListener('click', function () {
-          var isOpen = group.classList.toggle('open');
-          tg.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-          if (isOpen) {
-            Array.prototype.forEach.call(drawer.querySelectorAll('.d-group.open'), function (g) {
-              if (g !== group) {
-                g.classList.remove('open');
-                var bt = g.querySelector('.d-toggle');
-                if (bt) bt.setAttribute('aria-expanded', 'false');
-              }
-            });
-          }
-        });
-        drawer.appendChild(group);
-      } else {
-        drawer.appendChild(linkEl(plink.textContent, plink.getAttribute('href'), pcls));
-      }
-    } else if (node.tagName === 'A') {
-      drawer.appendChild(linkEl(node.textContent, node.getAttribute('href'),
-        'd-sec' + (node.classList.contains('active') ? ' on' : '')));
+  /* Drawer hubs: mobile sections grouped under collapsible hub labels
+     (desktop top bar is unchanged). Home/Portfolio stay plain links. */
+  var HUBS = [
+    { label: 'Markets', sections: ['Stocks', 'FX', 'Fixed Income', 'Economy', 'Brokers'] },
+    { label: 'Offers', sections: ['Offers'] },
+    { label: 'Calendar', sections: ['Calendar'] },
+    { label: 'News', sections: ['News'] },
+    { label: 'Learn', sections: ['Learn', 'Recap'] }
+  ];
+  function hubFor(label) {
+    for (var hi = 0; hi < HUBS.length; hi++) {
+      if (HUBS[hi].sections.indexOf(label) >= 0) return HUBS[hi];
     }
+    return null;
+  }
+  var entries = [];
+  Array.prototype.forEach.call(nav.children, function (node) {
+    var isItem = !!(node.classList && node.classList.contains('nav-item'));
+    var plink = isItem ? node.querySelector(':scope > a') : (node.tagName === 'A' ? node : null);
+    if (!plink) return;
+    var subs = [];
+    if (isItem) {
+      Array.prototype.forEach.call(node.querySelectorAll(':scope > .nav-dropdown a'), function (s) {
+        subs.push(s);
+      });
+    }
+    entries.push({ label: plink.textContent.trim(), plink: plink, subs: subs });
+  });
+  /* One linkEl row per section plus its sub-links; returns whether anything is active. */
+  function sectionRows(e, wrap) {
+    var hasOn = e.plink.classList.contains('active');
+    wrap.appendChild(linkEl(e.plink.textContent, e.plink.getAttribute('href'),
+      'd-sec' + (hasOn ? ' on' : '')));
+    Array.prototype.forEach.call(e.subs, function (s) {
+      if (s.classList.contains('active')) hasOn = true;
+      wrap.appendChild(linkEl(s.textContent, s.getAttribute('href'),
+        'd-sub' + (s.classList.contains('active') ? ' on' : '')));
+    });
+    return hasOn;
+  }
+  var hubRecs = {};
+  Array.prototype.forEach.call(entries, function (e) {
+    var hub = hubFor(e.label);
+    if (!hub) { sectionRows(e, drawer); return; } /* plain top-level link */
+    var rec = hubRecs[hub.label];
+    if (!rec) {
+      var group = document.createElement('div');
+      group.className = 'd-group';
+      var hb = document.createElement('button');
+      hb.type = 'button'; hb.className = 'd-hub';
+      hb.setAttribute('aria-expanded', 'false');
+      hb.setAttribute('aria-label', 'Show ' + hub.label + ' pages');
+      var hbl = document.createElement('span'); hbl.textContent = hub.label;
+      hb.appendChild(hbl); group.appendChild(hb);
+      var wrap = document.createElement('div');
+      wrap.className = 'd-subs'; group.appendChild(wrap);
+      rec = { group: group, btn: hb, wrap: wrap, hasOn: false };
+      hubRecs[hub.label] = rec;
+      hb.addEventListener('click', function () {
+        var isOpen = group.classList.toggle('open');
+        hb.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        if (isOpen) {
+          Array.prototype.forEach.call(drawer.querySelectorAll('.d-group.open'), function (og) {
+            if (og !== group) {
+              og.classList.remove('open');
+              var ob = og.querySelector('.d-hub');
+              if (ob) ob.setAttribute('aria-expanded', 'false');
+            }
+          });
+        }
+      });
+      drawer.appendChild(group);
+    }
+    if (sectionRows(e, rec.wrap)) rec.hasOn = true;
+  });
+  Object.keys(hubRecs).forEach(function (k) {
+    var rec = hubRecs[k];
+    if (rec.hasOn) { rec.group.classList.add('open'); rec.btn.setAttribute('aria-expanded', 'true'); }
   });
   document.body.appendChild(scrim);
   document.body.appendChild(drawer);

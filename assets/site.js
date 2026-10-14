@@ -1498,3 +1498,22 @@
     });
   } catch (e) {}
 }());
+
+/* ---- Market breadth panel (brief 12): adv/dec/unchanged under ASI chart ---- */
+(function () {
+  try {
+    var card = document.querySelector("#performance .chart-card");
+    if (!card || document.getElementById("breadth")) return;
+    var b = document.createElement("div");
+    b.className = "breadth";
+    b.id = "breadth";
+    b.setAttribute("aria-label", "Market breadth");
+    b.innerHTML = '<div class="breadth-bar" aria-hidden="true"><span class="breadth-adv" id="breadthAdvBar"></span><span class="breadth-dec" id="breadthDecBar"></span></div>' +
+      '<div class="breadth-stats">' +
+      '<span class="breadth-stat"><span class="breadth-num up" id="breadthAdv">·</span><span class="breadth-lab">Advancers</span></span>' +
+      '<span class="breadth-stat"><span class="breadth-num down" id="breadthDec">·</span><span class="breadth-lab">Decliners</span></span>' +
+      '<span class="breadth-stat"><span class="breadth-num" id="breadthUnc">·</span><span class="breadth-lab">Unchanged</span></span>' +
+      '</div>';
+    card.parentNode.insertBefore(b, card.nextSibling);
+  } catch (e) {}
+}());

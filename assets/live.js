@@ -580,6 +580,7 @@
       if (market) {
         try { paintMarket(market); } catch (e) {}
         try { tapeData.market = market; paintTape(); } catch (e2) {}
+        try { paintBreadth(market); } catch (e3) {}
         var ov = market.overview && market.overview.data;
         if (ov && ov.trade_date) window.NVLiveAsOf = ov.trade_date;
       } else {
@@ -634,6 +635,23 @@
         spr.textContent = '₦' + fmt2(Math.abs(ccy.parallel - ccy.official));
       }
     });
+  }
+
+  /* Market breadth panel (brief 12). */
+  function paintBreadth(market) {
+    var ov = market && market.overview && market.overview.data;
+    if (!ov) return;
+    var adv = Number(ov.advancers) || 0, dec = Number(ov.decliners) || 0, unc = Number(ov.unchanged) || 0;
+    var total = adv + dec + unc;
+    function set(id, v) { var el = document.getElementById(id); if (el) el.textContent = v; }
+    set('breadthAdv', adv);
+    set('breadthDec', dec);
+    set('breadthUnc', unc);
+    if (total > 0) {
+      var advBar = document.getElementById('breadthAdvBar'), decBar = document.getElementById('breadthDecBar');
+      if (advBar) advBar.style.width = (adv / total * 100) + '%';
+      if (decBar) decBar.style.width = (dec / total * 100) + '%';
+    }
   }
 
   /* Ticker tape (brief 10): ASI, mkt cap, USD/NGN, top mover, breadth. */

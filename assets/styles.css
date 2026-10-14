@@ -237,6 +237,17 @@
     .range-button .rb-ret.down { color: var(--red); }
     .range-button[aria-pressed="true"] .rb-ret.up { color: #a7f3d0; }
     .range-button[aria-pressed="true"] .rb-ret.down { color: #fca5a5; }
+    /* Market breadth panel (brief 12). */
+    .breadth { background: var(--surface); border: 1px solid var(--line); border-top: none; padding: 16px 18px; }
+    .breadth-bar { display: flex; height: 8px; background: var(--surface-2); margin-bottom: 12px; overflow: hidden; }
+    .breadth-adv { background: var(--green-strong); transition: width .5s ease; }
+    .breadth-dec { background: var(--red); transition: width .5s ease; }
+    .breadth-stats { display: flex; gap: 28px; }
+    .breadth-stat { display: flex; align-items: baseline; gap: 8px; }
+    .breadth-num { font: 700 20px/1 "Barlow Semi Condensed", sans-serif; font-variant-numeric: tabular-nums; }
+    .breadth-num.up { color: var(--green-strong); }
+    .breadth-num.down { color: var(--red); }
+    .breadth-lab { font: 600 10.5px/1 "IBM Plex Mono", monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
     /* IPO closing countdown banner (Dangote Refinery offer, closes 13 Oct 2026). */
     .ipo-countdown {
       display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap;

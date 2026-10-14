@@ -230,6 +230,17 @@
       return { s: r.s, c: r.c, p: r.p, m: compact(r.volNum).replace('₦', ''), d: 'up', pv: r.pv, cv: r.volNum, vol: true, noSnap: false };
     });
     if (!gainers.length || !losers.length) return; /* keep snapshot if the feed looks thin */
+    /* Carry over baked sparkline histories by symbol (brief 6): a symbol's
+       recent trend stays valid even when the live movers list reshuffles. */
+    var bakedBySym = {};
+    ["gainers", "losers"].forEach(function (k) {
+      (tables[k] || []).forEach(function (r) {
+        if (r.s && r.sp && r.sp.length > 1) bakedBySym[r.s] = r.sp;
+      });
+    });
+    gainers.concat(losers).forEach(function (r) {
+      if (bakedBySym[r.s]) r.sp = bakedBySym[r.s];
+    });
     tables.gainers = gainers;
     tables.losers = losers;
     tables.volume = volume;

@@ -1216,3 +1216,150 @@
     })(targets[i]);
   }
 }());
+
+/* ---- Command palette: Ctrl+K search (brief 5) ---- */
+(function () {
+  var PAGES = [
+    ["All listed stocks", "stocks"], ["Stock screener", "screener"],
+    ["Compare stocks", "compare"], ["Highs & lows", "highs-lows"],
+    ["ETFs", "etfs"], ["My watchlist", "watchlist"],
+    ["FX converter", "fx"], ["US dollar", "fx-usd"], ["Euro", "fx-eur"],
+    ["British pound", "fx-gbp"], ["Fixed Income", "fixed-income"],
+    ["Economy", "economy"], ["Brokers", "brokers"],
+    ["Public offers", "offers"], ["IPO performance tracker", "ipo-tracker"],
+    ["Market calendar", "calendar"], ["Dividends", "dividends"],
+    ["Corporate actions", "corporate-actions"], ["Earnings", "earnings"],
+    ["Latest headlines", "news-headlines"], ["Newsroom", "news-newsroom"],
+    ["Market notes", "news-notes"], ["Insider dealings", "insider-dealings"],
+    ["All guides", "learn"], ["Weekly recap", "market-recap"],
+    ["Portfolio tracker", "portfolio"],
+    ["What is the NGX?", "learn-what-is-ngx"],
+    ["How shares work", "learn-how-shares-work"],
+    ["Buy your first stock", "learn-buy-first-stock"],
+    ["Stockbrokers & CSCS", "learn-stockbroker-cscs"],
+    ["Beginner mistakes", "learn-beginner-mistakes"]
+  ];
+  var POPULAR = [["Stock screener", "screener"], ["Highs & lows", "highs-lows"],
+    ["Compare stocks", "compare"], ["Brokers", "brokers"],
+    ["Buy your first stock", "learn-buy-first-stock"]];
+  var prefix = window.location.pathname.indexOf("/stocks/") !== -1 ? "../" : "";
+  var isMac = /Mac|iPhone|iPad/.test(navigator.platform || "");
+  var header = document.querySelector(".header-inner");
+  if (!header) return;
+
+  var trigger = document.createElement("button");
+  trigger.type = "button";
+  trigger.className = "search-trigger";
+  trigger.setAttribute("aria-label", "Search Nairaview (Ctrl+K)");
+  trigger.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>' +
+    '<span class="st-text">Search</span><kbd class="st-kbd">' + (isMac ? "&#8984;K" : "Ctrl K") + "</kbd>";
+  var themeBtn = header.querySelector(".theme-toggle");
+  if (themeBtn) header.insertBefore(trigger, themeBtn);
+  else header.appendChild(trigger);
+
+  var overlay = document.createElement("div");
+  overlay.className = "palette-overlay";
+  overlay.hidden = true;
+  overlay.innerHTML = '<div class="palette" role="dialog" aria-modal="true" aria-label="Search Nairaview">' +
+    '<input class="palette-input" type="text" placeholder="Search stocks, pages, guides..." aria-label="Search Nairaview" autocomplete="off" spellcheck="false">' +
+    '<div class="palette-results" role="listbox" aria-label="Search results"></div>' +
+    '<div class="palette-hint"><span>&#8593;&#8595; navigate</span><span>Enter open</span><span>Esc close</span></div></div>';
+  document.body.appendChild(overlay);
+  var input = overlay.querySelector(".palette-input");
+  var results = overlay.querySelector(".palette-results");
+  var items = [], active = -1, opener = null;
+
+  function esc(s) {
+    return String(s).replace(/[&<>"]/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
+    });
+  }
+  function toRes(label, sub, url, kind, sym) {
+    return { label: label, sub: sub, url: url, kind: kind, sym: sym || "" };
+  }
+  function search(q) {
+    q = q.toLowerCase().trim();
+    var out = [], i;
+    if (!q) {
+      for (i = 0; i < POPULAR.length; i++)
+        out.push(toRes(POPULAR[i][0], "Popular", prefix + POPULAR[i][1], "Page"));
+      return out;
+    }
+    var dir = window.directory || [];
+    for (i = 0; i < dir.length; i++) {
+      var sym = dir[i].s, name = dir[i].c || "";
+      var sl = sym.toLowerCase(), nl = name.toLowerCase(), score = 0;
+      if (sl === q) score = 100;
+      else if (sl.indexOf(q) === 0) score = 80;
+      else if (nl.indexOf(q) === 0) score = 70;
+      else if (sl.indexOf(q) !== -1) score = 60;
+      else if (nl.indexOf(q) !== -1) score = 50;
+      if (score) out.push({ r: toRes(sym, name, prefix + "stocks/" + sym, "Stock", sym), score: score });
+    }
+    for (i = 0; i < PAGES.length; i++) {
+      if (PAGES[i][0].toLowerCase().indexOf(q) !== -1)
+        out.push({ r: toRes(PAGES[i][0], "Page", prefix + PAGES[i][1], "Page"), score: 40 });
+    }
+    out.sort(function (a, b) { return b.score - a.score; });
+    return out.slice(0, 8).map(function (x) { return x.r; });
+  }
+  function render(list) {
+    results.innerHTML = "";
+    items = [];
+    setActive(-1);
+    if (!list.length) {
+      results.innerHTML = '<div class="palette-empty">No matches. Try a ticker like DANGCEM or GTCO.</div>';
+      return;
+    }
+    list.forEach(function (r, idx) {
+      var el = document.createElement("div");
+      el.className = "palette-item";
+      el.setAttribute("role", "option");
+      el.innerHTML = (r.sym ? '<span class="pi-sym">' + esc(r.sym) + "</span>" : "") +
+        '<span class="pi-main"><span class="pi-label">' + esc(r.label) + "</span>" +
+        '<span class="pi-sub">' + esc(r.sub) + "</span></span>" +
+        '<span class="pi-kind">' + esc(r.kind) + "</span>";
+      el.addEventListener("click", function () { window.location.href = r.url; });
+      el.addEventListener("mousemove", function () { setActive(idx); });
+      results.appendChild(el);
+      items.push({ el: el, url: r.url });
+    });
+    setActive(0);
+  }
+  function setActive(i) {
+    if (active >= 0 && items[active]) items[active].el.classList.remove("active");
+    active = i;
+    if (active >= 0 && items[active]) {
+      items[active].el.classList.add("active");
+      items[active].el.setAttribute("aria-selected", "true");
+    }
+  }
+  function open(op) {
+    opener = op || null;
+    overlay.hidden = false;
+    document.body.style.overflow = "hidden";
+    input.value = "";
+    render(search(""));
+    input.focus();
+  }
+  function close() {
+    overlay.hidden = true;
+    document.body.style.overflow = "";
+    if (opener) opener.focus();
+  }
+  trigger.addEventListener("click", function () { open(trigger); });
+  overlay.addEventListener("click", function (e) { if (e.target === overlay) close(); });
+  input.addEventListener("input", function () { render(search(input.value)); });
+  input.addEventListener("keydown", function (e) {
+    if (e.key === "ArrowDown") { e.preventDefault(); if (items.length) setActive((active + 1) % items.length); }
+    else if (e.key === "ArrowUp") { e.preventDefault(); if (items.length) setActive((active - 1 + items.length) % items.length); }
+    else if (e.key === "Enter") { if (active >= 0 && items[active]) window.location.href = items[active].url; }
+    else if (e.key === "Escape") { close(); }
+  });
+  document.addEventListener("keydown", function (e) {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+      e.preventDefault();
+      if (overlay.hidden) open(null); else close();
+    } else if (e.key === "Escape" && !overlay.hidden) { close(); }
+  });
+}());

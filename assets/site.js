@@ -674,9 +674,16 @@
         var anySticky = false;
         document.querySelectorAll('.ad-slot').forEach(function (slot) {
           if (slot.id === 'adSticky' && stickyClosed) return;
-          if (slot.querySelector('iframe')) {
-            slot.classList.add('ad-live');
-            if (slot.id === 'adSticky') anySticky = true;
+          var frame = slot.querySelector('iframe');
+          if (frame) {
+            /* Only reveal if the ad actually rendered (non-zero size) */
+            try {
+              var r = frame.getBoundingClientRect();
+              if (r.width > 10 && r.height > 10) {
+                slot.classList.add('ad-live');
+                if (slot.id === 'adSticky') anySticky = true;
+              }
+            } catch (e) {}
           }
         });
         document.body.classList.toggle('ad-sticky-on', anySticky);
@@ -1757,5 +1764,32 @@
         if (kstat) kstat.style.display = "none";
       }
     });
+  } catch (e) {}
+}());
+
+/* ---- Hero stats (audit fix): fill market cap, breadth, top gainer ---- */
+(function () {
+  try {
+    var cap = document.getElementById("heroMktCap");
+    var breadth = document.getElementById("heroBreadth");
+    var gainer = document.getElementById("heroTopGainer");
+    if (!cap && !breadth && !gainer) return;
+    var API = "https://nairaview-api.meetomidiora.workers.dev";
+    fetch(API + "/api/market").then(function (r) { return r.ok ? r.json() : null; }).then(function (d) {
+      if (!d) return;
+      if (cap && d.market_cap) cap.textContent = "₦" + (d.market_cap / 1e12).toFixed(2) + "tn";
+      if (breadth && d.advancers !== undefined) breadth.textContent = d.advancers + "▲ " + d.decliners + "▼";
+    }).catch(function () {});
+    fetch(API + "/api/prices").then(function (r) { return r.ok ? r.json() : null; }).then(function (d) {
+      if (!d || !gainer) return;
+      var prices = d.prices || d;
+      var top = null, topChg = -Infinity;
+      Object.keys(prices).forEach(function (sym) {
+        var p = prices[sym];
+        var chg = p && (p.pct_change || p.change_pct);
+        if (typeof chg === "number" && chg > topChg) { topChg = chg; top = sym; }
+      });
+      if (top) gainer.textContent = top + " +" + topChg.toFixed(2) + "%";
+    }).catch(function () {});
   } catch (e) {}
 }());

@@ -148,12 +148,13 @@
         'fixed income': S + '<path d="M19 5 5 19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>',
         'economy': S + '<circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.5 2.6 3.8 5.7 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3z"/></svg>',
         'brokers': S + '<rect x="3" y="8" width="18" height="12" rx="2"/><path d="M9 8V6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/><path d="M3 13h18"/></svg>',
-        'portfolio': S + '<path d="M21.2 15.9A10 10 0 1 1 8 2.8"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg>'
+        'portfolio': S + '<path d="M21.2 15.9A10 10 0 1 1 8 2.8"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg>',
+        'markets': S + '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>'
       };
       function paint() {
         var nav = document.querySelector('.site-nav');
         if (!nav) return;
-        Array.prototype.forEach.call(nav.querySelectorAll('a'), function (a) {
+        Array.prototype.forEach.call(nav.querySelectorAll('a, button.nav-hub'), function (a) {
           if (a.querySelector('svg')) return;
           var key = a.textContent.trim().toLowerCase();
           if (ICONS[key]) a.insertAdjacentHTML('afterbegin', ICONS[key]);
@@ -980,14 +981,14 @@
   function closeAll(except) {
     items.forEach(function (it) {
       if (it !== except) it.classList.remove('open');
-      var link = it.querySelector(':scope > a');
+      var link = it.querySelector(':scope > a, :scope > button.nav-hub');
       if (link && it !== except) link.setAttribute('aria-expanded', 'false');
     });
     if (!except) nav.classList.remove('drop-open');
   }
 
   items.forEach(function (it) {
-    var link = it.querySelector(':scope > a');
+    var link = it.querySelector(':scope > a, :scope > button.nav-hub');
     var drop = it.querySelector(':scope > .nav-dropdown');
     if (!link || !drop) return;
     link.setAttribute('aria-haspopup', 'true');
@@ -1002,14 +1003,19 @@
       if (!nav.querySelector('.nav-item.open')) nav.classList.remove('drop-open');
     });
 
-    /* first click opens the menu, second click follows the parent link */
+    /* first click opens the menu, second click follows the parent link
+       (hub buttons have no link: second click closes instead) */
     link.addEventListener('click', function (e) {
+      var isHub = link.tagName === 'BUTTON';
       if (!it.classList.contains('open')) {
         e.preventDefault();
         closeAll(it);
         it.classList.add('open');
         nav.classList.add('drop-open');
         link.setAttribute('aria-expanded', 'true');
+      } else if (isHub) {
+        e.preventDefault();
+        closeAll(null);
       }
     });
   });
@@ -1024,15 +1030,21 @@
   /* highlight the parent when on a dropdown child page */
   var seg = location.pathname.split('/').pop().replace(/\.html$/, '');
   var childToParent = {
-    'highs-lows': 'stocks', 'watchlist': 'stocks', 'screener': 'stocks',
-    'etfs': 'stocks', 'compare': 'stocks',
+    'stocks': 'markets', 'screener': 'markets', 'compare': 'markets', 'highs-lows': 'markets',
+    'etfs': 'markets', 'watchlist': 'markets',
+    'fx': 'markets', 'fx-usd': 'markets', 'fx-eur': 'markets', 'fx-gbp': 'markets',
+    'fixed-income': 'markets', 'economy': 'markets', 'brokers': 'markets',
     'dividends': 'calendar', 'corporate-actions': 'calendar', 'earnings': 'calendar',
-    'insider-dealings': 'news', 'ipo-tracker': 'offers'
+    'insider-dealings': 'news', 'ipo-tracker': 'offers', 'market-recap': 'learn'
   };
   var parent = childToParent[seg];
   if (parent) {
-    var plink = nav.querySelector('.nav-item > a[href$="' + parent + '"]');
-    if (plink) plink.classList.add('active');
+    var hub = nav.querySelector('[data-hub="' + parent + '"]');
+    if (hub) hub.classList.add('active');
+    else {
+      var plink = nav.querySelector('.nav-item > a[href$="' + parent + '"]');
+      if (plink) plink.classList.add('active');
+    }
   }
 }());
 
@@ -1060,84 +1072,64 @@
     a.className = cls; a.setAttribute('href', href); a.textContent = text;
     return a;
   }
-  /* Drawer hubs: mobile sections grouped under collapsible hub labels
-     (desktop top bar is unchanged). Home/Portfolio stay plain links. */
-  var HUBS = [
-    { label: 'Markets', sections: ['Stocks', 'FX', 'Fixed Income', 'Economy', 'Brokers'] },
-    { label: 'Offers', sections: ['Offers'] },
-    { label: 'Calendar', sections: ['Calendar'] },
-    { label: 'News', sections: ['News'] },
-    { label: 'Learn', sections: ['Learn', 'Recap'] }
-  ];
-  function hubFor(label) {
-    for (var hi = 0; hi < HUBS.length; hi++) {
-      if (HUBS[hi].sections.indexOf(label) >= 0) return HUBS[hi];
-    }
-    return null;
-  }
-  var entries = [];
-  Array.prototype.forEach.call(nav.children, function (node) {
-    var isItem = !!(node.classList && node.classList.contains('nav-item'));
-    var plink = isItem ? node.querySelector(':scope > a') : (node.tagName === 'A' ? node : null);
-    if (!plink) return;
-    var subs = [];
-    if (isItem) {
-      Array.prototype.forEach.call(node.querySelectorAll(':scope > .nav-dropdown a'), function (s) {
-        subs.push(s);
-      });
-    }
-    entries.push({ label: plink.textContent.trim(), plink: plink, subs: subs });
-  });
-  /* One linkEl row per section plus its sub-links; returns whether anything is active. */
-  function sectionRows(e, wrap) {
-    var hasOn = e.plink.classList.contains('active');
-    wrap.appendChild(linkEl(e.plink.textContent, e.plink.getAttribute('href'),
-      'd-sec' + (hasOn ? ' on' : '')));
-    Array.prototype.forEach.call(e.subs, function (s) {
-      if (s.classList.contains('active')) hasOn = true;
-      wrap.appendChild(linkEl(s.textContent, s.getAttribute('href'),
-        'd-sub' + (s.classList.contains('active') ? ' on' : '')));
+  /* Drawer mirrors the desktop nav: each .nav-item becomes a collapsible
+     group; drophead labels are kept as section headers. Home/Portfolio
+     stay plain links. */
+  function dropRows(drop, wrap) {
+    var hasOn = false;
+    Array.prototype.forEach.call(drop.children, function (el) {
+      if (el.classList.contains('nav-drophead')) {
+        var hd = document.createElement('span');
+        hd.className = 'd-drophead'; hd.textContent = el.textContent;
+        wrap.appendChild(hd);
+      } else if (el.tagName === 'A') {
+        if (el.classList.contains('active')) hasOn = true;
+        wrap.appendChild(linkEl(el.textContent, el.getAttribute('href'),
+          'd-sub' + (el.classList.contains('active') ? ' on' : '')));
+      }
+      /* .nav-div hairlines are skipped in the drawer */
     });
     return hasOn;
   }
-  var hubRecs = {};
-  Array.prototype.forEach.call(entries, function (e) {
-    var hub = hubFor(e.label);
-    if (!hub) { sectionRows(e, drawer); return; } /* plain top-level link */
-    var rec = hubRecs[hub.label];
-    if (!rec) {
-      var group = document.createElement('div');
-      group.className = 'd-group';
-      var hb = document.createElement('button');
-      hb.type = 'button'; hb.className = 'd-hub';
-      hb.setAttribute('aria-expanded', 'false');
-      hb.setAttribute('aria-label', 'Show ' + hub.label + ' pages');
-      var hbl = document.createElement('span'); hbl.textContent = hub.label;
-      hb.appendChild(hbl); group.appendChild(hb);
-      var wrap = document.createElement('div');
-      wrap.className = 'd-subs'; group.appendChild(wrap);
-      rec = { group: group, btn: hb, wrap: wrap, hasOn: false };
-      hubRecs[hub.label] = rec;
-      hb.addEventListener('click', function () {
-        var isOpen = group.classList.toggle('open');
-        hb.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-        if (isOpen) {
-          Array.prototype.forEach.call(drawer.querySelectorAll('.d-group.open'), function (og) {
-            if (og !== group) {
-              og.classList.remove('open');
-              var ob = og.querySelector('.d-hub');
-              if (ob) ob.setAttribute('aria-expanded', 'false');
-            }
-          });
-        }
-      });
-      drawer.appendChild(group);
+  Array.prototype.forEach.call(nav.children, function (node) {
+    var isItem = !!(node.classList && node.classList.contains('nav-item'));
+    var top = isItem ? node.querySelector(':scope > a, :scope > button.nav-hub')
+                     : (node.tagName === 'A' ? node : null);
+    if (!top) return;
+    var drop = isItem ? node.querySelector(':scope > .nav-dropdown') : null;
+    var topOn = top.classList.contains('active');
+    if (!drop) {
+      drawer.appendChild(linkEl(top.textContent, top.getAttribute('href'),
+        'd-sec' + (topOn ? ' on' : '')));
+      return;
     }
-    if (sectionRows(e, rec.wrap)) rec.hasOn = true;
-  });
-  Object.keys(hubRecs).forEach(function (k) {
-    var rec = hubRecs[k];
-    if (rec.hasOn) { rec.group.classList.add('open'); rec.btn.setAttribute('aria-expanded', 'true'); }
+    var label = top.textContent.trim();
+    var group = document.createElement('div');
+    group.className = 'd-group';
+    var hb = document.createElement('button');
+    hb.type = 'button'; hb.className = 'd-hub' + (topOn ? ' on' : '');
+    hb.setAttribute('aria-expanded', 'false');
+    hb.setAttribute('aria-label', 'Show ' + label + ' pages');
+    var hbl = document.createElement('span'); hbl.textContent = label;
+    hb.appendChild(hbl); group.appendChild(hb);
+    var wrap = document.createElement('div');
+    wrap.className = 'd-subs'; group.appendChild(wrap);
+    var hasOn = topOn || dropRows(drop, wrap);
+    hb.addEventListener('click', function () {
+      var isOpen = group.classList.toggle('open');
+      hb.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      if (isOpen) {
+        Array.prototype.forEach.call(drawer.querySelectorAll('.d-group.open'), function (og) {
+          if (og !== group) {
+            og.classList.remove('open');
+            var ob = og.querySelector('.d-hub');
+            if (ob) ob.setAttribute('aria-expanded', 'false');
+          }
+        });
+      }
+    });
+    if (hasOn) { group.classList.add('open'); hb.setAttribute('aria-expanded', 'true'); }
+    drawer.appendChild(group);
   });
   document.body.appendChild(scrim);
   document.body.appendChild(drawer);

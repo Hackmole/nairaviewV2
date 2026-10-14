@@ -299,7 +299,7 @@
     .stk-badge.stk-logo { background: #fff; padding: 3px; }
     .stk-badge.stk-logo.sm { padding: 2px; }
     .stk-badge.stk-logo img { width: 100%; height: 100%; object-fit: contain; display: block; }
-    .site-nav a svg { width: 11px; height: 11px; margin-right: 5px; flex: none; }
+    .site-nav a svg, .site-nav .nav-hub svg { width: 11px; height: 11px; margin-right: 5px; flex: none; }
     .row-main .stk-badge { margin: 0; }
     .modal-symbol { display: flex; align-items: center; gap: 14px; }
     .ticker-item .stk-badge { margin-right: 2px; }
@@ -512,6 +512,13 @@
 .site-nav a { font: 600 10px/1 "IBM Plex Mono", monospace; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); text-decoration: none; padding: 12px 10px 10px; white-space: nowrap; border-bottom: 2px solid transparent; display: inline-flex; align-items: center; }
 .site-nav a:hover { color: var(--ink); }
 .site-nav a.active { color: var(--green-strong); border-bottom-color: var(--green-strong); }
+/* Top-level hub toggle (button): same treatment as nav links */
+.nav-hub { font: 600 10px/1 "IBM Plex Mono", monospace; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); padding: 12px 10px 10px; white-space: nowrap; border: 0; border-bottom: 2px solid transparent; display: inline-flex; align-items: center; background: none; cursor: pointer; }
+.nav-hub:hover { color: var(--ink); }
+.nav-hub.active { color: var(--green-strong); border-bottom-color: var(--green-strong); }
+/* Grouped dropdown sections (Markets menu) */
+.nav-drophead { display: block; padding: 10px 12px 4px; font: 600 9px/1.4 "IBM Plex Mono", monospace; text-transform: uppercase; letter-spacing: .12em; color: var(--muted); }
+.nav-div { display: block; border-top: 1px solid var(--line); margin: 6px 0; }
 /* ---- Mobile hamburger drawer (built by site.js from the nav) ---- */
 .nav-burger { display: none; }
 @media (max-width: 700px) {
@@ -547,6 +554,7 @@ body.drawer-open { overflow: hidden; }
 .d-close { border: 0; background: none; color: var(--muted); font-size: 18px; line-height: 1; padding: 10px 12px; cursor: pointer; }
 .d-sec { display: block; padding: 13px 20px 5px; font: 600 10px/1.4 "IBM Plex Mono", monospace; text-transform: uppercase; letter-spacing: .12em; color: var(--ink); text-decoration: none; }
 .d-sec.on { color: var(--green-strong); }
+.d-hub.on { color: var(--green-strong); }
 .d-sub { display: block; padding: 7px 20px 7px 32px; font-size: 14px; line-height: 1.4; color: var(--muted); text-decoration: none; }
 .d-sub.on { color: var(--green-strong); }
 /* ---- Mobile drawer: sections grouped into collapsible hubs ---- */
@@ -556,6 +564,7 @@ body.drawer-open { overflow: hidden; }
 .d-subs { display: none; }
 .d-group.open .d-subs { display: block; padding-bottom: 6px; }
 .d-subs .d-sec { margin-top: 2px; }
+.d-drophead { display: block; padding: 10px 20px 2px; font: 600 9px/1.4 "IBM Plex Mono", monospace; text-transform: uppercase; letter-spacing: .12em; color: var(--muted); }
 .page-kicker { margin: 26px 0 0; }
 
 /* IPO guide */

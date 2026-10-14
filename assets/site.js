@@ -156,6 +156,8 @@
         if (!nav) return;
         Array.prototype.forEach.call(nav.querySelectorAll('a, button.nav-hub'), function (a) {
           if (a.querySelector('svg')) return;
+          /* Skip dropdown subpages — icons on top-level items only */
+          if (a.closest('.nav-dropdown')) return;
           var key = a.textContent.trim().toLowerCase();
           if (ICONS[key]) a.insertAdjacentHTML('afterbegin', ICONS[key]);
         });

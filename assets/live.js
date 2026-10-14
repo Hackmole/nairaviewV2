@@ -605,6 +605,7 @@
       if (prices) {
         try { paintStocks(prices); } catch (e) {}
         try { tapeData.prices = prices; paintTape(); } catch (e2) {}
+        try { paintTickerChips(prices); } catch (e3) {}
         try { paintStockPage(window.NVLivePrices || {}); } catch (e) {}
       }
     });
@@ -634,6 +635,28 @@
       if (spr && ccy.official > 0 && ccy.parallel > 0) {
         spr.textContent = '₦' + fmt2(Math.abs(ccy.parallel - ccy.official));
       }
+    });
+  }
+
+  /* News ticker chips (brief 13): fill in day moves from the live feed. */
+  function paintTickerChips(doc) {
+    var stocks = doc && doc.stocks && doc.stocks.stocks;
+    if (!stocks || !stocks.length) return;
+    var bySym = {};
+    stocks.forEach(function (s) { bySym[s.symbol] = s; });
+    document.querySelectorAll(".ticker-chip").forEach(function (chip) {
+      var sym = chip.querySelector(".tc-sym");
+      var moveEl = chip.querySelector(".tc-move");
+      if (!sym || !moveEl) return;
+      var s = bySym[sym.textContent.trim()];
+      if (!s) return;
+      var pct = Number(s.change_percent) || 0;
+      var txt = (pct > 0 ? "+" : pct < 0 ? "−" : "") + Math.abs(pct).toFixed(2) + "%";
+      moveEl.textContent = " " + txt;
+      chip.classList.remove("up", "down");
+      if (pct > 0) chip.classList.add("up");
+      else if (pct < 0) chip.classList.add("down");
+      chip.setAttribute("aria-label", s.symbol + ", " + txt + ", view stock page");
     });
   }
 

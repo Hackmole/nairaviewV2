@@ -261,6 +261,25 @@
         try { if (window.NV[k]) window.NV[k](); } catch (e) {}
       });
     }
+    /* Fresh spark histories for live movers lacking baked data (brief 6):
+       fetch in the background, then re-render the tables once they land. */
+    var needSpark = gainers.concat(losers).filter(function (r) { return !r.sp || r.sp.length < 2; });
+    if (needSpark.length && window.NV && window.NV.renderTables) {
+      var got = 0;
+      needSpark.forEach(function (r) {
+        fetch(API + '/api/history?symbol=' + encodeURIComponent(r.s))
+          .then(function (resp) { return resp.json(); })
+          .then(function (h) {
+            var closes = ((h && h.prices) || []).filter(function (p) { return p.close; })
+              .map(function (p) { return p.close; }).slice(-15);
+            if (closes.length >= 2) r.sp = closes;
+          })
+          .catch(function () {})
+          .then(function () {
+            if (++got === needSpark.length) { try { window.NV.renderTables(); } catch (e) {} }
+          });
+      });
+    }
     /* Hand the price map to the portfolio page (same tab can't be both, but a
        CustomEvent keeps the contract explicit) and stash it globally. */
     var map = {};

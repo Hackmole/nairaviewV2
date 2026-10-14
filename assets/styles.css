@@ -517,13 +517,13 @@
 @media (max-width: 700px) {
   .header-inner { flex-wrap: nowrap; gap: 0; }
   .brand { order: 1; flex: 1 1 auto; }
-  .theme-toggle { order: 2; margin-left: auto; align-self: center; }
+  .theme-toggle { order: 2; margin-left: auto; align-self: center; font-size: 20px; }
   .site-nav { display: none; }
   .nav-burger {
     display: inline-flex; align-items: center; justify-content: center;
     order: 0; margin-left: 0; margin-right: 10px; width: 24px; height: 24px; flex: 0 0 auto;
     border: 0; background: none; padding: 0; color: var(--ink);
-    font-size: 17px; line-height: 1; cursor: pointer;
+    font-size: 20px; line-height: 1; cursor: pointer;
   }
 }
 @media (max-width: 700px) and (pointer: coarse) {

@@ -1416,3 +1416,20 @@
     }
   } catch (e2) {}
 }());
+
+/* ---- Mobile table cards (brief 8): label history cells for card layout ---- */
+(function () {
+  var tables = document.querySelectorAll(".hist-table");
+  for (var t = 0; t < tables.length; t++) {
+    var headers = [];
+    var ths = tables[t].querySelectorAll("thead th");
+    for (var h = 0; h < ths.length; h++) headers.push(ths[h].textContent.trim());
+    var rows = tables[t].querySelectorAll("tbody tr");
+    for (var r = 0; r < rows.length; r++) {
+      var cells = rows[r].children;
+      for (var c = 0; c < cells.length && c < headers.length; c++) {
+        if (headers[c]) cells[c].setAttribute("data-th", headers[c]);
+      }
+    }
+  }
+}());

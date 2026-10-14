@@ -1174,3 +1174,45 @@
   window.addEventListener('scroll', spy, { passive: true });
   spy();
 }());
+
+/* ---- Inline jargon definitions (brief 4): dotted-underline terms with
+   hover/tap tooltips, auto-wrapped on key-stat labels + history headers. ---- */
+(function () {
+  var GLOSSARY = {
+    "previous close": "The last traded price when the previous session ended.",
+    "open": "The first price traded when the session started.",
+    "day high": "The highest price any shares traded at today.",
+    "day low": "The lowest price any shares traded at today.",
+    "high": "The highest price traded in that session.",
+    "low": "The lowest price traded in that session.",
+    "close": "The last price traded before the session ended.",
+    "change": "How far the price moved versus the previous close.",
+    "volume": "How many shares changed hands.",
+    "avg volume": "The typical number of shares traded per day.",
+    "value traded": "The total naira exchanged, volume times price.",
+    "market cap": "What the whole company is worth on the market: price times all shares.",
+    "shares outstanding": "Every share the company has issued.",
+    "7-day change": "How far the price has moved in the last 7 days.",
+    "high \u00b7 tracked": "The highest close since we started tracking this stock.",
+    "low \u00b7 tracked": "The lowest close since we started tracking this stock.",
+    "sector": "The industry group the company belongs to."
+  };
+  function defFor(term) {
+    var t = String(term || "").toLowerCase().replace(/\s+/g, " ").trim();
+    return GLOSSARY[t] || null;
+  }
+  var targets = document.querySelectorAll(".kstat .k, .hist-table th");
+  for (var i = 0; i < targets.length; i++) {
+    (function (el) {
+      var d = el.hasAttribute("data-term") ? defFor(el.getAttribute("data-term")) : defFor(el.textContent);
+      if (!d || el.querySelector(".jargon")) return;
+      var s = document.createElement("span");
+      s.className = "jargon";
+      s.setAttribute("tabindex", "0");
+      s.setAttribute("data-def", d);
+      s.textContent = el.textContent;
+      el.textContent = "";
+      el.appendChild(s);
+    })(targets[i]);
+  }
+}());

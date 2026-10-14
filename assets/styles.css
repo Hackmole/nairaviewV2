@@ -1236,6 +1236,18 @@ a, button { -webkit-tap-highlight-color: transparent; }
 .whathap-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
 .whathap-chips a { font: 600 11px/1 "IBM Plex Mono", monospace; text-transform: uppercase; letter-spacing: .08em; color: var(--ink); text-decoration: none; border: 1px solid var(--line); padding: 10px 14px; background: var(--paper); }
 .whathap-chips a:hover { border-color: var(--green-strong); color: var(--green-strong); }
+/* ---- Inline jargon definitions (brief 4) ---- */
+.jargon { position: relative; border-bottom: 1px dotted var(--muted); cursor: help; }
+.jargon::after {
+  content: attr(data-def);
+  display: none;
+  position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);
+  width: max-content; max-width: min(250px, 74vw);
+  background: var(--ink); color: var(--paper);
+  font: 400 12px/1.5 "Barlow", sans-serif; letter-spacing: normal; text-transform: none;
+  padding: 10px 12px; z-index: 80; pointer-events: none; text-align: left;
+}
+.jargon:hover::after, .jargon:focus::after { display: block; }
 .quote-actions { display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
 
 /* ---- Session facts: headline stat cards ---- */

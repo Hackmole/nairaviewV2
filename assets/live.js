@@ -649,7 +649,7 @@
       items.push({ label: 'ASI', value: fmt2(m.asi),
         change: (pct < 0 ? '▼ ' : '▲ ') + signedPct(pct) + ' (' + (pts < 0 ? '−' : '+') + fmt2(Math.abs(pts)) + ' pts)',
         cls: pct < 0 ? 'down' : 'up' });
-      if (m.market_cap) items.push({ label: 'Mkt Cap', value: '₦' + compact(m.market_cap) });
+      if (m.market_cap) items.push({ label: 'Mkt Cap', value: compact(m.market_cap) });
       if (m.advancers != null) items.push({ label: 'Breadth', value: m.advancers + '▲ / ' + m.decliners + '▼' });
     }
     var fx = tapeData.fx && tapeData.fx.latest && tapeData.fx.latest.USD;

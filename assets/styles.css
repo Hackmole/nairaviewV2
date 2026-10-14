@@ -509,7 +509,7 @@
 .brand img { height: 34px; width: auto; display: block; }
 .site-nav { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; flex: 1; justify-content: center; }
 .site-nav::-webkit-scrollbar { display: none; }
-.site-nav a { font: 600 8px/1 "IBM Plex Mono", monospace; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); text-decoration: none; padding: 12px 10px 10px; white-space: nowrap; border-bottom: 2px solid transparent; display: inline-flex; align-items: center; }
+.site-nav a { font: 600 10px/1 "IBM Plex Mono", monospace; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); text-decoration: none; padding: 12px 10px 10px; white-space: nowrap; border-bottom: 2px solid transparent; display: inline-flex; align-items: center; }
 .site-nav a:hover { color: var(--ink); }
 .site-nav a.active { color: var(--green-strong); border-bottom-color: var(--green-strong); }
 /* ---- Mobile hamburger drawer (built by site.js from the nav) ---- */
@@ -923,7 +923,7 @@ a, button { -webkit-tap-highlight-color: transparent; }
 .eyebrow,
 .modal-eyebrow {
   color: var(--green-strong);
-  font: 600 11px/1.5 "IBM Plex Mono", monospace;
+  font: 600 12px/1.5 "IBM Plex Mono", monospace;
   letter-spacing: .14em;
   text-transform: uppercase;
 }
@@ -1442,7 +1442,7 @@ a, button { -webkit-tap-highlight-color: transparent; }
 .nav-dropdown a {
   display: block;
   padding: 10px 12px;
-  font: 600 11px/1.5 "IBM Plex Mono", monospace;
+  font: 600 12px/1.5 "IBM Plex Mono", monospace;
   text-transform: none;
   letter-spacing: .02em;
   color: var(--ink);

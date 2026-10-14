@@ -206,6 +206,15 @@
     .src-attr { margin: 8px 0 0; font: 500 11px/1.5 "IBM Plex Mono", monospace; letter-spacing: .04em; color: var(--muted); }
     .src-attr a { color: var(--muted); text-decoration: underline; text-underline-offset: 3px; }
     .src-attr a:hover { color: var(--green-strong); }
+    /* IPO live banner (brief 9). */
+    .ipo-banner { position: relative; background: var(--green); color: #022126; margin: 0 0 18px; }
+    .ipo-banner a { display: flex; align-items: center; gap: 10px; padding: 13px 44px 13px 18px; color: inherit; text-decoration: none; font-weight: 600; font-size: 14px; }
+    .ipo-banner a:hover .ipo-cta { text-decoration: underline; }
+    .ipo-dot { width: 9px; height: 9px; background: #022126; flex: 0 0 auto; animation: ipo-pulse 1.6s ease-in-out infinite; }
+    @keyframes ipo-pulse { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
+    .ipo-cta { margin-left: auto; font-size: 12.5px; letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; }
+    .ipo-x { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; color: inherit; font-size: 22px; line-height: 1; padding: 8px 10px; cursor: pointer; opacity: .7; }
+    .ipo-x:hover { opacity: 1; }
     /* IPO closing countdown banner (Dangote Refinery offer, closes 13 Oct 2026). */
     .ipo-countdown {
       display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap;

@@ -1433,3 +1433,23 @@
     }
   }
 }());
+
+/* ---- IPO live banner (brief 9): dismissible, auto-expires after close ---- */
+(function () {
+  try {
+    if (!document.querySelector("section.hero")) return; /* homepage only */
+    var closeDate = new Date("2026-10-27T16:00:00+01:00");
+    if (new Date() > closeDate) return; /* offer closed */
+    if (localStorage.getItem("nv-ipo-banner-dismissed")) return;
+    var hero = document.querySelector("section.hero");
+    var b = document.createElement("div");
+    b.className = "ipo-banner";
+    b.setAttribute("role", "announcement");
+    b.innerHTML = '<a href="dangote-refinery-ipo-guide"><span class="ipo-dot"></span><span>The Dangote Refinery IPO is open &middot; Subscribe from &#8358;5,250 &middot; Closes 27 Oct</span><span class="ipo-cta">See how</span></a><button type="button" class="ipo-x" aria-label="Dismiss">&times;</button>';
+    hero.parentNode.insertBefore(b, hero);
+    b.querySelector(".ipo-x").addEventListener("click", function () {
+      try { localStorage.setItem("nv-ipo-banner-dismissed", "1"); } catch (e) {}
+      b.remove();
+    });
+  } catch (e) {}
+}());

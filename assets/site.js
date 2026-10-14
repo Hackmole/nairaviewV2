@@ -1386,3 +1386,33 @@
     } else if (e.key === "Escape" && !overlay.hidden) { close(); }
   });
 }());
+
+/* ---- Trust signals (brief 7): methodology link + source attribution ---- */
+(function () {
+  var prefix = window.location.pathname.indexOf("/stocks/") !== -1 ? "../" : "";
+  /* Footer: "Data & methodology" link in the Nairaview column. */
+  try {
+    var cols = document.querySelectorAll(".footer-col");
+    for (var i = 0; i < cols.length; i++) {
+      var h = cols[i].querySelector("h4");
+      if (h && /nairaview/i.test(h.textContent) && !cols[i].querySelector('[data-trust="methodology"]')) {
+        var a = document.createElement("a");
+        a.href = prefix + "methodology";
+        a.textContent = "Data & methodology";
+        a.setAttribute("data-trust", "methodology");
+        cols[i].appendChild(a);
+        break;
+      }
+    }
+  } catch (e) {}
+  /* Source attribution under the data timestamp. */
+  try {
+    var target = document.querySelector(".quote-hero p.asof") || document.querySelector("#heroNote");
+    if (target && !target.parentNode.querySelector(".src-attr")) {
+      var s = document.createElement("p");
+      s.className = "src-attr";
+      s.innerHTML = 'Source: Nigerian Exchange (NGX) &middot; <a href="' + prefix + 'methodology">How we handle data</a>';
+      target.parentNode.insertBefore(s, target.nextSibling);
+    }
+  } catch (e2) {}
+}());

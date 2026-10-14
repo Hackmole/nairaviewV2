@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script>try{var t=localStorage.getItem("nv-theme");document.documentElement.setAttribute("data-theme",t==="light"?"light":"dark");}catch(e){document.documentElement.setAttribute("data-theme","dark");}</script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="theme-color" content="#022126" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Nairaview" />
+<meta property="og:title" content="Data & Methodology: Where Our Numbers Come From | Nairaview" />
+<meta property="og:description" content="Where Nairaview market data comes from, what daily close means, our delays, how we calculate changes and market cap, and our limitations." />
+<meta property="og:url" content="https://nairaview.com/methodology" />
+<meta property="og:image" content="https://nairaview.com/assets/og-default.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Data & Methodology: Where Our Numbers Come From | Nairaview" />
+<meta name="twitter:description" content="Where Nairaview market data comes from, what daily close means, our delays, how we calculate changes and market cap, and our limitations." />
+<meta name="twitter:image" content="https://nairaview.com/assets/og-default.png" />
+<link rel="canonical" href="https://nairaview.com/methodology" />
+  <meta name="description" content="Where Nairaview market data comes from, what daily close means, our delays, how we calculate changes and market cap, and our limitations." />
+  <link rel="icon" href="assets/logo-icon.svg" type="image/svg+xml">
+  <link rel="icon" href="assets/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="icon" href="assets/favicon-48.png" sizes="48x48" type="image/png">
+  <link rel="icon" href="assets/favicon-96.png" sizes="96x96" type="image/png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <title>Data & Methodology: Where Our Numbers Come From | Nairaview</title>
+  <link rel="stylesheet" href="assets/styles.css?v=20261013p" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Barlow+Semi+Condensed:wght@600;700&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+  </head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="./" aria-label="Nairaview home"><picture><source srcset="assets/logo-dark.svg" media="(prefers-color-scheme: dark)"><img src="assets/logo.svg" alt="Nairaview" height="34"></picture></a>
+      <nav class="site-nav" aria-label="Primary">
+          <a href="./">Home</a>
+          <div class="nav-item"><button type="button" class="nav-hub" data-hub="markets" aria-expanded="false">Markets</button><div class="nav-dropdown" role="menu"><span class="nav-drophead">Stocks</span><a href="stocks">All listed stocks</a><a href="screener">Stock screener</a><a href="compare">Compare stocks</a><a href="highs-lows">Highs &amp; lows</a><a href="etfs">ETFs</a><a href="watchlist">My watchlist</a><span class="nav-drophead">Foreign exchange</span><a href="fx">FX converter</a><a href="fx-usd">US dollar</a><a href="fx-eur">Euro</a><a href="fx-gbp">British pound</a><span class="nav-div" aria-hidden="true"></span><a href="fixed-income">Fixed Income</a><a href="economy">Economy</a><a href="brokers">Brokers</a></div></div>
+          <div class="nav-item"><a href="offers">Offers</a><div class="nav-dropdown" role="menu"><a href="offers">Public offers</a><a href="ipo-tracker">IPO performance tracker</a></div></div>
+          <div class="nav-item"><a href="calendar">Calendar</a><div class="nav-dropdown" role="menu"><a href="calendar">Market calendar</a><a href="dividends">Dividends</a><a href="corporate-actions">Corporate actions</a><a href="earnings">Earnings</a></div></div>
+          <div class="nav-item"><a href="news">News</a><div class="nav-dropdown" role="menu"><a href="news-headlines">Latest headlines</a><a href="news-newsroom">Newsroom</a><a href="news-notes">Market notes</a><a href="insider-dealings">Insider dealings</a></div></div>
+          <div class="nav-item"><a href="learn" class="active">Learn</a><div class="nav-dropdown" role="menu"><a href="learn">All guides</a><a href="market-recap">Recap</a></div></div>
+      </nav>
+    </div>
+  </header>
+  <div class="shell">
+    <div class="live-ticker" role="region" aria-label="Live NGX price ticker">
+      <iframe src="https://ngnmarket.com/widget/marquee" width="100%" height="60" frameborder="0" scrolling="no" style="border:none;" title="Live NGX market ticker"></iframe>
+    </div>
+    <div class="topline">
+      <span class="status"><i class="status-dot" aria-hidden="true"></i> MARKET CLOSED</span>
+      <span class="topline-date">DAILY CLOSE · TUE 13 OCT 2026 · WAT</span>
+    </div>
+    <main>
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="./">Home</a><span class="sep">/</span><span>Methodology</span></nav>
+      <section class="section">
+        <div class="section-heading">
+          <p class="kicker">NAIRAVIEW &middot; HOW WE WORK</p>
+          <h1>Data &amp; methodology</h1>
+          <div class="tldr">
+            <span class="tldr-label">In short</span>
+            <p>Every price on Nairaview is an official <strong>daily closing price from the Nigerian Exchange (NGX)</strong>. During trading hours we show a session snapshot about 30 minutes behind, clearly labeled. We explain below exactly what each number means and where it can fall short.</p>
+          </div>
+        </div>
+        <h2 class="guide-h2">Where our numbers come from</h2>
+        <p class="guide-p">All market data on Nairaview, prices, volumes, the All-Share Index, comes from the <strong>Nigerian Exchange (NGX)</strong> through our market data feed. We publish the Exchange&apos;s official daily closing prices: the same figures the NGX releases after each trading session. We do not invent, estimate, or round-trip prices through third parties.</p>
+        <h2 class="guide-h2">What &ldquo;daily close&rdquo; means</h2>
+        <p class="guide-p">The NGX trades Monday to Friday, 9:30am to 4:00pm WAT. When the session ends, the Exchange publishes one official closing price per stock. That single price is what you see on our stock pages and homepage until the next session closes. Each page carries its timestamp, for example &ldquo;As of the 13 Oct 2026 close &middot; 16:00 WAT,&rdquo; so you always know which session you are looking at.</p>
+        <h2 class="guide-h2">Delays, stated plainly</h2>
+        <p class="guide-p">Nairaview is not a real-time terminal. During trading hours the homepage shows a <strong>session snapshot about 30 minutes behind</strong> the live market, labeled &ldquo;SESSION &middot; AS OF HH:MM WAT &middot; ~30-MIN DELAYED.&rdquo; After the 4:00pm close, everything settles to the official daily close. Prices may have moved since what you see here; confirm with your broker before acting on any number.</p>
+        <h2 class="guide-h2">How we calculate the basics</h2>
+        <ul class="guide-list">
+          <li><strong>Day change:</strong> (close &minus; previous close) &divide; previous close, shown in percent and in naira.</li>
+          <li><strong>Market cap:</strong> share price &times; shares outstanding.</li>
+          <li><strong>ASI:</strong> the NGX All-Share Index itself, published by the Exchange. Our year-to-date figure is measured from the first trading session of the year.</li>
+          <li><strong>7-day change and tracked highs/lows:</strong> computed from our accumulated daily closes.</li>
+        </ul>
+        <h2 class="guide-h2">Limitations we own up to</h2>
+        <ul class="guide-list">
+          <li><strong>History window:</strong> our daily price history grows from late September 2026. &ldquo;Tracked&rdquo; highs and lows cover that window only, not all-time records.</li>
+          <li><strong>Corporate actions:</strong> share splits and consolidations can make a price look like it jumped or crashed overnight. We adjust for verified actions; unverified ones may briefly show odd figures.</li>
+          <li><strong>No intraday:</strong> we do not publish live tick-by-tick prices or intraday charts. Daily closes only.</li>
+          <li><strong>Indicative FX:</strong> naira rates are indicative aggregates, not tradable quotes.</li>
+        </ul>
+        <h2 class="guide-h2">Corrections</h2>
+        <p class="guide-p">If a number here looks wrong, tell us at <a href="mailto:hello@nairaview.com">hello@nairaview.com</a>. We fix verified errors promptly. Nairaview provides market data for information only, not investment advice.</p>
+      </section>
+    </main>
+    </div>
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="./" aria-label="Nairaview home"><img src="assets/logo-dark.svg" alt="Nairaview" height="34"></a>
+          <p>The Nigerian Exchange, decoded daily. Prices, movers, offers, news and plain-language guides.</p>
+          <a class="footer-x" href="https://x.com/naira_view" target="_blank" rel="noopener" aria-label="Nairaview on X"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a><a class="footer-x" style="margin-left:12px" href="mailto:hello@nairaview.com" aria-label="Email Nairaview"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></a>
+        </div>
+        <div class="footer-col">
+          <h4>Markets</h4>
+          <a href="stocks">All listed stocks</a>
+          <a href="screener">Stock screener</a>
+          <a href="highs-lows">Highs & lows</a>
+          <a href="dividends">Dividends</a>
+          <a href="corporate-actions">Corporate actions</a>
+          <a href="insider-dealings">Insider dealings</a>
+          <a href="offers">Public offers</a>
+          <a href="brokers">Stockbrokers</a>
+          <a href="calendar">Market calendar</a>
+          <a href="earnings">Earnings dashboard</a>
+          <a href="fx">Dollar / naira</a>
+          <a href="fixed-income">Fixed income</a>
+          <a href="economy">Economy</a>
+        </div>
+        <div class="footer-col">
+          <h4>Nairaview</h4>
+          
+          <a href="learn">Learn</a>
+          <a href="portfolio">Portfolio tracker</a>
+          <a href="watchlist">My watchlist</a>
+          <a href="market-recap">Weekly recap</a>
+        </div>
+      </div>
+      <div class="footer-legal">
+        <span>&copy; 2026 Nairaview. information only, not investment advice.</span>
+        <span>Market data is delayed. Prices may have changed, confirm before acting.</span>
+      </div>
+    </div>
+  </footer>
+  <div class="modal-backdrop" id="modalBackdrop" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalSymbol">
+      <button class="modal-close" id="modalClose" aria-label="Close stock details">×</button>
+      <div class="modal-eyebrow" id="modalList">Snapshot · 13 Oct 2026</div>
+      <div class="modal-symbol" id="modalSymbol"></div>
+      <div class="modal-company" id="modalCompany"></div>
+      <div class="modal-grid">
+        <div class="modal-cell"><span>Price</span><strong id="modalPrice"></strong></div>
+        <div class="modal-cell"><span id="modalMoveLabel">Day change</span><strong id="modalMove"></strong></div>
+      </div>
+      <a class="modal-live" id="modalPage" href="#" hidden>Full stock page on Nairaview &rarr;</a>
+      <button class="modal-star" id="modalStar" type="button"></button>
+    </div>
+  </div>
+  <div class="ad-slot ad-sticky-mobile" id="adSticky" aria-hidden="true">
+    <button class="ad-close" id="adStickyClose" type="button" aria-label="Close advertisement">×</button>
+    <div class="ad-label">Advertisement</div>
+    <script>
+  atOptions = {
+    'key' : '2c91ae62a5b6daf76d6821ebc779a810',
+    'format' : 'iframe',
+    'height' : 50,
+    'width' : 320,
+    'params' : {}
+  };
+</script>
+<script src="https://www.highrevenueformat.com/2c91ae62a5b6daf76d6821ebc779a810/invoke.js"></script>
+  </div>
+  <script src="assets/data.js?v=20261013b"></script>
+  <script src="assets/logos.js"></script>
+  <script src="assets/stock-pages.js"></script>
+  <script src="assets/site.js?v=20261013j"></script>
+  <script src="assets/live.js?v=20261013c"></script>
+    <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a9f4136dd40547a7b1acca41e62cc7a5"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

@@ -126,20 +126,24 @@
         return h > 0 ? h + 'H ' + String(m).padStart(2, '0') + 'M' : m + 'M';
       }
       var DAYN = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+      /* Shared with live.js: its feed-driven repaints must keep the countdown. */
+      window.NV = window.NV || {};
+      window.NV.marketLabel = function (open) {
+        var wat = watNow();
+        var day = wat.getDay(), mins = wat.getHours() * 60 + wat.getMinutes();
+        if (open) return 'MARKET OPEN \u00B7 CLOSES IN ' + fmtDur(960 - mins);
+        if (day >= 1 && day <= 5 && mins < 570) return 'MARKET CLOSED \u00B7 OPENS IN ' + fmtDur(570 - mins);
+        var add = day === 0 ? 1 : day === 6 ? 2 : (day === 5 ? 3 : 1);
+        var openDay = new Date(wat.getTime() + add * 86400000).getDay();
+        return 'MARKET CLOSED \u00B7 OPENS ' + DAYN[openDay] + ' 9:30';
+      };
       function paint() {
         var wat = watNow();
         var day = wat.getDay(), mins = wat.getHours() * 60 + wat.getMinutes();
         var open = day >= 1 && day <= 5 && mins >= 570 && mins < 960;
-        var label;
-        if (open) {
-          label = 'MARKET OPEN \u00B7 CLOSES IN ' + fmtDur(960 - mins);
-        } else if (day >= 1 && day <= 5 && mins < 570) {
-          label = 'MARKET CLOSED \u00B7 OPENS IN ' + fmtDur(570 - mins);
-        } else {
-          var add = day === 0 ? 1 : day === 6 ? 2 : (day === 5 ? 3 : 1);
-          var openDay = new Date(wat.getTime() + add * 86400000).getDay();
-          label = 'MARKET CLOSED \u00B7 OPENS ' + DAYN[openDay] + ' 9:30';
-        }
+        /* live.js may know better (exchange holidays): prefer its feed state. */
+        if (window.NV && typeof window.NV.marketOpenFeed === 'boolean') open = window.NV.marketOpenFeed;
+        var label = window.NV.marketLabel(open);
         statusEl.innerHTML = '<i class="status-dot" aria-hidden="true"></i> ' + label;
         statusEl.classList.toggle('closed', !open);
         var hh = String(wat.getHours()).padStart(2, '0'), mm = String(wat.getMinutes()).padStart(2, '0');

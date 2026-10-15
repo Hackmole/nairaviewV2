@@ -113,6 +113,7 @@
     var providerClosed = (st && st.is_open === false) ||
       String(ov.market_status || '').toLowerCase() === 'closed';
     var marketOpen = watInSessionNow() && !providerClosed;
+    try { window.NV = window.NV || {}; window.NV.marketOpenFeed = marketOpen; } catch (e) {}
     var sessionLive = !!(marketOpen && ov.session);
     var sessionTime = sessionLive ? fmtTimeWAT(ov.as_of) : '';
     /* Every page carries a .topline-date hook now (index.html keeps its
@@ -160,9 +161,10 @@
        the provider feed can only confirm a closure (holiday). */
     var statusEl = document.querySelector('.topline .status');
     if (statusEl) {
-      statusEl.innerHTML = '<i class="status-dot" aria-hidden="true"></i> ' + (marketOpen ? 'MARKET OPEN' : 'MARKET CLOSED');
+      var mlabel = (window.NV && window.NV.marketLabel) ? window.NV.marketLabel(marketOpen) : (marketOpen ? 'MARKET OPEN' : 'MARKET CLOSED');
+      statusEl.innerHTML = '<i class="status-dot" aria-hidden="true"></i> ' + mlabel;
       statusEl.classList.toggle('closed', !marketOpen);
-      statusEl.title = 'Market state: NGX trades Mon\u2013Fri 10:00\u201314:30 WAT. Prices carry the exchange\u2019s usual delay.';
+      statusEl.title = 'Market state: NGX trades Mon\u2013Fri 9:30\u201316:00 WAT. Prices carry the exchange\u2019s usual delay.';
     }
     /* Homepage hero pill mirrors the topline state (Figma quote-hero pattern). */
     var hp = document.getElementById('heroPill');
@@ -590,7 +592,8 @@
           var open = watInSessionNow();
           var el = document.querySelector('.topline .status');
           if (el) {
-            el.innerHTML = '<i class="status-dot" aria-hidden="true"></i> ' + (open ? 'MARKET OPEN' : 'MARKET CLOSED');
+            var mlabel2 = (window.NV && window.NV.marketLabel) ? window.NV.marketLabel(open) : (open ? 'MARKET OPEN' : 'MARKET CLOSED');
+            el.innerHTML = '<i class="status-dot" aria-hidden="true"></i> ' + mlabel2;
             el.classList.toggle('closed', !open);
           }
           var hp2 = document.getElementById('heroPill');

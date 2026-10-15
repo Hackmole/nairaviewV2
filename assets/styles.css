@@ -1450,17 +1450,23 @@ a, button { -webkit-tap-highlight-color: transparent; }
 .hist-table td.down { color: var(--red); font-weight: 600; }
 .hist-table tr:last-child td { border-bottom: 0; }
 
-/* ---- Mobile: history table becomes cards (brief 8) ---- */
+/* ---- Mobile: frozen first column + horizontal scroll (mobile redesign brief 2) ---- */
 @media (max-width: 700px) {
   .hist-card { overflow-x: visible; padding: 16px; }
-  .hist-table thead { display: none; }
-  .hist-table, .hist-table tbody, .hist-table tr, .hist-table td { display: block; }
-  .hist-table tr { background: var(--surface); border: 1px solid var(--line); padding: 12px 14px; margin-bottom: 10px; }
-  .hist-table tr:last-child td { border-bottom: none; }
-  .hist-table td { border: none; padding: 5px 0; text-align: left; white-space: normal; display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
-  .hist-table td::before { content: attr(data-th); font: 600 10px/1.4 "IBM Plex Mono", "Noto Sans", monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); flex: 0 0 auto; }
-  .hist-table td:first-child { font-weight: 700; font-size: 14px; }
-  .hist-table td:first-child::before { display: none; }
+  /* Sticky needs separate borders (Chrome ignores sticky under border-collapse: collapse) */
+  .hist-table { border-collapse: separate; border-spacing: 0; min-width: 600px; }
+  /* Stock history: Date column pinned (table lives on a --surface card) */
+  .hist-card .hist-table th:first-child, .hist-card .hist-table td:first-child {
+    position: sticky; left: 0; z-index: 2; background: var(--surface);
+    box-shadow: 1px 0 0 var(--line-strong);
+  }
+  .hist-card .hist-table thead th:first-child { z-index: 3; }
+  /* Compare: metric column pinned (table sits on the --paper page background) */
+  .compare-table th:first-child, .compare-table th[scope="row"] {
+    position: sticky; left: 0; z-index: 2; background: var(--paper);
+    box-shadow: 1px 0 0 var(--line-strong);
+  }
+  .compare-table thead th:first-child { z-index: 3; }
 }
 
 /* ---- Stock page: tracked range widget ---- */

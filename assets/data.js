@@ -126,28 +126,29 @@ var asiHistory = [
         { d: '2026-10-12', label: '12 Oct 2026', v: 247144.27 },
         { d: '2026-10-13', label: '13 Oct 2026', v: 247513.63 },
         { d: '2026-10-14', label: '14 Oct 2026', v: 247673.65 },
+        { d: '2026-10-15', label: '15 Oct 2026', v: 247707.13 },
       ];
 var tables = {
         gainers: [
-          { s: 'AUSTINLAZ', c: 'Austin Laz & Company Plc', p: '₦2.42', m: '+10.00%', d: 'up', pv: 2.42, cv: 10.00 , mc: 2613261200, sp: [2.20,2.30,2.20,2.29,2.20,2.20,2.20,2.20,2.22,2.22,2.42]},
-          { s: 'ETRANZACT', c: 'eTranzact International Plc', p: '₦15.75', m: '+9.76%', d: 'up', pv: 15.75, cv: 9.76 , mc: 144899997102, sp: [12.50,12.50,12.50,12.35,12.20,12.20,11.00,11.00,11.00,11.00,12.10,12.10,15.75]},
-          { s: 'LIVESTOCK', c: 'Livestock Feeds Plc', p: '₦16.95', m: '+9.71%', d: 'up', pv: 16.95, cv: 9.71 , mc: 50849990135, sp: [9.75,10.70,11.00,12.00,13.15,14.45,15.70,16.95]},
-          { s: 'CMFC', c: 'DEAP Capital Management & Trust Plc', p: '₦3.54', m: '+9.60%', d: 'up', pv: 3.54, cv: 9.60 , mc: 5310000000, sp: [2.70,2.97,3.26,3.58,3.93,4.32,4.49,4.05,3.65,4.01,3.65,3.58,3.54]},
-          { s: 'FTGINSURE', c: 'Fortis Global Insurance Plc', p: '₦1.75', m: '+9.37%', d: 'up', pv: 1.75, cv: 9.37 , mc: 22594303525, sp: []},
+          { s: 'ZICHIS', c: 'Zichis Agro Allied Industries Plc', p: '₦17.93', m: '+10.00%', d: 'up', pv: 17.93, cv: 10.00 , mc: 10758000000, sp: [16.28,16.00,17.60,19.18,19.90,19.90,18.25,18.25,17.05,17.05,17.05,17.05,16.00,16.55,17.93]},
+          { s: 'MULTITREX', c: 'Multi-Trex Integrated Foods Plc', p: '₦0.55', m: '+10.00%', d: 'up', pv: 0.55, cv: 10.00 , mc: 3426892629, sp: [0.36,0.36,0.36,0.39,0.42,0.42,0.46,0.55]},
+          { s: 'AUSTINLAZ', c: 'Austin Laz & Company Plc', p: '₦2.66', m: '+9.92%', d: 'up', pv: 2.66, cv: 9.92 , mc: 2872427600, sp: [2.20,2.30,2.20,2.29,2.20,2.20,2.20,2.20,2.22,2.22,2.66]},
+          { s: 'CWG', c: 'CWG Plc', p: '₦20.05', m: '+9.86%', d: 'up', pv: 20.05, cv: 9.86 , mc: 50622768497, sp: [18.00,18.00,19.40,20.75,20.75,20.75,20.75,19.25,19.25,18.95,18.95,18.95,18.25,18.25,20.05]},
+          { s: 'OMATEK', c: 'Omatek Ventures Plc', p: '₦1.46', m: '+9.77%', d: 'up', pv: 1.46, cv: 9.77 , mc: 4295012629, sp: [1.45,1.45,1.42,1.38,1.41,1.44,1.34,1.46]},
         ],
         losers: [
-          { s: 'UPDCREIT', c: 'UPDC Real Estate Investment Trust', p: '₦23.50', m: '−9.96%', d: 'down', pv: 23.50, cv: -9.96 , mc: 62704333250, sp: [18.55,18.60,18.75,19.95,19.95,20.65,20.65,21.60,21.60,22.20,22.70,24.00,26.40,26.10,23.50]},
-          { s: 'UPDC', c: 'UPDC Plc', p: '₦3.90', m: '−6.02%', d: 'down', pv: 3.90, cv: -6.02 , mc: 72383882750, sp: [3.60,3.60,3.85,3.90,3.80,3.75,3.95,4.10,4.30,4.25,4.10,3.90]},
-          { s: 'REGALINS', c: 'Regency Alliance Insurance Plc', p: '₦0.78', m: '−4.88%', d: 'down', pv: 0.78, cv: -4.88 , mc: 12483900000, sp: [0.70,0.73,0.72,0.74,0.70,0.77,0.82,0.78]},
-          { s: 'VERITASKAP', c: 'Veritas Kapital Assurance Plc', p: '₦1.08', m: '−3.57%', d: 'down', pv: 1.08, cv: -3.57 , mc: 14975999999, sp: []},
-          { s: 'RTBRISCOE', c: 'RT Briscoe Nigeria Plc', p: '₦9.25', m: '−3.14%', d: 'down', pv: 9.25, cv: -3.14 , mc: 10881301140, sp: [10.05,10.00,10.00,10.05,9.80,10.00,10.00,9.55,9.25]},
+          { s: 'NASCON', c: 'NASCON Allied Industries Plc', p: '₦171.00', m: '−9.48%', d: 'down', pv: 171.00, cv: -9.48 , mc: 462115041966, sp: [176.00,183.40,188.50,188.50,188.50,188.50,188.90,188.90,188.90,188.90,188.90,188.90,188.90,188.90,171.00]},
+          { s: 'GUINEAINS', c: 'Guinea Insurance Plc', p: '₦0.91', m: '−9.00%', d: 'down', pv: 0.91, cv: -9.00 , mc: 7227948000, sp: [0.75,0.75,0.70,0.72,0.68,0.73,0.78,0.85,0.93,0.97,0.94,1.00,0.91]},
+          { s: 'THOMASWY', c: 'Thomas Wyatt Nigeria Plc', p: '₦2.20', m: '−6.38%', d: 'down', pv: 2.20, cv: -6.38 , mc: 871200000, sp: [2.96,2.67,2.67,2.67,2.67,2.41,2.41,2.41,2.41,2.35,2.35,2.20]},
+          { s: 'DAARCOMM', c: 'DAAR Communications Plc', p: '₦1.47', m: '−6.37%', d: 'down', pv: 1.47, cv: -6.37 , mc: 17640000000, sp: [1.44,1.50,1.52,1.50,1.44,1.46,1.45,1.45,1.50,1.38,1.38,1.48,1.57,1.47]},
+          { s: 'ELLAHLAKES', c: 'Ellah Lakes Plc', p: '₦7.55', m: '−5.03%', d: 'down', pv: 7.55, cv: -5.03 , mc: 29129211268, sp: [8.10,8.60,8.30,8.20,8.20,8.10,7.90,7.60,7.60,8.00,7.80,7.95,7.55]},
         ],
         volume: [
-          { s: 'ACCESSCORP', c: 'Access Holdings Plc', p: '–', m: '99.37m', d: 'up', pv: null, cv: 99.37, vol: true },
-          { s: 'ZENITHBANK', c: 'Zenith Bank Plc', p: '–', m: '17.55m', d: 'up', pv: null, cv: 17.55, vol: true },
-          { s: 'LIVESTOCK', c: 'Livestock Feeds Plc', p: '–', m: '13.31m', d: 'up', pv: null, cv: 13.31, vol: true },
-          { s: 'UBA', c: 'United Bank for Africa Plc', p: '–', m: '11.74m', d: 'up', pv: null, cv: 11.74, vol: true },
-          { s: 'GTCO', c: 'Guaranty Trust Holding Company Plc', p: '–', m: '11.71m', d: 'up', pv: null, cv: 11.71, vol: true },
+          { s: 'UBA', c: 'United Bank for Africa Plc', p: '–', m: '36.15m', d: 'up', pv: null, cv: 36.15, vol: true },
+          { s: 'GTCO', c: 'Guaranty Trust Holding Company Plc', p: '–', m: '18.70m', d: 'up', pv: null, cv: 18.70, vol: true },
+          { s: 'ACCESSCORP', c: 'Access Holdings Plc', p: '–', m: '15.32m', d: 'up', pv: null, cv: 15.32, vol: true },
+          { s: 'VFDGROUP', c: 'VFD Group Plc', p: '–', m: '14.15m', d: 'up', pv: null, cv: 14.15, vol: true },
+          { s: 'ZENITHBANK', c: 'Zenith Bank Plc', p: '–', m: '11.91m', d: 'up', pv: null, cv: 11.91, vol: true },
         ]
       };
       var listNames = { gainers: 'Top gainer', losers: 'Top loser', volume: 'Most traded', directory: 'Market directory' };

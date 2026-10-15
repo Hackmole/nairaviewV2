@@ -1106,7 +1106,7 @@ a, button { -webkit-tap-highlight-color: transparent; }
 .hs-value { font: 600 16px/1.2 "IBM Plex Mono", "Noto Sans", monospace; color: var(--ink); }
 @media (max-width: 700px) {
   .hero { flex-direction: column; }
-  .hero-side { padding-top: 0; }
+  .hero-side { display: none; }
 }
 .hero {
   padding: 40px 24px 34px;

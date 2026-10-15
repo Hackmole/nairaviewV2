@@ -1874,3 +1874,14 @@
     else header.appendChild(ms);
   }
 }());
+
+/* ---- Theme collection counts (mobile redesign brief 5) ---- */
+(function () {
+  var host = document.getElementById('themes');
+  if (!host || !Array.isArray(window.directory)) return;
+  host.querySelectorAll('[data-theme-count]').forEach(function (el) {
+    var sector = el.getAttribute('data-theme-count');
+    var n = window.directory.filter(function (r) { return r.g === sector; }).length;
+    el.textContent = n + (n === 1 ? ' stock' : ' stocks');
+  });
+}());

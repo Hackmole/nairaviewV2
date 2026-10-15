@@ -275,7 +275,55 @@ export default function Screener(): React.ReactElement {
   }, []);
 
   /* Refresh from the live API; baked snapshot stays on failure. */
+    /* Deep-linkable filters (mobile redesign brief 5): ?preset=id or ?sector=X&minP=&maxP=&minC=&maxC=&sort=&mover= */
   useEffect(() => {
+    let q: URLSearchParams;
+    try { q = new URLSearchParams(window.location.search); } catch { return; }
+    const presetParam = q.get('preset');
+    const hasParams = presetParam || q.get('sector') || q.get('mover') || q.get('minP') ||
+      q.get('maxP') || q.get('minC') || q.get('maxC') || q.get('sort');
+    if (!hasParams) return;
+    const preset = PRESETS.find((p) => p.id === presetParam);
+    const base: FilterState = preset ? { ...preset.f }
+      : { mover: 'all', sector: 'All', minP: '', maxP: '', minC: '', maxC: '', sort: 'chg-desc' };
+    const nf: FilterState = {
+      mover: q.get('mover') || base.mover,
+      sector: q.get('sector') || base.sector,
+      minP: q.get('minP') !== null ? (q.get('minP') as string) : base.minP,
+      maxP: q.get('maxP') !== null ? (q.get('maxP') as string) : base.maxP,
+      minC: q.get('minC') !== null ? (q.get('minC') as string) : base.minC,
+      maxC: q.get('maxC') !== null ? (q.get('maxC') as string) : base.maxC,
+      sort: q.get('sort') || base.sort,
+    };
+    function setControl(id: string, value: string) {
+      const c = document.getElementById(id) as HTMLInputElement | HTMLSelectElement | null;
+      if (c) c.value = value;
+    }
+    /* Validate the sector against the built options; unknown values fall back to All. */
+    const sel = document.getElementById('screenSector') as HTMLSelectElement | null;
+    if (sel && nf.sector !== 'All' &&
+        !Array.from(sel.options).some((o) => o.value === nf.sector)) {
+      nf.sector = 'All';
+    }
+    setControl('screenSector', nf.sector);
+    setControl('screenMinP', nf.minP);
+    setControl('screenMaxP', nf.maxP);
+    setControl('screenMinC', nf.minC);
+    setControl('screenMaxC', nf.maxC);
+    setControl('screenSort', nf.sort);
+    const host = document.getElementById('screenMover');
+    if (host) host.querySelectorAll('.sector-chip').forEach((c) => {
+      c.setAttribute('aria-pressed', (c as HTMLElement).dataset.mover === nf.mover ? 'true' : 'false');
+    });
+    const presetHost = document.getElementById('presetRow');
+    if (presetHost) presetHost.querySelectorAll('.preset-chip').forEach((c) => {
+      c.setAttribute('aria-pressed', (c as HTMLElement).dataset.preset === (preset ? preset.id : '') ? 'true' : 'false');
+    });
+    setF(nf);
+    setActivePreset(preset ? preset.id : null);
+  }, []);
+
+useEffect(() => {
     let cancelled = false;
     getJSON<PricesResponse>('/api/prices')
       .then((doc) => {

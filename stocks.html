@@ -24,7 +24,7 @@
   <link rel="icon" href="assets/favicon-96.png" sizes="96x96" type="image/png">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
   <title>All Listed Stocks · NGX Stock Directory | Nairaview</title>
-  <link rel="stylesheet" href="assets/styles.css?v=20261015c" />
+  <link rel="stylesheet" href="assets/styles.css?v=20261015d" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Barlow+Semi+Condensed:wght@600;700&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -68,6 +68,48 @@
                 <p class="lede">A searchable directory of NGX-listed equities. Search, filter by sector, tap any row for details and its live chart, or star it to your watchlist.</p>
               </div>
             </div>
+            <section class="section" id="themes">
+              <div class="section-heading">
+                <div>
+                  <div class="kicker">Browse by theme</div>
+                  <h2>Start from a theme.</h2>
+                </div>
+              </div>
+              <div class="theme-grid">
+                <a class="theme-card" href="screener?sector=Financial">
+                  <span class="theme-name">Banks &amp; financials</span>
+                  <span class="theme-sub" data-theme-count="Financial"></span>
+                </a>
+                <a class="theme-card" href="screener?sector=Industrial">
+                  <span class="theme-name">Industrial</span>
+                  <span class="theme-sub" data-theme-count="Industrial"></span>
+                </a>
+                <a class="theme-card" href="screener?sector=Consumer%20Goods">
+                  <span class="theme-name">Consumer goods</span>
+                  <span class="theme-sub" data-theme-count="Consumer Goods"></span>
+                </a>
+                <a class="theme-card" href="screener?sector=Oil%20%26%20Gas">
+                  <span class="theme-name">Oil &amp; gas</span>
+                  <span class="theme-sub" data-theme-count="Oil &amp; Gas"></span>
+                </a>
+                <a class="theme-card" href="screener?sector=Technology">
+                  <span class="theme-name">Technology</span>
+                  <span class="theme-sub" data-theme-count="Technology"></span>
+                </a>
+                <a class="theme-card" href="screener?preset=active">
+                  <span class="theme-name">Most traded</span>
+                  <span class="theme-sub">Highest volume today</span>
+                </a>
+                <a class="theme-card" href="screener?preset=gainers">
+                  <span class="theme-name">Top gainers</span>
+                  <span class="theme-sub">Biggest risers today</span>
+                </a>
+                <a class="theme-card" href="screener?preset=penny">
+                  <span class="theme-name">Under &#8358;5</span>
+                  <span class="theme-sub">Priced under &#8358;5</span>
+                </a>
+              </div>
+            </section>
             <section class="section" id="directory">
               <div class="table-tools">
                 <input class="stock-search" id="dirSearch" type="search" placeholder="Search all stocks: try “dangote” or “MTNN”" aria-label="Search all listed stocks" autocomplete="off" />
@@ -163,7 +205,7 @@
   <script src="assets/data.js?v=20261014a"></script>
   <script src="assets/logos.js"></script>
   <script src="assets/stock-pages.js"></script>
-  <script src="assets/site.js?v=20261015b"></script>
+  <script src="assets/site.js?v=20261015c"></script>
   <script src="assets/live.js?v=20261014a"></script>
     <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a9f4136dd40547a7b1acca41e62cc7a5"}'></script><!-- End Cloudflare Web Analytics -->
 </body>

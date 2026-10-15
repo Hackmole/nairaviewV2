@@ -1885,3 +1885,18 @@
     el.textContent = n + (n === 1 ? ' stock' : ' stocks');
   });
 }());
+
+/* ---- Trust strip above the footer (mobile redesign brief 6) ---- */
+(function () {
+  var prefix = window.location.pathname.indexOf("/stocks/") !== -1 ? "../" : "";
+  var footer = document.querySelector(".site-footer");
+  if (!footer) return;
+  var prev = footer.previousElementSibling;
+  if (prev && prev.classList.contains("trust-strip")) return;
+  var strip = document.createElement("div");
+  strip.className = "trust-strip";
+  strip.innerHTML = "<span>Prices: Nigerian Exchange (NGX) <b>\u00B7</b> " +
+    "Delayed ~30 min in session <b>\u00B7</b> No sign-up needed <b>\u00B7</b> " +
+    '<a href="' + prefix + 'methodology">How we handle data</a></span>';
+  footer.parentNode.insertBefore(strip, footer);
+}());

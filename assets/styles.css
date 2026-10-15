@@ -1722,3 +1722,12 @@ a, button { -webkit-tap-highlight-color: transparent; }
 .theme-name { display: block; font: 700 17px/1.25 "Barlow Semi Condensed", "Noto Sans", sans-serif; color: var(--ink); margin-bottom: 6px; }
 .theme-sub { display: block; font-size: 13px; color: var(--muted); }
 @media (max-width: 900px) { .theme-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* ---- Trust strip (mobile redesign brief 6) ---- */
+.trust-strip {
+  border-top: 1px solid var(--line); padding: 18px 20px; text-align: center;
+  font: 500 12px/1.7 "IBM Plex Mono", "Noto Sans", monospace; color: var(--muted);
+}
+.trust-strip b { font-weight: 400; color: var(--line-strong); }
+.trust-strip a { color: var(--green-strong); font-weight: 600; text-decoration: none; }
+.trust-strip a:hover { text-decoration: underline; }

@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { getJSON, toRow, dirArrow } from '../lib/api.js';
 import { markFeedOk, unavailableHTML, lastUpdatedDate } from '../lib/feedState.js';
-import type { DirectoryRow, PricesResponse } from '../lib/types.js';
+import type { DirectoryRow, HistoryResponse, PricesResponse } from '../lib/types.js';
 
 /* React-owned stock screener results.
    - Mounts on #screenList (screener.html). The static filter controls stay in
@@ -108,6 +108,64 @@ export default function Screener(): React.ReactElement {
   const [activePreset, setActivePreset] = useState<string | null>(null);
   const [liveStale, setLiveStale] = useState(false);
   const [dataFailed, setDataFailed] = useState(false);
+  /* Expandable rows (mobile redesign brief 3): one open at a time, chart lazy-fetched */
+  const [expanded, setExpanded] = useState<string | null>(null);
+  const [charts, setCharts] = useState<Record<string, number[] | 'loading' | 'error'>>({});
+
+  function toggleExpand(sym: string) {
+    const next = expanded === sym ? null : sym;
+    setExpanded(next);
+    if (next && charts[sym] === undefined) {
+      setCharts((c) => ({ ...c, [sym]: 'loading' }));
+      getJSON<HistoryResponse>('/api/history?symbol=' + encodeURIComponent(sym))
+        .then((j) => {
+          const closes = (j.prices || [])
+            .map((p) => p.close)
+            .filter((n) => typeof n === 'number') as number[];
+          setCharts((c) => ({ ...c, [sym]: closes.length >= 2 ? closes.slice(-63) : 'error' }));
+        })
+        .catch(() => setCharts((c) => ({ ...c, [sym]: 'error' })));
+    }
+  }
+
+  function fmtVol(v: number | undefined): string {
+    if (!v) return '\u00B7';
+    if (v >= 1e9) return (v / 1e9).toFixed(1) + 'bn';
+    if (v >= 1e6) return (v / 1e6).toFixed(1) + 'm';
+    if (v >= 1e3) return (v / 1e3).toFixed(1) + 'k';
+    return String(Math.round(v));
+  }
+
+  function miniChart(closes: number[], dir: string | undefined): React.ReactElement {
+    const w = 300, h = 64;
+    const min = Math.min.apply(null, closes), max = Math.max.apply(null, closes);
+    const rng = (max - min) || 1;
+    const pts = closes.map((c, i) =>
+      (i / (closes.length - 1) * w).toFixed(1) + ',' + (h - 4 - (c - min) / rng * (h - 8)).toFixed(1)
+    ).join(' ');
+    return (
+      <svg viewBox={'0 0 ' + w + ' ' + h} preserveAspectRatio="none"
+        className={'expand-chart ' + (dir === 'down' ? 'down' : 'up')} aria-hidden="true">
+        <polyline points={pts} fill="none" stroke="currentColor" strokeWidth="2" vectorEffect="non-scaling-stroke" />
+      </svg>
+    );
+  }
+
+  function expandPanel(r: DirectoryRow): React.ReactElement {
+    const ch = charts[r.s];
+    return (
+      <div className="row-expand">
+        {Array.isArray(ch) ? miniChart(ch, r.d)
+          : ch === 'loading' ? <p className="expand-note">Loading chart\u2026</p>
+          : <p className="expand-note">Chart unavailable.</p>}
+        <div className="expand-stats">
+          <span><b>Volume</b> {fmtVol(r.volNum)}</span>
+          <span><b>Sector</b> {r.g || '\u00B7'}</span>
+        </div>
+        <a className="expand-link" href={'stocks/' + r.s + '.html'}>Open {r.s} full page</a>
+      </div>
+    );
+  }
 
   const sectors = useMemo(() => {
     const s: Record<string, boolean> = {};
@@ -281,29 +339,41 @@ export default function Screener(): React.ReactElement {
       {rows.map((r) => {
         const starred = watch.indexOf(r.s) !== -1;
         const badgeHTML = window.nvBadgeHTML ? window.nvBadgeHTML(r.s) : '';
+        const isOpen = expanded === r.s;
         return (
-          <div className="market-row" key={r.s}>
-            <button
-              type="button" className="star"
-              aria-pressed={starred ? 'true' : 'false'}
-              aria-label={(starred ? 'Remove ' : 'Add ') + r.s + (starred ? ' from' : ' to') + ' watchlist'}
-              onClick={(ev) => { ev.stopPropagation(); toggleStar(r.s); }}
-            >{starred ? '★' : '☆'}</button>
-            <button
-              type="button" className="row-main"
-              aria-label={r.s + ', ' + r.c + ', view details'}
-              onClick={(ev) => openStock(r.s, ev)}
-            >
-              <span dangerouslySetInnerHTML={{ __html: badgeHTML }} />
-              <span className="row-text">
-                <span className="symbol">{r.s}<span className="sym-sep"> · </span><span className="list-tag">{r.g}</span></span>
-                <span className="company">{r.c}</span>
-              </span>
-            </button>
-            <div className="price">{r.p || '·'}</div>
-            <div className={'move ' + (r.d || '')}>
-              {r.vol ? (r.m || '') + ' shares' : dirArrow(r.cv) + (r.m || '')}
+          <div className="market-item" key={r.s}>
+            <div className="market-row has-expand">
+              <button
+                type="button" className="star"
+                aria-pressed={starred ? 'true' : 'false'}
+                aria-label={(starred ? 'Remove ' : 'Add ') + r.s + (starred ? ' from' : ' to') + ' watchlist'}
+                onClick={(ev) => { ev.stopPropagation(); toggleStar(r.s); }}
+              >{starred ? '★' : '☆'}</button>
+              <button
+                type="button" className="row-main"
+                aria-label={r.s + ', ' + r.c + ', view details'}
+                onClick={(ev) => openStock(r.s, ev)}
+              >
+                <span dangerouslySetInnerHTML={{ __html: badgeHTML }} />
+                <span className="row-text">
+                  <span className="symbol">{r.s}<span className="sym-sep"> · </span><span className="list-tag">{r.g}</span></span>
+                  <span className="company">{r.c}</span>
+                </span>
+              </button>
+              <div className="price">{r.p || '·'}</div>
+              <div className={'move ' + (r.d || '')}>
+                {r.vol ? (r.m || '') + ' shares' : dirArrow(r.cv) + (r.m || '')}
+              </div>
+              <button
+                type="button" className="row-chev"
+                aria-expanded={isOpen ? 'true' : 'false'}
+                aria-label={(isOpen ? 'Collapse' : 'Expand') + ' ' + r.s + ' details'}
+                onClick={(ev) => { ev.stopPropagation(); toggleExpand(r.s); }}
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6" /></svg>
+              </button>
             </div>
+            {isOpen && expandPanel(r)}
           </div>
         );
       })}

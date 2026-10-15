@@ -1687,3 +1687,30 @@ a, button { -webkit-tap-highlight-color: transparent; }
   /* Hide the bar while the hamburger drawer is open */
   body.drawer-open .mobile-tabbar { transform: translateY(110%); }
 }
+
+/* ---- Expandable screener rows (mobile redesign brief 3) ---- */
+.market-row.has-expand { grid-template-columns: 30px minmax(0, 1fr) auto auto 32px; }
+.market-row.has-expand:has(.spark) { grid-template-columns: 30px minmax(0, 1fr) auto auto auto 32px; }
+.row-chev {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px; border: 0; background: none; padding: 0;
+  color: var(--muted); cursor: pointer;
+}
+.row-chev:hover { color: var(--ink); }
+.row-chev svg { width: 18px; height: 18px; transition: transform .18s ease; }
+.row-chev[aria-expanded="true"] svg { transform: rotate(180deg); }
+.row-chev[aria-expanded="true"] { color: var(--green-strong); }
+.row-expand { border-bottom: 1px solid var(--line); padding: 2px 18px 16px 62px; }
+.expand-chart { display: block; width: 100%; height: 64px; margin-bottom: 10px; }
+.expand-chart.up { color: var(--green-strong); }
+.expand-chart.down { color: var(--red); }
+.expand-note { color: var(--muted); font-size: 13px; margin: 0 0 10px; }
+.expand-stats { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-bottom: 10px; font-size: 13px; color: var(--muted); }
+.expand-stats b { font-weight: 600; color: var(--ink); margin-right: 6px; }
+.expand-link { font-size: 13px; font-weight: 600; color: var(--green-strong); text-decoration: none; }
+.expand-link:hover { text-decoration: underline; }
+@media (max-width: 700px) {
+  .market-row.has-expand { grid-template-columns: 24px 1fr auto 32px; grid-template-areas: "star main price chev" "star main move chev"; }
+  .market-row.has-expand .row-chev { grid-area: chev; align-self: center; }
+  .row-expand { padding: 2px 14px 14px 14px; border: 1px solid var(--line); border-top: 0; margin: -8px 0 8px; background: var(--surface); }
+}

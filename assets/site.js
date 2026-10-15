@@ -1142,14 +1142,19 @@
      stay plain links. */
   function dropRows(drop, wrap) {
     var hasOn = false;
-    Array.prototype.forEach.call(drop.children, function (el) {
+    /* Walk dropheads and links in document order via a single selector —
+       avoids :scope/children quirks entirely. */
+    var nodes = drop.querySelectorAll('.nav-drophead, a');
+    Array.prototype.forEach.call(nodes, function (el) {
       if (el.classList.contains('nav-drophead')) {
         var hd = document.createElement('span');
         hd.className = 'd-drophead'; hd.textContent = el.textContent;
         wrap.appendChild(hd);
-      } else if (el.tagName === 'A') {
+      } else {
+        var href = el.getAttribute('href');
+        if (!href) return;
         if (el.classList.contains('active')) hasOn = true;
-        wrap.appendChild(linkEl(el.textContent, el.getAttribute('href'),
+        wrap.appendChild(linkEl(el.textContent, href,
           'd-sub' + (el.classList.contains('active') ? ' on' : '')));
       }
       /* .nav-div hairlines are skipped in the drawer */
@@ -1158,10 +1163,18 @@
   }
   Array.prototype.forEach.call(nav.children, function (node) {
     var isItem = !!(node.classList && node.classList.contains('nav-item'));
-    var top = isItem ? node.querySelector(':scope > a, :scope > button.nav-hub')
-                     : (node.tagName === 'A' ? node : null);
+    /* Find the top link/hub and dropdown among direct children without :scope. */
+    var top = null, drop = null;
+    if (isItem) {
+      var kids = node.children;
+      for (var ci = 0; ci < kids.length; ci++) {
+        var kk = kids[ci];
+        if (!top && (kk.tagName === 'A' ||
+            (kk.tagName === 'BUTTON' && kk.classList.contains('nav-hub')))) top = kk;
+        if (!drop && kk.classList.contains('nav-dropdown')) drop = kk;
+      }
+    } else if (node.tagName === 'A') { top = node; }
     if (!top) return;
-    var drop = isItem ? node.querySelector(':scope > .nav-dropdown') : null;
     var topOn = top.classList.contains('active');
     if (!drop) {
       drawer.appendChild(linkEl(top.textContent, top.getAttribute('href'),

@@ -1182,6 +1182,8 @@
     var hasOn = topOn || dropRows(drop, wrap);
     hb.addEventListener('click', function () {
       var isOpen = group.classList.toggle('open');
+      /* iOS Safari sometimes skips repainting the toggled subtree; force it. */
+      void wrap.offsetHeight;
       hb.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
       if (isOpen) {
         Array.prototype.forEach.call(drawer.querySelectorAll('.d-group.open'), function (og) {

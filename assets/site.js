@@ -1379,6 +1379,8 @@
     document.body.style.overflow = "";
     if (opener) opener.focus();
   }
+  window.NV = window.NV || {};
+  window.NV.openPalette = open;
   trigger.addEventListener("click", function () { open(trigger); });
   overlay.addEventListener("click", function (e) { if (e.target === overlay) close(); });
   input.addEventListener("input", function () { render(search(input.value)); });
@@ -1794,4 +1796,57 @@
       if (top) gainer.textContent = top + " +" + topChg.toFixed(2) + "%";
     }).catch(function () {});
   } catch (e) {}
+}());
+
+/* ---- Mobile bottom tab bar + search-first header (mobile redesign brief 1) ---- */
+(function () {
+  var S = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">';
+  var IC = {
+    home: S + '<path d="M3 9.5 12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>',
+    stocks: S + '<path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg>',
+    screener: S + '<path d="M4 5h16l-6 7v5l-4 2v-7z"/></svg>',
+    news: S + '<path d="M4 6h13v12H6a2 2 0 0 1-2-2z"/><path d="M17 8h2a1 1 0 0 1 1 1v9a2 2 0 0 1-2 2H4"/><path d="M7 10h7M7 14h5"/></svg>',
+    learn: S + '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V4H6.5A2.5 2.5 0 0 0 4 6.5z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/></svg>',
+    search: S + '<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>'
+  };
+  var prefix = window.location.pathname.indexOf("/stocks/") !== -1 ? "../" : "./";
+  var TABS = [
+    ["Home", prefix, "home", "home"],
+    ["Stocks", prefix + "stocks", "stocks", "stocks"],
+    ["Screener", prefix + "screener", "screener", "screener"],
+    ["News", prefix + "news", "news", "news"],
+    ["Learn", prefix + "learn", "learn", "learn"]
+  ];
+  var p = window.location.pathname.replace(/\/$/, "");
+  var seg = p.split("/").pop();
+  function isActive(key) {
+    if (key === "home") return seg === "" || seg === "index" || seg === "index.html" || seg === "nairaviewV2";
+    return new RegExp("(^|/)" + key + "([-/]|\\.|$)").test(p);
+  }
+  var bar = document.createElement("nav");
+  bar.className = "mobile-tabbar";
+  bar.setAttribute("aria-label", "Primary");
+  TABS.forEach(function (t) {
+    var a = document.createElement("a");
+    a.href = t[1];
+    a.innerHTML = IC[t[3]] + "<span>" + t[0] + "</span>";
+    if (isActive(t[2])) { a.classList.add("active"); a.setAttribute("aria-current", "page"); }
+    bar.appendChild(a);
+  });
+  document.body.appendChild(bar);
+
+  /* Full-width search field under the header on mobile; opens the command palette */
+  var header = document.querySelector(".site-header");
+  if (header && window.NV && window.NV.openPalette) {
+    var ms = document.createElement("button");
+    ms.type = "button";
+    ms.className = "mobile-search";
+    ms.setAttribute("aria-label", "Search Nairaview");
+    ms.innerHTML = IC.search + "<span>Search stocks, tickers, guides...</span>";
+    ms.addEventListener("click", function () { window.NV.openPalette(ms); });
+    var inner = header.querySelector(".header-inner");
+    if (inner && inner.nextSibling) inner.parentNode.insertBefore(ms, inner.nextSibling);
+    else if (inner) inner.parentNode.appendChild(ms);
+    else header.appendChild(ms);
+  }
 }());

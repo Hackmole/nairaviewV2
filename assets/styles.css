@@ -1645,3 +1645,39 @@ a, button { -webkit-tap-highlight-color: transparent; }
 .compare-table th[scope="row"] { text-align: left; white-space: nowrap; }
 .compare-table td.up { color: #77FC49; }
 .compare-table td.down { color: #ff6b6b; }
+
+/* ---- Mobile bottom tab bar + search-first header (mobile redesign brief 1) ---- */
+.mobile-tabbar, .mobile-search { display: none; }
+@media (max-width: 700px) {
+  /* Full-width search field under the header; the icon-only trigger is redundant */
+  .search-trigger { display: none; }
+  .mobile-search {
+    display: flex; align-items: center; gap: 10px; width: calc(100% - 28px);
+    margin: 2px auto 10px; background: var(--surface-2); border: 1px solid var(--line);
+    color: var(--muted); padding: 11px 14px; font: 500 14px/1.2 "Barlow", "Noto Sans", sans-serif;
+    cursor: pointer; text-align: left;
+  }
+  .mobile-search svg { width: 18px; height: 18px; flex: 0 0 auto; }
+  .mobile-search:active { border-color: var(--green-strong); color: var(--ink); }
+  /* Bottom tab bar: 5 thumb-reachable destinations */
+  .mobile-tabbar {
+    display: flex; position: fixed; left: 0; right: 0; bottom: 0; z-index: 90;
+    background: var(--paper); border-top: 1px solid var(--line);
+    padding-bottom: env(safe-area-inset-bottom);
+    transition: transform .2s ease;
+  }
+  .mobile-tabbar a {
+    flex: 1 1 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 4px; min-height: 58px; padding: 8px 2px 6px; color: var(--muted); text-decoration: none;
+    font: 600 10px/1 "IBM Plex Mono", "Noto Sans", monospace; text-transform: uppercase; letter-spacing: .06em;
+  }
+  .mobile-tabbar a svg { width: 22px; height: 22px; }
+  .mobile-tabbar a.active { color: var(--green-strong); }
+  .mobile-tabbar a:active { color: var(--ink); }
+  /* Stack above the sticky mobile ad when it is live; keep content clear of both */
+  body.ad-sticky-on .mobile-tabbar { bottom: 78px; }
+  body { padding-bottom: calc(58px + env(safe-area-inset-bottom)); }
+  body.ad-sticky-on { padding-bottom: calc(136px + env(safe-area-inset-bottom)); }
+  /* Hide the bar while the hamburger drawer is open */
+  body.drawer-open .mobile-tabbar { transform: translateY(110%); }
+}

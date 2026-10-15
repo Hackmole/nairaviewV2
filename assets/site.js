@@ -1192,8 +1192,23 @@
     hb.appendChild(hbl); group.appendChild(hb);
     var wrap = document.createElement('div');
     wrap.className = 'd-subs'; group.appendChild(wrap);
-    var hasOn = topOn || dropRows(drop, wrap);
+    var populated = false;
+    function ensureSubs() {
+      if (populated) return;
+      populated = true;
+      dropRows(drop, wrap);
+    }
+    ensureSubs();
+    /* Auto-open if this section (or one of its subpages) is active. */
+    var hasOn = topOn;
+    if (!hasOn) {
+      var subLinks = drop.querySelectorAll('a');
+      for (var si = 0; si < subLinks.length; si++) {
+        if (subLinks[si].classList.contains('active')) { hasOn = true; break; }
+      }
+    }
     hb.addEventListener('click', function () {
+      ensureSubs();
       var isOpen = group.classList.toggle('open');
       /* iOS Safari sometimes skips repainting the toggled subtree; force it. */
       void wrap.offsetHeight;

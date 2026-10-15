@@ -80,16 +80,20 @@
       apply(saved());
       if (window.matchMedia) {
         var mq = window.matchMedia('(prefers-color-scheme: dark)');
-        if (mq.addEventListener) mq.addEventListener('change', function () { if (!saved()) paintLogo(); });
+        if (mq.addEventListener) mq.addEventListener('change', function () { var sv2 = saved(); if (!sv2 || sv2 === 'system') paintLogo(); });
       }
-      /* Toggle button: dark <-> light. Dark is the default on this edition. */
+      /* Theme toggle: dark -> light -> system -> dark. Dark is the default
+         on this edition; "system" follows the OS and reacts to OS changes. */
       var header = document.querySelector('.header-inner');
       if (header && !header.querySelector('.theme-toggle')) {
         var btn = document.createElement('button');
         btn.type = 'button'; btn.className = 'theme-toggle';
-        var icons = { light: '\u2600', dark: '\u263E' };
-        var labels = { light: 'Appearance: light', dark: 'Appearance: dark' };
-        function state() { return saved() === 'light' ? 'light' : 'dark'; }
+        var icons = { light: '\u2600', dark: '\u263E', system: '\u25D0' };
+        var labels = { light: 'Appearance: light', dark: 'Appearance: dark', system: 'Appearance: follow system' };
+        function state() {
+          var sv = saved();
+          return sv === 'light' ? 'light' : sv === 'system' ? 'system' : 'dark';
+        }
         function paint() {
           var st = state();
           btn.textContent = icons[st];
@@ -97,7 +101,8 @@
           btn.title = labels[st];
         }
         btn.addEventListener('click', function () {
-          var next = state() === 'dark' ? 'light' : 'dark';
+          var st = state();
+          var next = st === 'dark' ? 'light' : st === 'light' ? 'system' : 'dark';
           try { localStorage.setItem('nv-theme', next); } catch (e) {}
           apply(next);
           paint();

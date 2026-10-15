@@ -1921,7 +1921,10 @@
   }
   sync();
   window.addEventListener('resize', sync);
+  window.addEventListener('orientationchange', sync);
+  window.addEventListener('load', sync);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(sync);
   /* Re-sync after the mobile search field is injected (brief 1 runs at end of file too). */
   setTimeout(sync, 0);
+  setTimeout(sync, 500);
 }());

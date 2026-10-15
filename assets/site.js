@@ -1909,3 +1909,19 @@
     '<a href="' + prefix + 'methodology">How we handle data</a></span>';
   footer.parentNode.insertBefore(strip, footer);
 }());
+
+/* ---- Sync --header-h to the real sticky header height ----
+   The mobile search field (brief 1) changed the header height; a hardcoded
+   value leaves a slit where scrolling content shows through under the header. */
+(function () {
+  var header = document.querySelector('.site-header');
+  if (!header) return;
+  function sync() {
+    document.documentElement.style.setProperty('--header-h', header.offsetHeight + 'px');
+  }
+  sync();
+  window.addEventListener('resize', sync);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(sync);
+  /* Re-sync after the mobile search field is injected (brief 1 runs at end of file too). */
+  setTimeout(sync, 0);
+}());

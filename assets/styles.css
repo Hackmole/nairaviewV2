@@ -140,7 +140,7 @@
       letter-spacing: .02em;
       /* Sticky market-state bar: stays pinned under the sticky header. */
       position: sticky;
-      top: var(--header-h);
+      top: calc(var(--header-h) - 1px);
       z-index: 50;
       background: var(--paper);
     }

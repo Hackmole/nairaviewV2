@@ -1731,3 +1731,15 @@ a, button { -webkit-tap-highlight-color: transparent; }
 .trust-strip b { font-weight: 400; color: var(--line-strong); }
 .trust-strip a { color: var(--green-strong); font-weight: 600; text-decoration: none; }
 .trust-strip a:hover { text-decoration: underline; }
+
+/* ---- Mobile: movers tables scroll inside their container, first column pinned ----
+   Fixes whole-page sideways scroll (insider-dealings, dividends, etc.). */
+@media (max-width: 700px) {
+  .movers-col { overflow-x: auto; }
+  .movers-table { border-collapse: separate; border-spacing: 0; }
+  .movers-table th:first-child, .movers-table td:first-child {
+    position: sticky; left: 0; z-index: 2; background: var(--surface);
+    box-shadow: 1px 0 0 var(--line-strong);
+  }
+  .movers-table thead th:first-child { z-index: 3; }
+}

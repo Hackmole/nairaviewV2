@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { getJSON, fmt2, signedPct, esc } from '../lib/api.js';
-import type { ApiStock, PricesResponse } from '../lib/types.js';
+import type { ApiStock, AsiHistoryResponse, HistoryResponse, PricesResponse } from '../lib/types.js';
 
 /* React-owned stock comparison tool.
    - Mounts on #compareApp (compare.html). Render-style: owns its container.
@@ -127,6 +127,83 @@ export default function Compare(): React.JSX.Element {
     return Number(c) || 0;
   };
 
+  /* ---- Intelligent metrics: history-driven ---- */
+  const [hist, setHist] = useState<Record<string, number[]>>({});
+  const [divYield, setDivYield] = useState<Record<string, number>>({});
+  const [asiCloses, setAsiCloses] = useState<number[]>([]);
+
+  /* Fetch per-stock history when the selection changes. */
+  useEffect(() => {
+    let cancelled = false;
+    sel.forEach((sym) => {
+      if (hist[sym]) return;
+      getJSON<HistoryResponse>('/api/history?symbol=' + encodeURIComponent(sym))
+        .then((j) => {
+          if (cancelled) return;
+          const closes = (j && j.prices ? j.prices.map((p) => p.close) : []).filter(
+            (c): c is number => typeof c === 'number' && c > 0
+          );
+          if (closes.length > 1) setHist((h) => ({ ...h, [sym]: closes }));
+        })
+        .catch(() => {});
+    });
+    return () => { cancelled = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sel]);
+
+  /* Dividend yields + ASI history: fetch once. */
+  useEffect(() => {
+    getJSON<{ dividends?: Array<{ ticker?: string; amount?: number }> }>('assets/dividends.json?v=20261015a')
+      .then((j) => {
+        const map: Record<string, number> = {};
+        (j && j.dividends ? j.dividends : []).forEach((d) => {
+          if (d.ticker && typeof d.amount === 'number' && d.amount > 0) {
+            const t = d.ticker.toUpperCase();
+            map[t] = (map[t] || 0) + d.amount;
+          }
+        });
+        setDivYield(map);
+      })
+      .catch(() => {});
+    getJSON<AsiHistoryResponse>('/api/asi-history')
+      .then((j) => {
+        const pts = (j && j.history ? j.history : [])
+          .map((p) => p.value)
+          .filter((c): c is number => typeof c === 'number' && c > 0);
+        if (pts.length > 1) setAsiCloses(pts);
+      })
+      .catch(() => {});
+  }, []);
+
+  const closesOf = (sym: string): number[] => hist[sym] || [];
+  const retOf = (closes: number[], days: number): number | null => {
+    if (closes.length <= days) return null;
+    const a = closes[closes.length - 1 - days];
+    const b = closes[closes.length - 1];
+    if (!(a > 0) || !(b > 0)) return null;
+    return ((b / a) - 1) * 100;
+  };
+  const volOf = (closes: number[]): number | null => {
+    if (closes.length < 22) return null;
+    const rets: number[] = [];
+    for (let i = 1; i < closes.length; i++) {
+      if (closes[i] > 0 && closes[i - 1] > 0) rets.push(Math.log(closes[i] / closes[i - 1]));
+    }
+    if (rets.length < 20) return null;
+    const mean = rets.reduce((x, r) => x + r, 0) / rets.length;
+    const sd = Math.sqrt(rets.reduce((x, r) => x + (r - mean) * (r - mean), 0) / rets.length);
+    return sd * Math.sqrt(252) * 100;
+  };
+  const rangePosOf = (closes: number[]): { pct: number; n: number } | null => {
+    if (closes.length < 10) return null;
+    const lo = Math.min(...closes);
+    const hi = Math.max(...closes);
+    const last = closes[closes.length - 1];
+    if (!(hi > lo)) return null;
+    return { pct: ((last - lo) / (hi - lo)) * 100, n: closes.length };
+  };
+  const asiRet = (days: number): number | null => retOf(asiCloses, days);
+
   return (
     <div className="compare-app">
       <div className="compare-picker">
@@ -193,6 +270,70 @@ export default function Compare(): React.JSX.Element {
               {metric('Volume', (s) => fmtVol(s.volume))}
               {metric('Market cap', (s) => fmtMcap(s.market_cap))}
               {metric('Sector', (s) => esc(s.sector || '·'))}
+              {metric(
+                '7-day return',
+                (s) => {
+                  const r = retOf(closesOf(s.symbol), 7);
+                  return r == null ? '·' : signedPct(r);
+                },
+                (s) => {
+                  const r = retOf(closesOf(s.symbol), 7);
+                  return r == null ? '' : r < 0 ? 'down' : 'up';
+                }
+              )}
+              {metric(
+                '30-day return',
+                (s) => {
+                  const r = retOf(closesOf(s.symbol), 30);
+                  return r == null ? '·' : signedPct(r);
+                },
+                (s) => {
+                  const r = retOf(closesOf(s.symbol), 30);
+                  return r == null ? '' : r < 0 ? 'down' : 'up';
+                }
+              )}
+              {metric('30-day volatility', (s) => {
+                const v = volOf(closesOf(s.symbol));
+                return v == null ? '·' : v.toFixed(1) + '%';
+              })}
+              {metric('Range position', (s) => {
+                const rp = rangePosOf(closesOf(s.symbol));
+                if (!rp) return '·';
+                return (
+                  <span className="range-wrap" title={rp.n + ' sessions'}>
+                    <span className="range-bar">
+                      <span className="range-fill" style={{ width: rp.pct.toFixed(0) + '%' }} />
+                      <span className="range-dot" style={{ left: rp.pct.toFixed(0) + '%' }} />
+                    </span>
+                    <span className="range-pct">{rp.pct.toFixed(0)}%</span>
+                  </span>
+                );
+              })}
+              {metric('Dividend yield', (s) => {
+                const tot = divYield[s.symbol.toUpperCase()];
+                if (!(tot > 0) || !(s.current_price > 0)) return '·';
+                return ((tot / s.current_price) * 100).toFixed(2) + '%';
+              })}
+              {metric(
+                'vs ASI (30d)',
+                (s) => {
+                  const sr = retOf(closesOf(s.symbol), 30);
+                  const ar = asiRet(30);
+                  if (sr == null || ar == null) return '·';
+                  return signedPct(sr - ar);
+                },
+                (s) => {
+                  const sr = retOf(closesOf(s.symbol), 30);
+                  const ar = asiRet(30);
+                  if (sr == null || ar == null) return '';
+                  return sr - ar < 0 ? 'down' : 'up';
+                }
+              )}
+              {metric('Value traded', (s) => {
+                const vol = s.volume || 0;
+                if (!(s.current_price > 0) || !(vol > 0)) return '·';
+                return fmtMcap(s.current_price * vol);
+              })}
             </tbody>
           </table>
         </div>

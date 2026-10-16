@@ -640,10 +640,11 @@ body.drawer-open .drawer-scrim { opacity: 1; pointer-events: auto; }
 .nav-drawer {
   position: fixed; top: 0; right: 0; bottom: 0; width: min(300px, 84vw); z-index: 90;
   background: var(--surface); border-left: 1px solid var(--line);
-  transform: translateX(102%); transition: transform .25s ease;
+  transform: translateX(102%); visibility: hidden;
+  transition: transform .25s ease, visibility 0s linear .25s;
   overflow-y: auto; padding: 0 0 32px;
 }
-body.drawer-open .nav-drawer { transform: translateX(0); }
+body.drawer-open .nav-drawer { transform: translateX(0); visibility: visible; transition: transform .25s ease; }
 body.drawer-open { overflow: hidden; }
 .d-head { display: flex; align-items: center; justify-content: flex-end; padding: 8px 10px; border-bottom: 1px solid var(--line); position: sticky; top: 0; background: var(--surface); }
 .d-close { border: 0; background: none; color: var(--muted); font-size: 18px; line-height: 1; padding: 10px 12px; cursor: pointer; }

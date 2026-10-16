@@ -1117,7 +1117,10 @@
 (function () {
   var nav = document.querySelector('.site-nav');
   var header = document.querySelector('.header-inner');
-  if (!nav || !header || header.querySelector('.nav-burger')) return;
+  if (!nav || !header) return;
+  /* Clear any stale drawer from bfcache or double-execution. */
+  var stale = document.querySelectorAll('.nav-drawer, .drawer-scrim, .nav-burger');
+  Array.prototype.forEach.call(stale, function (el) { el.parentNode.removeChild(el); });
   var burger = document.createElement('button');
   burger.type = 'button'; burger.className = 'nav-burger';
   burger.setAttribute('aria-label', 'Open menu'); burger.setAttribute('aria-expanded', 'false');

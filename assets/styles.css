@@ -452,7 +452,7 @@
     .news-card h3 { margin: 14px 0 8px; font: 700 18px/1.15 "Barlow Semi Condensed", "Noto Sans", sans-serif; transition: color .15s ease; }
     .news-card p { color: var(--muted); font-size: 13px; line-height: 1.55; }
     .news-card .arrow { margin-top: auto; color: var(--green-strong); font-size: 18px; }
-    .ad-slot { display: none; margin: 0 auto; max-width: 100%; text-align: center; }
+    .ad-slot { display: none; margin: 0 auto; max-width: 100%; text-align: center; overflow: hidden; }
     .ad-slot.ad-live { display: block; }
     .ad-label { font: 500 9px/1 "IBM Plex Mono", "Noto Sans", monospace; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
     .ad-leaderboard { padding: 24px 0 8px; }

@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-10-11",
+  "as_of": "2026-10-15",
   "gdp": {
     "period": "Q2 2026",
     "value": 4.43
@@ -14,5 +14,58 @@
   "mpr": {
     "change": "cut 350 bps, 22 Sep 2026",
     "value": 23.0
-  }
+  },
+  "oil": {
+    "grade": "Bonny Light",
+    "value": 129.33,
+    "unit": "USD/bbl",
+    "as_of": "2026-10-14",
+    "source": "OilMonster/MEMAN",
+    "note": "7-day average $131.30; budget benchmark $75"
+  },
+  "mpr_history": [
+    {
+      "date": "2026-05-01",
+      "label": "May 2026",
+      "value": 26.5
+    },
+    {
+      "date": "2026-07-01",
+      "label": "Jul 2026",
+      "value": 26.5
+    },
+    {
+      "date": "2026-09-22",
+      "label": "22 Sep 2026",
+      "value": 23.0
+    }
+  ],
+  "inflation_history": [
+    {
+      "period": "August 2026",
+      "value": 15.39
+    }
+  ],
+  "calendar": [
+    {
+      "date": "2026-11-15",
+      "label": "15 Nov 2026",
+      "event": "NBS CPI (October inflation)"
+    },
+    {
+      "date": "2026-11-23",
+      "label": "23-24 Nov 2026",
+      "event": "CBN MPC meeting (rate decision)"
+    },
+    {
+      "date": "2026-11-25",
+      "label": "Late Nov 2026",
+      "event": "NBS Q3 2026 GDP"
+    },
+    {
+      "date": "2026-12-15",
+      "label": "15 Dec 2026",
+      "event": "NBS CPI (November inflation)"
+    }
+  ]
 }

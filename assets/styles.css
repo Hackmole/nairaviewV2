@@ -1751,3 +1751,10 @@ a, button { -webkit-tap-highlight-color: transparent; }
 .range-fill { position: absolute; left: 0; top: 0; bottom: 0; background: var(--green-strong); opacity: .35; }
 .range-dot { position: absolute; top: 50%; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%; background: var(--green-strong); }
 .range-pct { font-size: 12px; color: var(--muted); }
+.ec-chart { margin: 16px 0 4px; }
+.ec-spark { display: block; max-width: 100%; }
+.ec-chart-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); margin-top: 4px; }
+.ec-cal { list-style: none; margin: 0; padding: 0; }
+.ec-cal li { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.ec-cal-date { flex: 0 0 130px; font-weight: 600; font-size: 13px; }
+.ec-cal-event { font-size: 13px; color: var(--muted); }

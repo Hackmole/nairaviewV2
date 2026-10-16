@@ -1,15 +1,22 @@
 import { useEffect, useState } from 'react';
 
 /* Economy hub data. Adopt-style island: fetches the curated
-   assets/economy.json (MPR, inflation, GDP, MPC dates) and repaints the
-   stat cards. Static HTML stays as the fallback. */
+   assets/economy.json (MPR, inflation, GDP, oil, MPC dates, calendar)
+   and repaints the stat cards, trend charts, and releases calendar.
+   Static HTML stays as the fallback. */
 
+interface HistPt { date?: string; label?: string; period?: string; value: number }
+interface CalItem { date: string; label: string; event: string }
 interface EcDoc {
   as_of: string;
   mpr: { value: number; change: string };
   inflation: { value: number; period: string; source: string; note?: string };
   gdp: { value: number; period: string };
   mpc_next: string;
+  oil?: { grade: string; value: number; unit: string; as_of: string; source: string; note?: string };
+  mpr_history?: HistPt[];
+  inflation_history?: HistPt[];
+  calendar?: CalItem[];
 }
 
 function fmtDate(iso: string): string {
@@ -22,12 +29,31 @@ function esc(s: string): string {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
 }
 
+/* Minimal SVG line chart for a small history series. */
+function spark(pts: HistPt[], w: number, h: number, color: string): string {
+  if (pts.length < 2) return '';
+  const vals = pts.map((p) => p.value);
+  const lo = Math.min(...vals);
+  const hi = Math.max(...vals);
+  const span = hi - lo || 1;
+  const px = (i: number) => (i / (pts.length - 1)) * (w - 8) + 4;
+  const py = (v: number) => h - 6 - ((v - lo) / span) * (h - 14);
+  const line = pts.map((p, i) => (i === 0 ? 'M' : 'L') + px(i).toFixed(1) + ',' + py(p.value).toFixed(1)).join(' ');
+  const last = pts[pts.length - 1];
+  return (
+    '<svg class="ec-spark" viewBox="0 0 ' + w + ' ' + h + '" width="' + w + '" height="' + h + '" aria-hidden="true">' +
+    '<path d="' + line + '" fill="none" stroke="' + color + '" stroke-width="2"/>' +
+    '<circle cx="' + px(pts.length - 1).toFixed(1) + '" cy="' + py(last.value).toFixed(1) + '" r="3" fill="' + color + '"/>' +
+    '</svg>'
+  );
+}
+
 export default function Economy(): null {
   const [doc, setDoc] = useState<EcDoc | null>(null);
 
   useEffect(() => {
     let alive = true;
-    fetch('assets/economy.json?v=20261012b')
+    fetch('assets/economy.json?v=20261015c')
       .then((r) => { if (!r.ok) throw new Error('bad status'); return r.json() as Promise<EcDoc>; })
       .then((d) => { if (alive) setDoc(d); })
       .catch(() => { /* static fallback stays */ });
@@ -39,12 +65,37 @@ export default function Economy(): null {
     const set = (id: string, html: string) => { const el = document.getElementById(id); if (el) el.innerHTML = html; };
     const setText = (id: string, t: string) => { const el = document.getElementById(id); if (el) el.textContent = t; };
 
-    set('ecCards',
+    let cards =
       '<div class="stat-card"><div class="stat-label">MPR (CBN)</div><div class="stat-value">' + doc.mpr.value.toFixed(2) + '%</div><div class="stat-sub">' + esc(doc.mpr.change) + '</div></div>' +
       '<div class="stat-card"><div class="stat-label">Inflation (' + esc(doc.inflation.source) + ')</div><div class="stat-value">' + doc.inflation.value.toFixed(2) + '%</div><div class="stat-sub">' + esc(doc.inflation.period) + '</div></div>' +
-      '<div class="stat-card"><div class="stat-label">GDP growth</div><div class="stat-value">+' + doc.gdp.value.toFixed(2) + '%</div><div class="stat-sub">' + esc(doc.gdp.period) + ', year-on-year</div></div>' +
-      '<div class="stat-card"><div class="stat-label">Next MPC meeting</div><div class="stat-value">' + esc(doc.mpc_next) + '</div><div class="stat-sub">2026: rate decision expected</div></div>'
-    );
+      '<div class="stat-card"><div class="stat-label">GDP growth</div><div class="stat-value">+' + doc.gdp.value.toFixed(2) + '%</div><div class="stat-sub">' + esc(doc.gdp.period) + ', year-on-year</div></div>';
+    if (doc.oil && doc.oil.value > 0) {
+      cards +=
+        '<div class="stat-card"><div class="stat-label">' + esc(doc.oil.grade) + ' oil</div><div class="stat-value">$' + doc.oil.value.toFixed(2) + '</div><div class="stat-sub">per barrel, ' + esc(doc.oil.as_of) + '</div></div>';
+    }
+    cards +=
+      '<div class="stat-card"><div class="stat-label">Next MPC meeting</div><div class="stat-value">' + esc(doc.mpc_next) + '</div><div class="stat-sub">2026: rate decision expected</div></div>';
+    set('ecCards', cards);
+
+    /* MPR trend chart */
+    const mh = doc.mpr_history || [];
+    if (mh.length >= 2) {
+      const labels = mh.map((p) => esc(p.label || p.date || '')).join(' · ');
+      set('ecMprChart',
+        spark(mh, 320, 64, 'var(--green-strong)') +
+        '<div class="ec-chart-labels"><span>' + mh[0].value.toFixed(2) + '%</span><span>' + esc(labels) + '</span><span>' + mh[mh.length - 1].value.toFixed(2) + '%</span></div>'
+      );
+    }
+
+    /* Releases calendar */
+    const cal = doc.calendar || [];
+    if (cal.length) {
+      set('ecCalendar',
+        '<ul class="ec-cal">' +
+        cal.map((c) => '<li><span class="ec-cal-date">' + esc(c.label) + '</span><span class="ec-cal-event">' + esc(c.event) + '</span></li>').join('') +
+        '</ul>'
+      );
+    }
 
     setText('ecInflNote', doc.inflation.note || ('Headline inflation was ' + doc.inflation.value.toFixed(2) + '% in ' + esc(doc.inflation.period) + ' (' + esc(doc.inflation.source) + ').'));
     setText('ecVintage', 'Figures as of ' + fmtDate(doc.as_of) + '.');

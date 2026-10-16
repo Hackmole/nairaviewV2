@@ -25,6 +25,16 @@
   },
   "mpr_history": [
     {
+      "date": "2026-02-01",
+      "label": "Feb 2026",
+      "value": 27.0
+    },
+    {
+      "date": "2026-02-24",
+      "label": "Feb 2026",
+      "value": 26.5
+    },
+    {
       "date": "2026-05-01",
       "label": "May 2026",
       "value": 26.5

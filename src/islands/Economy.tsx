@@ -71,10 +71,13 @@ function mprTrendSVG(hist: HistPt[]): string {
     '<line x1="' + L + '" y1="' + Y(g).toFixed(0) + '" x2="' + W + '" y2="' + Y(g).toFixed(0) + '" stroke="var(--line)" stroke-width="1" stroke-dasharray="3 5"/>' +
     '<text x="8" y="' + (Y(g) + 4).toFixed(0) + '" fill="var(--muted)" font-size="11" font-family="IBM Plex Mono,monospace">' + g.toFixed(2) + '%</text>'
   ).join('');
+  const base = B;
+  const area = 'M' + X(0).toFixed(0) + ',' + base + ' ' + pts.split(' ').map((pt) => 'L' + pt).join(' ') + ' L' + X(hist.length - 1).toFixed(0) + ',' + base + ' Z';
   return '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="MPR trend" style="width:100%;height:auto;display:block">' +
     '<line x1="' + L + '" y1="' + T + '" x2="' + L + '" y2="' + B + '" stroke="var(--line)" stroke-width="1"/>' +
     '<line x1="' + L + '" y1="' + B + '" x2="' + W + '" y2="' + B + '" stroke="var(--line)" stroke-width="1"/>' +
-    grid + '<polyline points="' + pts + '" fill="none" stroke="var(--green-strong)" stroke-width="3"/>' + dots + '</svg>';
+    grid + '<path d="' + area + '" fill="var(--green-strong)" opacity="0.12"/>' +
+    '<polyline points="' + pts + '" fill="none" stroke="var(--green-strong)" stroke-width="3"/>' + dots + '</svg>';
 }
 
 export default function Economy(): null {
@@ -82,7 +85,7 @@ export default function Economy(): null {
 
   useEffect(() => {
     let alive = true;
-    fetch('assets/economy.json?v=20261015c')
+    fetch('assets/economy.json?v=20261015d')
       .then((r) => { if (!r.ok) throw new Error('bad status'); return r.json() as Promise<EcDoc>; })
       .then((d) => { if (alive) setDoc(d); })
       .catch(() => { /* static fallback stays */ });

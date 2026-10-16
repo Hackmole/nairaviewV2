@@ -48,6 +48,35 @@ function spark(pts: HistPt[], w: number, h: number, color: string): string {
   );
 }
 
+/* Detailed MPR trend chart: axes, gridlines, value labels, date labels.
+   Same visual language as the fixed-income NTB trend chart. */
+function mprTrendSVG(hist: HistPt[]): string {
+  if (hist.length < 2) return '';
+  const W = 620, H = 240, L = 40, B = 200, T = 20;
+  const vals = hist.map((p) => p.value);
+  const lo = Math.min(...vals), hi = Math.max(...vals);
+  const span = Math.max(hi - lo, 0.5);
+  const X = (i: number) => 60 + (i * (W - 60 - 30)) / (hist.length - 1);
+  const Y = (v: number) => T + (1 - (v - lo) / span) * (B - T - 10);
+  const pts = hist.map((p, i) => X(i).toFixed(0) + ',' + Y(p.value).toFixed(0)).join(' ');
+  const dots = hist.map((p, i) => {
+    const label = esc(p.label || p.date || '');
+    return '<circle cx="' + X(i).toFixed(0) + '" cy="' + Y(p.value).toFixed(0) + '" r="4" fill="var(--green-strong)"/>' +
+    '<text x="' + X(i).toFixed(0) + '" y="' + (Y(p.value) - 12).toFixed(0) + '" fill="var(--ink)" font-size="11" font-family="IBM Plex Mono,monospace" text-anchor="middle">' + p.value.toFixed(2) + '%</text>' +
+    '<text x="' + X(i).toFixed(0) + '" y="220" fill="var(--muted)" font-size="10" font-family="IBM Plex Mono,monospace" text-anchor="middle">' + label + '</text>';
+  }).join('');
+  const gv = (n: number) => Math.round(n * 4) / 4;
+  const gridVals = [gv(lo), gv(lo + span / 2), gv(hi)];
+  const grid = gridVals.map((g) =>
+    '<line x1="' + L + '" y1="' + Y(g).toFixed(0) + '" x2="' + W + '" y2="' + Y(g).toFixed(0) + '" stroke="var(--line)" stroke-width="1" stroke-dasharray="3 5"/>' +
+    '<text x="8" y="' + (Y(g) + 4).toFixed(0) + '" fill="var(--muted)" font-size="11" font-family="IBM Plex Mono,monospace">' + g.toFixed(2) + '%</text>'
+  ).join('');
+  return '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="MPR trend" style="width:100%;height:auto;display:block">' +
+    '<line x1="' + L + '" y1="' + T + '" x2="' + L + '" y2="' + B + '" stroke="var(--line)" stroke-width="1"/>' +
+    '<line x1="' + L + '" y1="' + B + '" x2="' + W + '" y2="' + B + '" stroke="var(--line)" stroke-width="1"/>' +
+    grid + '<polyline points="' + pts + '" fill="none" stroke="var(--green-strong)" stroke-width="3"/>' + dots + '</svg>';
+}
+
 export default function Economy(): null {
   const [doc, setDoc] = useState<EcDoc | null>(null);
 
@@ -77,14 +106,10 @@ export default function Economy(): null {
       '<div class="stat-card"><div class="stat-label">Next MPC meeting</div><div class="stat-value">' + esc(doc.mpc_next) + '</div><div class="stat-sub">2026: rate decision expected</div></div>';
     set('ecCards', cards);
 
-    /* MPR trend chart */
+    /* MPR trend chart (detailed: axes, gridlines, value + date labels) */
     const mh = doc.mpr_history || [];
     if (mh.length >= 2) {
-      const labels = mh.map((p) => esc(p.label || p.date || '')).join(' · ');
-      set('ecMprChart',
-        spark(mh, 320, 64, 'var(--green-strong)') +
-        '<div class="ec-chart-labels"><span>' + mh[0].value.toFixed(2) + '%</span><span>' + esc(labels) + '</span><span>' + mh[mh.length - 1].value.toFixed(2) + '%</span></div>'
-      );
+      set('ecMprChart', '<div class="chart-wrap">' + mprTrendSVG(mh) + '</div>');
     }
 
     /* Releases calendar */

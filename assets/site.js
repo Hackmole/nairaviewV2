@@ -1250,6 +1250,24 @@
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') shut(); });
 }());
 
+/* ---- Screener: "back to all stocks" when arriving via a theme link ---- */
+(function () {
+  var list = document.getElementById('screenList');
+  if (!list) return;
+  var q;
+  try { q = new URLSearchParams(window.location.search); } catch (e) { return; }
+  var hasFilter = q.get('preset') || q.get('sector') || q.get('mover') ||
+    q.get('minP') || q.get('maxP') || q.get('minC') || q.get('maxC');
+  if (!hasFilter) return;
+  if (document.getElementById('backToStocks')) return;
+  var a = document.createElement('a');
+  a.id = 'backToStocks';
+  a.href = 'stocks';
+  a.className = 'back-link';
+  a.innerHTML = '&larr; All listed stocks';
+  list.parentNode.insertBefore(a, list);
+}());
+
 /* ---- Ticker sub-nav scroll-spy (stock pages; no-op elsewhere) ---- */
 (function () {
   var tnav = document.querySelector('.ticker-nav');

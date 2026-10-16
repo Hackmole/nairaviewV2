@@ -646,6 +646,8 @@ body.drawer-open .drawer-scrim { opacity: 1; pointer-events: auto; }
 }
 body.drawer-open .nav-drawer { transform: translateX(0); visibility: visible; transition: transform .25s ease; }
 body.drawer-open { overflow: hidden; }
+.back-link { display: inline-block; margin: 0 0 12px; font-size: 13px; font-weight: 600; color: var(--green-strong); text-decoration: none; }
+.back-link:hover { text-decoration: underline; }
 .d-head { display: flex; align-items: center; justify-content: flex-end; padding: 8px 10px; border-bottom: 1px solid var(--line); position: sticky; top: 0; background: var(--surface); }
 .d-close { border: 0; background: none; color: var(--muted); font-size: 18px; line-height: 1; padding: 10px 12px; cursor: pointer; }
 .d-sec { display: block; padding: 13px 20px 5px; font: 600 10px/1.4 "IBM Plex Mono", "Noto Sans", monospace; text-transform: uppercase; letter-spacing: .12em; color: var(--ink); text-decoration: none; }

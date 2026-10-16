@@ -1605,7 +1605,7 @@ a, button { -webkit-tap-highlight-color: transparent; }
 
 /* ---- Nav dropdowns ---- */
 .nav-item { position: relative; display: flex; }
-.nav-item > a::after { content: "\25BE"; font-size: 7px; margin-left: 6px; color: var(--muted); vertical-align: 2px; }
+.nav-item > a::after, .nav-item > button.nav-hub::after { content: "\25BE"; font-size: 7px; margin-left: 6px; color: var(--muted); vertical-align: 2px; }
 .nav-item > a.active::after { color: var(--green-strong); }
 .nav-dropdown {
   display: none;

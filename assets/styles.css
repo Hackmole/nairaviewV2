@@ -239,8 +239,8 @@
     .range-button .rb-ret { font-weight: 700; font-size: 11px; }
     .range-button .rb-ret.up { color: var(--green-strong); }
     .range-button .rb-ret.down { color: var(--red); }
-    .range-button[aria-pressed="true"] .rb-ret.up { color: #a7f3d0; }
-    .range-button[aria-pressed="true"] .rb-ret.down { color: #fca5a5; }
+    .range-button[aria-pressed="true"] .rb-ret.up { color: #022126; }
+    .range-button[aria-pressed="true"] .rb-ret.down { color: #7f1d1d; }
     /* Market breadth panel (brief 12). */
     .breadth { background: var(--surface); border: 1px solid var(--line); border-top: none; padding: 16px 18px; }
     .breadth-bar { display: flex; height: 8px; background: var(--surface-2); margin-bottom: 12px; overflow: hidden; }

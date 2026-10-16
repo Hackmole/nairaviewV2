@@ -1749,6 +1749,9 @@ a, button { -webkit-tap-highlight-color: transparent; }
     box-shadow: 1px 0 0 var(--line-strong);
   }
   .movers-table thead th:first-child { z-index: 3; }
+  /* Kill the desktop vertical sticky thead inside the mobile horizontal scroller:
+     it floats the header over body rows. Horizontal first-column freeze is kept. */
+  #insiderTable thead th { top: auto; }
 }
 .range-wrap { display: inline-flex; align-items: center; gap: 8px; }
 .range-bar { position: relative; width: 72px; height: 6px; background: var(--line); border-radius: 0; }

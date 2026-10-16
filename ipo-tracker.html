@@ -27,7 +27,7 @@
   <link rel="icon" href="assets/favicon-96.png" sizes="96x96" type="image/png">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
   <title>IPO Performance Tracker · How NGX Listings Fared | Nairaview</title>
-  <link rel="stylesheet" href="assets/styles.css?v=20261015s" />
+  <link rel="stylesheet" href="assets/styles.css?v=20261016a" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Barlow+Semi+Condensed:wght@600;700&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -50,7 +50,7 @@
   <div class="shell">
     <div class="topline">
       <span class="status"><i class="status-dot" aria-hidden="true"></i> MARKET CLOSED</span>
-      <span class="topline-date">DAILY CLOSE · THU 15 OCT 2026 · WAT</span>
+      <span class="topline-date">DAILY CLOSE · FRI 16 OCT 2026 · WAT</span>
     </div>
     <main>
       <nav class="crumbs" aria-label="Breadcrumb"><a href="./">Home</a><span class="sep">/</span><a href="offers">Offers</a><span class="sep">/</span><span>IPO tracker</span></nav>
@@ -136,7 +136,7 @@
       </div>
     </div>
   </footer>
-  <script defer src="assets/data.js?v=20261014a"></script>
+  <script defer src="assets/data.js?v=20261016a"></script>
   <script>
   (function(){
     function fmtP(n){ return n==null ? '·' : '&#8358;' + Number(n).toLocaleString('en-NG',{minimumFractionDigits:2,maximumFractionDigits:2}); }
@@ -155,7 +155,7 @@
       var html = entries.filter(function(e){return e.status==='listed';}).map(function(e){return row(e, live);}).join('');
       document.getElementById('ipoBody').innerHTML = html || '<tr><td colspan="7">No listed entries yet.</td></tr>';
     }
-    fetch('assets/ipo-tracker.json?v=20261014a').then(function(r){return r.json();}).then(function(data){
+    fetch('assets/ipo-tracker.json?v=20261016a').then(function(r){return r.json();}).then(function(data){
       var entries = data.entries || [];
       paint(entries, null);
       /* Dangote pill goes stale after the offer closes; flip it by date */
@@ -177,8 +177,8 @@
     });
   })();
   </script>
-  <script defer src="assets/site.js?v=20261015o"></script>
-  <script defer src="assets/live.js?v=20261015a"></script>
+  <script defer src="assets/site.js?v=20261016a"></script>
+  <script defer src="assets/live.js?v=20261016a"></script>
   <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a9f4136dd40547a7b1acca41e62cc7a5"}'></script><!-- End Cloudflare Web Analytics -->
 </body>
 </html>

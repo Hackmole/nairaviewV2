@@ -113,8 +113,12 @@ export default function FixedIncome(): null {
       ).join(''));
     }
 
-    setText('fiVsNote', doc.vs_stocks_note);
-    setText('fiVintage', 'Figures as of ' + fmtDate(doc.as_of) + '. Auction results update after each DMO/CBN primary market auction.');
+    const tbillRate = doc.ntb_latest.rates['364d'].toFixed(2) + '%';
+    setText('chTbillRate', tbillRate);
+    setText('chTbillRate2', tbillRate);
+    const sbRates = doc.savings_bonds.tenors.map((t) => t.coupon.toFixed(3) + '%').join(' / ');
+    if (sbRates) setText('chSbRate', sbRates);
+    setText('fiVintage', 'Figures as of ' + fmtDate(doc.as_of) + '. Auction results update after each DMO/CBN primary market auction, typically held on Wednesdays; the next auction is expected ' + fmtDate((doc as any).auction_calendar?.next_auction || '') + '.');
   }, [doc]);
 
   return null;

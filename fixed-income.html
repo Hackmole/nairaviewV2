@@ -116,15 +116,30 @@
               <p class="lab-note"><strong>Subscription vs allotment.</strong> Subscription is how much investors bid; allotment is how much the CBN actually sold. When subscription dwarfs allotment, demand is hot and the next stop rate often falls.</p>
               <p class="lab-note"><strong>Annualised.</strong> The rate scaled to a full year, so a 91-day and a 364-day rate can be compared fairly.</p>
               <p class="lab-note"><strong>Bullet repayment.</strong> Savings bonds repay the full principal in one lump at maturity, while interest arrives quarterly.</p>
-              <h2 class="guide-h2" style="margin-top:28px" id="fiBondH">FGN Savings Bond: October 2026 offer</h2>
+              <h2 class="guide-h2" style="margin-top:28px">How to buy</h2>
+            <p class="lab-note"><strong>T-bills, primary auction.</strong> Place your bid through a bank, stockbroker, or fintech app before the auction closes on Wednesday morning. Fund the account, state the tenor and amount, and the CBN allots at the stop rate. Your account is debited the discounted price; the full face value lands automatically at maturity.</p>
+            <p class="lab-note"><strong>T-bills, secondary market.</strong> Buy an existing bill from a bank or broker before it matures. The price moves with current rates, so you can enter or exit between auctions.</p>
+            <p class="lab-note"><strong>Minimums depend on the channel.</strong> Direct bids at the CBN auction start around &#8358;50m, but banks pool smaller retail orders from about &#8358;50,000, and fintech apps go from about &#8358;10,000. Confirm the figure with your provider before you commit.</p>
+            <p class="lab-note"><strong>Savings bonds.</strong> Subscribe through any DMO-appointed stockbroker during the monthly 5-day window. Minimum &#8358;5,000, maximum &#8358;50m. Coupons arrive quarterly; the full principal returns at maturity.</p>
+            <h2 class="guide-h2" style="margin-top:28px" id="fiBondH">FGN Savings Bond: October 2026 offer</h2>
               <p class="lab-note" id="fiBondNote">Subscriptions ran 5&ndash;9 October 2026. Minimum subscription &#8358;5,000.</p>
               <div class="movers-col"><table class="movers-table">
                 <thead><tr><th>Tenor</th><th>Coupon</th><th>Offer</th></tr></thead>
                 <tbody id="fiBondBody"><tr><td>2-year</td><td>13.071%</td><td>October 2026</td></tr><tr><td>3-year</td><td>14.071%</td><td>October 2026</td></tr></tbody>
               </table></div>
-              <h2 class="guide-h2" style="margin-top:28px">T-bills vs stocks</h2>
-              <p class="lab-note" id="fiVsNote">The 364-day T-bill now yields 15.85% against August inflation of 15.39%. The risk-free return barely beats inflation. Falling T-bill yields (as now) usually make equities look more attractive, since the &lsquo;safe&rsquo; alternative pays less. Rising yields do the opposite.</p>
-              <p class="lab-note" id="fiVintage">Figures as of 11 October 2026. Auction results update after each DMO/CBN primary market auction, typically held on Wednesdays; the next auction is expected 21 October 2026.</p>
+              <h2 class="guide-h2" style="margin-top:28px">Which one fits you?</h2>
+            <div class="movers-col"><table class="movers-table">
+              <thead><tr><th></th><th>364-day T-bill</th><th>FGN Savings Bond</th><th>Bank fixed deposit</th></tr></thead>
+              <tbody>
+                <tr><td>Rate</td><td><span id="chTbillRate">15.85%</span> stop rate</td><td><span id="chSbRate">13.071% / 14.071%</span> coupon</td><td>Set by your bank, usually below T-bills</td></tr>
+                <tr><td>Tax on interest</td><td>10% withholding tax</td><td>Exempt</td><td>10% withholding tax</td></tr>
+                <tr><td>Tenor</td><td>91, 182 or 364 days</td><td>2 or 3 years</td><td>30&ndash;365 days typically</td></tr>
+                <tr><td>Minimum</td><td>From about &#8358;10,000 (channel-dependent)</td><td>&#8358;5,000</td><td>Bank-dependent</td></tr>
+                <tr><td>Best for</td><td>Money you need back within a year</td><td>Steady quarterly income, hands-off for years</td><td>Simplicity at your own bank</td></tr>
+              </tbody>
+            </table></div>
+            <p class="lab-note">Thinking about stocks instead? T-bills are the yardstick: with the 364-day at <span id="chTbillRate2">15.85%</span> against inflation at 15.39%, equities need to beat roughly 16% to justify their risk. Falling T-bill yields make shares look more attractive; rising yields do the opposite.</p>
+<p class="lab-note" id="fiVintage">Figures as of 11 October 2026. Auction results update after each DMO/CBN primary market auction, typically held on Wednesdays; the next auction is expected 21 October 2026.</p>
             </section>
 
     </main>
@@ -178,7 +193,7 @@
 
   <script>window.NV_ISLANDS = window.NV_ISLANDS || {}; window.NV_ISLANDS["fixed-income"] = true;</script>
   <script defer src="assets/site.js?v=20261017c"></script>
-  <script defer src="assets/islands.js?v=20261017d"></script>
+  <script defer src="assets/islands.js?v=20261017e"></script>
   <script defer src="assets/live.js?v=20261017a"></script>
     <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a9f4136dd40547a7b1acca41e62cc7a5"}'></script><!-- End Cloudflare Web Analytics -->
 </body>

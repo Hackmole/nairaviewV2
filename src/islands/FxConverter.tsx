@@ -175,14 +175,18 @@ export default function FxConverter(): null {
       if (fxFailed && settled.current) {
         /* feed failed: clear state, not a permanent spinner */
         const last = lastUpdatedLine('fx');
+        res.classList.remove('skel');
         res.innerHTML = '<span class="val-unavail">Rate unavailable</span>';
         if (note) note.textContent = 'Rate temporarily unavailable' + (last ? ' · ' + last : '.');
       } else {
-        res.textContent = '₦·';
+        /* loading: shimmer block instead of a bare placeholder */
+        res.textContent = '';
+        res.classList.add('skel');
         if (note) note.textContent = 'Rate loading…';
       }
       return;
     }
+    res.classList.remove('skel');
     markFeedOk('fx', fmtFxDate(legs.official_date));
     const sym: Record<string, string> = { USD: '$', EUR: '\u20ac', GBP: '\u00a3' };
     const legName = leg === 'official' ? 'official NFEM rate' : 'indicative street rate';

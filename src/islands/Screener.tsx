@@ -156,7 +156,7 @@ export default function Screener(): React.ReactElement {
     return (
       <div className="row-expand">
         {Array.isArray(ch) ? miniChart(ch, r.d)
-          : ch === 'loading' ? <p className="expand-note">Loading chart\u2026</p>
+          : ch === 'loading' ? <span className="skel skel-chart" role="status" aria-label="Loading chart" />
           : <p className="expand-note">Chart unavailable.</p>}
         <div className="expand-stats">
           <span><b>Volume</b> {fmtVol(r.volNum)}</span>

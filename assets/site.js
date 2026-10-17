@@ -252,7 +252,7 @@
         Object.keys(attrs || {}).forEach(function (key) { el.setAttribute(key, attrs[key]); });
         return el;
       }
-      function draw(range) {
+      function draw(range, animate) {
         while (svg.firstChild) svg.removeChild(svg.firstChild);
         var points = rangePoints(range);
         if (!points.length) return;
@@ -330,8 +330,8 @@
         if (up.area) svg.appendChild(node('path', { d: up.area, 'class': 'area-up' }));
         /* Zero line sits above the fills so it stays crisp where they meet it. */
         svg.appendChild(node('line', { x1: L, x2: W - R, y1: zeroY, y2: zeroY, 'class': 'zero-line' }));
-        if (down.line) svg.appendChild(node('path', { d: down.line, 'class': 'series-down' }));
-        if (up.line) svg.appendChild(node('path', { d: up.line, 'class': 'series-up' }));
+        if (down.line) svg.appendChild(node('path', { d: down.line, 'class': 'series-down' + (animate ? ' asi-draw' : ''), pathLength: '1' }));
+        if (up.line) svg.appendChild(node('path', { d: up.line, 'class': 'series-up' + (animate ? ' asi-draw' : ''), pathLength: '1' }));
         points.forEach(function (p, idx) {
           var dot = node('circle', { cx: coords[idx][0], cy: coords[idx][1], r: 5, 'class': 'chart-dot ' + (pcts[idx] < 0 ? 'down' : 'up'), tabindex: '0', role: 'button', 'aria-label': plabel(p) + ': ' + formatNumber(p.v) + ' (' + fmtPct(pcts[idx]) + ')' });
           function show() {
@@ -358,7 +358,7 @@
           document.querySelectorAll('.range-button').forEach(function (b) { b.setAttribute('aria-pressed', 'false'); });
           button.setAttribute('aria-pressed', 'true');
           currentRange = button.getAttribute('data-range');
-          draw(currentRange);
+          draw(currentRange, true);
         });
       });
       /* Return-embedded range chips (brief 11): each pill shows its period return. */
@@ -916,7 +916,7 @@
         });
       }());
       updateWatchCount();
-      if (document.getElementById('asiChart')) draw(currentRange);
+      if (document.getElementById('asiChart')) draw(currentRange, true);
       render();
       renderDirectory();
       /* Live-data hooks: assets/live.js swaps in fresh market data after load

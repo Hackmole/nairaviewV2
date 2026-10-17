@@ -79,6 +79,32 @@
     x = Number(x) || 0;
     return (x < 0 ? '−' : '+') + Math.abs(x).toFixed(2) + '%';
   }
+  /* Reduced-motion guard for all JS-driven animation below. */
+  var REDUCED = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  /* Count a numeric repaint old -> new over ~600ms ease-out instead of snapping
+     (NN/g change-blindness: static number updates get missed). fmt maps a raw
+     number to its display string. Animates only when the value actually moved;
+     snaps on first paint (no data-nv-val yet) and under reduced motion. */
+  function countUp(el, to, fmt) {
+    if (!el) return;
+    to = Number(to) || 0;
+    var from = parseFloat(el.getAttribute('data-nv-val'));
+    if (REDUCED || isNaN(from) || from === to) {
+      el.textContent = fmt(to); el.setAttribute('data-nv-val', to); return;
+    }
+    var start = null, DUR = 600;
+    function frame(t) {
+      if (!start) start = t;
+      var p = Math.min((t - start) / DUR, 1);
+      var e = 1 - Math.pow(1 - p, 3);
+      var cur = from + (to - from) * e;
+      el.textContent = fmt(cur);
+      el.setAttribute('data-nv-val', cur);
+      if (p < 1) requestAnimationFrame(frame);
+      else { el.textContent = fmt(to); el.setAttribute('data-nv-val', to); }
+    }
+    requestAnimationFrame(frame);
+  }
 
   /* ---------- homepage: hero + metrics + market-today recap ---------- */
   function paintMarket(market) {
@@ -86,7 +112,7 @@
     if (!ov) return;
     var tradeDate = fmtDate(ov.trade_date);
     var h1 = $('market-heading');
-    if (h1) h1.textContent = fmt2(ov.asi);
+    if (h1) countUp(h1, ov.asi, fmt2);
     var move = $('heroMove');
     if (move) {
       var pct = Number(ov.pct_change) || 0;
@@ -96,7 +122,7 @@
         '<span class="points">' + (pts < 0 ? '−' : '+') + fmt2(Math.abs(pts)) + ' points</span>';
     }
     var chartValue = $('chartValue');
-    if (chartValue) chartValue.textContent = fmt2(ov.asi);
+    if (chartValue) countUp(chartValue, ov.asi, fmt2);
     function setMetric(id, detailId, value, detail) {
       var v = $(id), d = detailId && $(detailId);
       if (v) v.textContent = value;
@@ -540,7 +566,7 @@
       }
     } catch (e) {}
     if (priceEl && px) {
-      priceEl.textContent = '₦' + fmt2(px);
+      countUp(priceEl, px, function (v) { return '₦' + fmt2(v); });
       var asof = document.querySelector('p.asof');
       if (asof && window.NVLiveAsOf) tradeDate = fmtDate(window.NVLiveAsOf);
       if (asof) asof.textContent = 'As of the ' + (tradeDate || 'latest') + ' close.';
@@ -633,8 +659,8 @@
       if (!ccy) return;
       var off = $(pair[1] + 'Official'), par = $(pair[1] + 'Parallel'),
           spr = $(pair[1] + 'Spread');
-      if (off && ccy.official > 0) off.textContent = '₦' + fmt2(ccy.official);
-      if (par && ccy.parallel > 0) par.textContent = '₦' + fmt2(ccy.parallel);
+      if (off && ccy.official > 0) countUp(off, ccy.official, function (v) { return '₦' + fmt2(v); });
+      if (par && ccy.parallel > 0) countUp(par, ccy.parallel, function (v) { return '₦' + fmt2(v); });
       if (spr && ccy.official > 0 && ccy.parallel > 0) {
         spr.textContent = '₦' + fmt2(Math.abs(ccy.parallel - ccy.official));
       }
@@ -682,6 +708,7 @@
 
   /* Ticker tape (brief 10): ASI, mkt cap, USD/NGN, top mover, breadth. */
   var tapeData = {};
+  var tapePrev = {}; /* label -> last painted value, for the refresh flash */
   function paintTape() {
     var track = document.getElementById('tapeTrack');
     if (!track) return;
@@ -707,16 +734,31 @@
     }
     if (!items.length) return;
     var half = items.map(function (it) {
-      return '<span class="tape-item"><span class="tape-label">' + it.label + '</span> ' +
+      return '<span class="tape-item" data-label="' + it.label + '"><span class="tape-label">' + it.label + '</span> ' +
         '<span class="tape-value">' + it.value + '</span>' +
         (it.change ? ' <span class="tape-change ' + (it.cls || '') + '">' + it.change + '</span>' : '') + '</span><span class="tape-sep">·</span>';
     }).join('');
     /* skip rebuild if the items are unchanged (avoids restarting the scroll animation) */
     var sig = half;
     if (track.getAttribute('data-sig') === sig) return;
+    /* diff per-item so changed values can flash without restarting the scroll */
+    var changed = {};
+    items.forEach(function (it) {
+      if (tapePrev[it.label] !== undefined && tapePrev[it.label] !== it.value) changed[it.label] = true;
+      tapePrev[it.label] = it.value;
+    });
     track.setAttribute('data-sig', sig);
     /* two identical halves for a seamless loop */
     track.innerHTML = '<div class="tape-half">' + half + '</div><div class="tape-half" aria-hidden="true">' + half + '</div>';
+    var labels = Object.keys(changed);
+    if (labels.length) {
+      Array.prototype.forEach.call(track.querySelectorAll('.tape-item'), function (node) {
+        if (changed[node.getAttribute('data-label')]) {
+          var v = node.querySelector('.tape-value');
+          if (v) { v.classList.add('tape-flash'); setTimeout(function () { v.classList.remove('tape-flash'); }, 350); }
+        }
+      });
+    }
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', main);

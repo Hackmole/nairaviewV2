@@ -27,7 +27,7 @@
   <link rel="icon" href="assets/favicon-96.png" sizes="96x96" type="image/png">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
   <title>Fixed Income · T-Bill Rates & FGN Savings Bond | Nairaview</title>
-  <link rel="stylesheet" href="assets/styles.css?v=20261017e" />
+  <link rel="stylesheet" href="assets/styles.css?v=20261017f" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Barlow+Semi+Condensed:wght@600;700&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -68,7 +68,12 @@
                 <thead><tr><th>Tenor</th><th>Stop rate</th><th>Change</th></tr></thead>
                 <tbody id="fiLatestBody"><tr><td>91-day</td><td>15.50%</td><td>unchanged</td></tr><tr><td>182-day</td><td>15.80%</td><td>unchanged</td></tr><tr><td>364-day</td><td>15.85%</td><td>&minus;4 bps</td></tr></tbody>
               </table></div>
-              <h2 class="guide-h2" style="margin-top:28px">364-day stop rate trend</h2>
+              <h2 class="guide-h2" style="margin-top:28px">Why rates moved</h2>
+            <div id="fiNotesBody">
+              <div class="note-item"><span class="note-date">14 October 2026</span><p class="lab-note">Demand stayed strong: &#8358;1.032tn bid for &#8358;450bn offered (2.3x cover), but the CBN allotted only &#8358;269.06bn. The 364-day stop rate edged up 5bps to 15.90%, a pause in the easing run that began after September's 350bp MPR cut to 23.00%. (CBN via Nairametrics/Punch)</p></div>
+              <div class="note-item"><span class="note-date">7 October 2026</span><p class="lab-note">The 364-day stop rate fell 4bps to 15.85%, extending the decline since the CBN cut the MPR to 23.00% in September. The 91-day and 182-day rates held steady.</p></div>
+            </div>
+            <h2 class="guide-h2" style="margin-top:28px">364-day stop rate trend</h2>
               <p class="lab-note" id="fiTrendNote">Four straight cuts since the 8 July peak of 17.70%, after the CBN cut the MPR by 350 bps to 23.00% in September.</p>
               <div class="chart-wrap" id="fiTrendChart">
               <svg viewBox="0 0 620 240" role="img" aria-label="364-day NTB stop rate falling from 17.70% on 8 July 2026 to 15.85% on 7 October 2026" style="width:100%;height:auto;display:block">
@@ -91,6 +96,15 @@
                 <text x="562" y="220" fill="var(--muted)" font-size="10" font-family="IBM Plex Mono,monospace">7 Oct</text>
               </svg>
               </div>
+            <h2 class="guide-h2" style="margin-top:28px">Mark your calendar</h2>
+            <div id="fiCalBody">
+              <p class="lab-note"><strong>Next NTB auction: Wednesday 21 October 2026.</strong> Every two weeks on Wednesdays (CBN, on behalf of the Federal Government/DMO).</p>
+              <div class="chip-row"><span class="date-chip next">21 Oct</span><span class="date-chip">4 Nov</span><span class="date-chip">18 Nov</span><span class="date-chip">2 Dec</span><span class="date-chip">16 Dec</span><span class="date-chip">30 Dec</span></div>
+              <p class="lab-note">Follows the bi-weekly Wednesday pattern; the CBN occasionally shifts dates around holidays.</p>
+            </div>
+            <div id="fiSbCalBody">
+              <p class="lab-note"><strong>Next savings bond window: November 2026</strong> (expected 2&ndash;6 November). Usually opens the first Monday of the month, closes Friday, settles the following Wednesday. Expected dates; confirmed when the DMO publishes the monthly circular.</p>
+            </div>
             <h2 class="guide-h2" style="margin-top:28px">How much will I earn?</h2>
               <p class="lab-note">Enter an amount and pick a tenor. Uses the latest auction stop rates.</p>
               <div data-island="tbill-calculator" id="tbillCalcMount">
@@ -164,7 +178,7 @@
 
   <script>window.NV_ISLANDS = window.NV_ISLANDS || {}; window.NV_ISLANDS["fixed-income"] = true;</script>
   <script defer src="assets/site.js?v=20261017c"></script>
-  <script defer src="assets/islands.js?v=20261017c"></script>
+  <script defer src="assets/islands.js?v=20261017d"></script>
   <script defer src="assets/live.js?v=20261017a"></script>
     <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a9f4136dd40547a7b1acca41e62cc7a5"}'></script><!-- End Cloudflare Web Analytics -->
 </body>

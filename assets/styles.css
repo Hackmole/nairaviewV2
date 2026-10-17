@@ -1782,3 +1782,11 @@ tr.etf-group[id] { scroll-margin-top: calc(var(--header-h) + 48px); }
 .fact-list > div { background: var(--paper); padding: 10px 14px; }
 .fact-list dt { font-size: 11.5px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
 .fact-list dd { margin: 3px 0 0; font-weight: 600; }
+
+/* Fixed income calendar + notes */
+.chip-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 4px; }
+.date-chip { display: inline-block; border: 1px solid var(--line-strong); padding: 6px 12px; font: 600 12.5px/1 "IBM Plex Mono", monospace; color: var(--muted); }
+.date-chip.next { background: var(--green-strong); border-color: var(--green-strong); color: var(--green-strong-ink); }
+.note-item { border-left: 3px solid var(--green-strong); padding: 2px 0 2px 14px; margin: 12px 0; }
+.note-date { font: 600 11.5px/1 "IBM Plex Mono", monospace; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+.note-item .lab-note { margin-top: 4px; }

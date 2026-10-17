@@ -89,6 +89,30 @@ export default function FixedIncome(): null {
     ).join(''));
     setText('fiBondNote', 'Subscriptions ran ' + esc(doc.savings_bonds.subscription) + '. Minimum subscription \u20A6' + doc.savings_bonds.min_subscription.toLocaleString('en-NG') + '.');
 
+    const cal = (doc as any).auction_calendar;
+    if (cal) {
+      const chips = (cal.upcoming || []).map((d: string) =>
+        '<span class="date-chip' + (d === cal.next_auction ? ' next' : '') + '">' + esc(fmtDateShort(d)) + '</span>').join('');
+      set('fiCalBody',
+        '<p class="lab-note"><strong>Next NTB auction: ' + esc(fmtDate(cal.next_auction)) + '.</strong> ' +
+        esc(cal.frequency) + ' (' + esc(cal.run_by) + ').</p>' +
+        '<div class="chip-row">' + chips + '</div>' +
+        '<p class="lab-note">' + esc(cal.caveat) + '</p>');
+    }
+    const sbcal = (doc as any).savings_bond_calendar;
+    if (sbcal) {
+      set('fiSbCalBody',
+        '<p class="lab-note"><strong>Next savings bond window: ' + esc(sbcal.next_offer) + '</strong>' +
+        (sbcal.expected_window ? ' (expected ' + esc(sbcal.expected_window) + ')' : '') + '. ' +
+        esc(sbcal.pattern) + ' ' + esc(sbcal.caveat) + '</p>');
+    }
+    const notes = (doc as any).auction_notes as Array<{ date: string; text: string }> | undefined;
+    if (notes && notes.length) {
+      set('fiNotesBody', notes.slice(0, 3).map((n) =>
+        '<div class="note-item"><span class="note-date">' + esc(fmtDate(n.date)) + '</span><p class="lab-note">' + esc(n.text) + '</p></div>'
+      ).join(''));
+    }
+
     setText('fiVsNote', doc.vs_stocks_note);
     setText('fiVintage', 'Figures as of ' + fmtDate(doc.as_of) + '. Auction results update after each DMO/CBN primary market auction.');
   }, [doc]);

@@ -61,5 +61,36 @@
       "FIRS clarification via The Sun Oct 2025",
       "Nairametrics Sep 2025"
     ]
-  }
+  },
+  "auction_calendar": {
+    "frequency": "Every two weeks on Wednesdays",
+    "run_by": "CBN, on behalf of the Federal Government/DMO",
+    "next_auction": "2026-10-21",
+    "upcoming": [
+      "2026-10-21",
+      "2026-11-04",
+      "2026-11-18",
+      "2026-12-02",
+      "2026-12-16",
+      "2026-12-30"
+    ],
+    "caveat": "Follows the bi-weekly Wednesday pattern; the CBN occasionally shifts dates around holidays."
+  },
+  "savings_bond_calendar": {
+    "next_offer": "November 2026",
+    "expected_window": "2-6 November 2026",
+    "expected_settlement": "2026-11-11",
+    "pattern": "Usually opens the first Monday of the month, closes Friday, settles the following Wednesday.",
+    "caveat": "Expected dates; confirmed when the DMO publishes the monthly circular."
+  },
+  "auction_notes": [
+    {
+      "date": "2026-10-14",
+      "text": "Demand stayed strong: N1.032tn bid for N450bn offered (2.3x cover), but the CBN allotted only N269.06bn. The 364-day stop rate edged up 5bps to 15.90%, a pause in the easing run that began after September's 350bp MPR cut to 23.00%. (CBN via Nairametrics/Punch)"
+    },
+    {
+      "date": "2026-10-07",
+      "text": "The 364-day stop rate fell 4bps to 15.85%, extending the decline since the CBN cut the MPR to 23.00% in September. The 91-day and 182-day rates held steady."
+    }
+  ]
 }

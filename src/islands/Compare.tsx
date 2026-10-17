@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { getJSON, fmt2, signedPct, esc } from '../lib/api.js';
 import type { ApiStock, AsiHistoryResponse, HistoryResponse, PricesResponse } from '../lib/types.js';
 
@@ -61,6 +61,8 @@ export default function Compare(): React.JSX.Element {
   const [sel, setSel] = useState<string[]>([]);
   const [q, setQ] = useState('');
   const [live, setLive] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const paramsRead = useRef(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -85,6 +87,51 @@ export default function Compare(): React.JSX.Element {
       cancelled = true;
     };
   }, []);
+
+  /* Shareable comparisons: read ?a=GTCO&b=ZENITHBANK on load (after the
+     name list is ready so symbols validate), then keep the URL in sync as
+     the selection changes. Follows the screener's deep-link pattern. */
+  useEffect(() => {
+    if (paramsRead.current || !names.length) return;
+    paramsRead.current = true;
+    let q: URLSearchParams;
+    try { q = new URLSearchParams(window.location.search); } catch { return; }
+    const valid = ['a', 'b', 'c', 'd']
+      .map((k) => (q.get(k) || '').toUpperCase())
+      .filter((s) => s && names.some((n) => n.symbol === s));
+    if (valid.length >= 2) setSel(valid.slice(0, 4));
+  }, [names]);
+
+  useEffect(() => {
+    if (!paramsRead.current) return;
+    try {
+      const keys = ['a', 'b', 'c', 'd'];
+      const qs = sel.map((s, i) => keys[i] + '=' + encodeURIComponent(s)).join('&');
+      window.history.replaceState(null, '', window.location.pathname + (qs ? '?' + qs : ''));
+    } catch { /* noop */ }
+  }, [sel]);
+
+  function copyLink() {
+    const url = window.location.href;
+    const done = () => { setCopied(true); setTimeout(() => setCopied(false), 2000); };
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(done).catch(() => { fallbackCopy(url); done(); });
+      } else { fallbackCopy(url); done(); }
+    } catch { /* noop */ }
+  }
+  function fallbackCopy(url: string) {
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = url;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      ta.remove();
+    } catch { /* noop */ }
+  }
 
   const matches = useMemo(() => {
     const needle = q.trim().toLowerCase();
@@ -341,7 +388,10 @@ export default function Compare(): React.JSX.Element {
       {rows.length > 0 && (
         <p className="pc-note">
           {live ? 'Live from the latest market feed.' : 'Showing the latest snapshot.'} Information only, not
-          investment advice.
+          investment advice.{' '}
+          <button type="button" className="btn-ghost btn-sm" onClick={copyLink}>
+            {copied ? 'Link copied' : 'Copy share link'}
+          </button>
         </p>
       )}
     </div>

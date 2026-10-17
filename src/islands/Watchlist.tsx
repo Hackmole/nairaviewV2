@@ -65,6 +65,23 @@ export default function Watchlist(): React.ReactElement {
     });
   }
 
+  function exportCsv() {
+    const lines = ['ticker,company,price'];
+    rows.forEach((r) => {
+      lines.push([r.s, '"' + String(r.c || '').replace(/"/g, '""') + '"', r.p || ''].join(','));
+    });
+    try {
+      const blob = new Blob([lines.join('\n')], { type: 'text/csv' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'nairaview-watchlist.csv';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+    } catch { /* noop */ }
+  }
+
   const rows = useMemo(() => {
     const bySym: Record<string, DirectoryRow> = {};
     stocks.forEach((e) => { bySym[e.s] = e; });
@@ -93,6 +110,7 @@ export default function Watchlist(): React.ReactElement {
       <div className="empty-note">
         Your watchlist is empty. Tap the ☆ on any stock to follow it here.<br />
         <a href="screener">Open the screener &rarr;</a>
+        <p className="form-note" style={{ marginTop: '12px' }}>Stars are saved on this device. <a href="account">Sign in</a> to keep them on every device.</p>
       </div>
     );
   }
@@ -101,6 +119,10 @@ export default function Watchlist(): React.ReactElement {
   return (
     <>
       {liveStale && <p className="stale-note">Live prices unavailable. Showing the last snapshot{staleDate ? ' (' + staleDate + ')' : ''}.</p>}
+      <div className="watchlist-foot">
+        <button type="button" className="btn-ghost btn-sm" onClick={exportCsv}>Export list</button>
+        <p className="form-note">Stars are saved on this device. <a href="account">Sign in</a> to keep them on every device.</p>
+      </div>
       {rows.map((r) => {
         const badgeHTML = window.nvBadgeHTML ? window.nvBadgeHTML(r.s) : '';
         return (

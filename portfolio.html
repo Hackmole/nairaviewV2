@@ -135,7 +135,7 @@
   <script defer src="assets/logos.js"></script>
   <script defer src="assets/stock-pages.js"></script>
   <script defer src="assets/site.js?v=20261016a"></script>
-  <script defer src="assets/islands.js?v=20261016a"></script>
+  <script defer src="assets/islands.js?v=20261017b"></script>
   <script defer src="assets/live.js?v=20261016a"></script>
   <script>window.NV_ISLANDS = window.NV_ISLANDS || {}; window.NV_ISLANDS.portfolio = true;</script>
   <script>
@@ -164,10 +164,26 @@
       return '\u20A6' + Number(n).toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
 
+    function showLocked(message, retry) {
+      var app = document.getElementById('portfolioApp');
+      app.hidden = false;
+      app.innerHTML =
+        '<div class="auth-wrap">' +
+        '<p class="guide-p"><strong>' + (retry ? 'We could not reach your account.' : 'Sign in to view your portfolio.') + '</strong></p>' +
+        '<p class="guide-p">' + message + '</p>' +
+        '<p>' + (retry
+          ? '<button type="button" class="btn-primary" onclick="location.reload()">Try again</button>'
+          : '<a class="btn-primary" href="account">Sign in or create an account</a>') + '</p>' +
+        '</div>';
+    }
+
     function load() {
       fetch(API + '/api/holdings', { credentials: 'include' }).then(function (res) {
-        // Logged out (or API unreachable): Portfolio now funnels through sign-in.
-        if (res.status === 401) { window.location.href = 'account'; return; }
+        // Logged out: explain inline instead of silently bouncing to /account.
+        if (res.status === 401) {
+          showLocked('Your portfolio is private to your account. Sign in to see your holdings, valued at our latest daily-close prices.', false);
+          return;
+        }
         if (!res.ok) throw new Error('down');
         return res.json();
       }).then(function (out) {
@@ -176,7 +192,7 @@
         lastHoldings = out.holdings || [];
         render(lastHoldings);
       }).catch(function () {
-        window.location.href = 'account';
+        showLocked('Check your connection, then try again. Your holdings are safe.', true);
       });
     }
 

@@ -97,6 +97,7 @@ export default function ChartLab(): null {
   const [asiData, setAsiData] = useState<Asipoint[]>([]);
   const [asiReady, setAsiReady] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [retryTick, setRetryTick] = useState(0);
 
   const charts = useRef<ChartSet>({ main: null, mainSeries: [], rsi: null, rsiSeries: null, macd: null, macdLine: null, macdSig: null, macdHist: null, asi: null });
   const knownSyms = useRef<Record<string, boolean>>({});
@@ -237,12 +238,16 @@ export default function ChartLab(): null {
     }
   }, [sym, ctype, tf, ind]);
 
-  /* ---- load stock history when the symbol changes ---- */
+  /* ---- load stock history when the symbol changes (or Retry is hit) ---- */
   useEffect(() => {
     const id = ++reqId.current;
     setLoading(true);
     const err = el('tv-err');
-    if (err) { err.style.display = 'flex'; err.textContent = 'Loading chart…'; }
+    if (err) {
+      err.style.display = 'flex';
+      err.replaceChildren();
+      err.append(document.createTextNode('Loading chart…'));
+    }
     getJSON<HistoryResponse>('/api/history?symbol=' + encodeURIComponent(sym)).then((j) => {
       if (id !== reqId.current) return;
       if (!j.prices || !j.prices.length) throw new Error('no data');
@@ -253,9 +258,22 @@ export default function ChartLab(): null {
       if (id !== reqId.current) return;
       setStockData([]);
       setLoading(false);
-      if (err) { err.style.display = 'flex'; err.textContent = 'Could not load ' + sym + ' data (' + ((e as Error)?.message || 'error') + ').'; }
+      if (err) {
+        err.style.display = 'flex';
+        err.replaceChildren();
+        err.append(document.createTextNode(
+          'Could not load ' + sym + ' data (' + ((e as Error)?.message || 'error') + '). '
+        ));
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'btn-ghost btn-sm';
+        b.textContent = 'Retry';
+        b.addEventListener('click', () => { setRetryTick((t) => t + 1); });
+        err.append(b);
+      }
     });
-  }, [sym]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sym, retryTick]);
 
   /* ---- draw: rebuilds all series from current state ---- */
   useEffect(() => {

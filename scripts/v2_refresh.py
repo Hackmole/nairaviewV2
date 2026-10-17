@@ -643,6 +643,63 @@ def main():
         need_build = True
         log("portfolio SNAPSHOT prices updated")
 
+
+def bake_headlines():
+    """Rebake the static headline cards in news-headlines.html from /api/news."""
+    import html as _html
+    try:
+        data = get_json("/api/news", timeout=30)
+    except Exception as e:
+        log(f"WARNING: headline bake skipped: {e}")
+        return
+    items = (data.get("items") or [])[:10]
+    if not items:
+        return
+    sector_key = {"market-wide": "market", "banking": "banking", "insurance": "insurance",
+                  "oil & gas": "oilgas", "consumer goods": "consumer", "industrial goods": "industrial"}
+    sector_label = {"market-wide": "Market-wide", "banking": "Banking", "insurance": "Insurance",
+                    "oil & gas": "Oil & Gas", "consumer goods": "Consumer Goods",
+                    "industrial goods": "Industrial Goods"}
+    months_up = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN",
+                 "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"]
+    cards = []
+    for it in items:
+        sec = it.get("sector") or "market-wide"
+        try:
+            ts = int(it.get("published_at") or 0) / 1000
+            d = datetime.fromtimestamp(ts, timezone.utc)
+            dstr = f"{d.day} {months_up[d.month - 1]}"
+        except Exception:
+            dstr = ""
+        thumb = ""
+        if it.get("image"):
+            thumb = ('<div class="news-thumb"><img src="' + _html.escape(it["image"], quote=True) +
+                     '" alt="" loading="lazy" onerror="this.closest(\'.news-thumb\').remove()"></div>')
+        cards.append(
+            '<a class="news-card" data-sector="' + sector_key.get(sec, "market") +
+            '" href="' + _html.escape(it.get("link") or "#", quote=True) +
+            '" target="_blank" rel="noopener noreferrer">' + thumb +
+            '<div class="news-meta"><span>' + _html.escape((it.get("source") or "").upper()) +
+            "</span><span>" + dstr +
+            '</span><span class="news-sector">' + sector_label.get(sec, "Market-wide") +
+            "</span></div><h3>" + _html.escape(it.get("title") or "") + "</h3>" +
+            ("<p>" + _html.escape(it.get("description") or "") + "</p>" if it.get("description") else "") +
+            '<span class="arrow" aria-hidden="true">\u2197</span></a>')
+    p = os.path.join(REPO, "news-headlines.html")
+    t = open(p, encoding="utf-8").read()
+    new_grid = ("<!-- BAKED-HEADLINES -->\n" + "\n".join(cards) +
+                "\n<!-- /BAKED-HEADLINES -->")
+    t2 = re.sub(r"<!-- BAKED-HEADLINES -->.*?<!-- /BAKED-HEADLINES -->",
+                lambda m: new_grid, t, flags=re.S, count=1)
+    if t2 != t:
+        open(p, "w", encoding="utf-8").write(t2)
+        log(f"baked {len(cards)} headlines into news-headlines.html")
+    return True
+
+
+    if bake_headlines():
+        changed.add("news-headlines.html")
+
     # ---- 8b. regenerate per-stock og cards (prices change daily) ----
     log("regenerating og cards...")
     r = run([sys.executable, "scripts/gen_og_cards.py"], timeout=300)

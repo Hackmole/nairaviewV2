@@ -367,6 +367,18 @@ useEffect(() => {
     if (el) el.textContent = rows.length + (rows.length === 1 ? ' stock' : ' stocks');
   }, [rows.length]);
 
+  /* As-of vintage on the results, parsed from the baked topline date. */
+  useEffect(() => {
+    const t = document.querySelector('.topline-date');
+    const m = t && /(\d{1,2}) ([A-Z]{3}) (\d{4})/.exec(t.textContent || '');
+    const el = document.getElementById('screenAsOf');
+    if (el) {
+      el.textContent = m
+        ? 'Results as of the ' + m[1] + ' ' + m[2].charAt(0) + m[2].slice(1).toLowerCase() + ' ' + m[3] + ' close.'
+        : 'Results as of the latest daily close.';
+    }
+  }, []);
+
   function openStock(s: string, ev: React.MouseEvent) {
     if (window.nvOpenModal) { window.nvOpenModal(s, ev.currentTarget as Element); return; }
     window.location.href = 'stocks/' + s + '.html';

@@ -44,6 +44,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Barlow+Semi+Condensed:wght@600;700&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600&text=%E2%82%A6&display=swap" rel="stylesheet">
+    <style>.edition-nav{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin:32px 0 4px;padding-top:20px;border-top:1px solid var(--line);font-size:15px}.edition-nav a{font-weight:600;text-decoration:none}</style>
   </head>
 <body>
   <header class="site-header">
@@ -54,8 +55,8 @@
           <div class="nav-item"><button type="button" class="nav-hub" data-hub="markets" aria-expanded="false">Markets</button><div class="nav-dropdown" role="menu"><span class="nav-drophead">Stocks</span><a href="stocks">All listed stocks</a><a href="screener">Stock screener</a><a href="compare">Compare stocks</a><a href="highs-lows">Highs &amp; lows</a><a href="etfs">ETFs</a><a href="watchlist">My watchlist</a><span class="nav-drophead">Foreign exchange</span><a href="fx">FX converter</a><a href="fx-usd">US dollar</a><a href="fx-eur">Euro</a><a href="fx-gbp">British pound</a><span class="nav-div" aria-hidden="true"></span><a href="fixed-income">Fixed Income</a><a href="economy">Economy</a><a href="brokers">Brokers</a></div></div>
           <div class="nav-item"><a href="offers">Offers</a><div class="nav-dropdown" role="menu"><a href="offers">Public offers</a><a href="ipo-tracker">IPO performance tracker</a></div></div>
           <div class="nav-item"><a href="calendar">Calendar</a><div class="nav-dropdown" role="menu"><a href="calendar">Market calendar</a><a href="dividends">Dividends</a><a href="corporate-actions">Corporate actions</a><a href="earnings">Earnings</a></div></div>
-          <div class="nav-item"><a href="news" class="active">News</a><div class="nav-dropdown" role="menu"><a href="news-headlines">Latest headlines</a><a href="news-newsroom">Newsroom</a><a href="news-notes">Market notes</a><a href="insider-dealings">Insider dealings</a></div></div>
-          <div class="nav-item"><a href="learn">Learn</a><div class="nav-dropdown" role="menu"><a href="learn">All guides</a><a href="market-recap">Recap</a></div></div>
+          <div class="nav-item"><a href="news">News</a><div class="nav-dropdown" role="menu"><a href="news-headlines">Latest headlines</a><a href="news-newsroom">Newsroom</a><a href="news-notes">Market notes</a><a href="insider-dealings">Insider dealings</a></div></div>
+          <div class="nav-item"><a href="learn" class="active">Learn</a><div class="nav-dropdown" role="menu"><a href="learn">All guides</a><a href="market-recap" class="active">Recap</a></div></div>
       </nav>
     </div>
   </header>
@@ -63,7 +64,7 @@
     <div class="live-ticker" role="region" aria-label="Live NGX price ticker"></div>
     <div class="topline">
       <span class="status"><i class="status-dot" aria-hidden="true"></i> MARKET CLOSED</span>
-      <span class="topline-date">DAILY CLOSE · FRI 2 OCT 2026 · WAT</span>
+      <span class="topline-date">DAILY CLOSE · FRI 25 SEP 2026 · WAT</span>
     </div>
     <main>
       <section class="section">
@@ -121,9 +122,14 @@
           <li><strong>Dividend:</strong> PZ Cussons &#8358;2.50 final dividend. Qualification 9 Oct, payment expected 30 Oct. See our <a href="dividends-october-2026">October dividend spotlight</a>.</li>
         </ul>
         <p class="guide-p">Figures compiled from NGX session data and market reporting for the week ended 26 Sep 2026. Not investment advice. <a href="news">More market news &rarr;</a></p>
+        <nav class="edition-nav" aria-label="More weekly recaps">
+          <a href="market-recap">All weekly recaps</a>
+          <a href="ngx-weekly-recap-02-oct-2026">Week ended 2 Oct 2026 &rarr;</a>
+        </nav>
       </section>
     </main>
     </div>
+  <div class="trust-strip"><span>Prices: Nigerian Exchange (NGX) <b>·</b> Delayed ~30 min in session <b>·</b> No sign-up needed <b>·</b> <a href="methodology">How we handle data</a></span></div>
   <footer class="site-footer">
     <div class="footer-inner">
       <div class="footer-grid">

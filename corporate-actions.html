@@ -62,8 +62,38 @@
               </div>
             </div>
             <section class="section" id="corp-actions-section" data-island="corp-actions">
+              <p class="lab-note">Last updated: 8 October 2026.</p>
+              <div class="cal-chips" id="caChips" role="group" aria-label="Filter actions by type"></div>
               <div id="caList"></div>
               <p class="lab-note" id="caNote"></p>
+              <script>
+              (function () {
+                var host = document.getElementById('caChips');
+                var list = document.getElementById('caList');
+                if (!host || !list) return;
+                var filters = [['All', ''], ['Bonus', 'BONUS'], ['Rights', 'RIGHTS'], ['Split', 'SPLIT'], ['Delisting', 'DELISTED'], ['M&A', 'M&A']];
+                var active = '';
+                function apply() {
+                  list.querySelectorAll('article').forEach(function (a) {
+                    var tag = a.querySelector('.otag');
+                    var label = tag ? tag.textContent.trim() : '';
+                    a.style.display = (!active || label === active) ? '' : 'none';
+                  });
+                }
+                filters.forEach(function (f, i) {
+                  var b = document.createElement('button');
+                  b.type = 'button'; b.className = 'sector-chip'; b.textContent = f[0];
+                  b.setAttribute('aria-pressed', i === 0 ? 'true' : 'false');
+                  b.addEventListener('click', function () {
+                    active = f[1];
+                    host.querySelectorAll('.sector-chip').forEach(function (c) { c.setAttribute('aria-pressed', c === b ? 'true' : 'false'); });
+                    apply();
+                  });
+                  host.appendChild(b);
+                });
+                new MutationObserver(apply).observe(list, { childList: true });
+              })();
+              </script>
             </section>
     </main>
     </div>
@@ -131,7 +161,7 @@
   <script defer src="assets/stock-pages.js"></script>
   <script>window.NV_ISLANDS = window.NV_ISLANDS || {}; window.NV_ISLANDS['corp-actions'] = true;</script>
   <script defer src="assets/site.js?v=20261017a"></script>
-  <script defer src="assets/islands.js?v=20261017a"></script>
+  <script defer src="assets/islands.js?v=20261017b"></script>
   <script defer src="assets/live.js?v=20261017a"></script>
     <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a9f4136dd40547a7b1acca41e62cc7a5"}'></script><!-- End Cloudflare Web Analytics -->
 </body>

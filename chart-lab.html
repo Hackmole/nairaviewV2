@@ -33,6 +33,16 @@
     .pill-row button[aria-pressed="true"]{background:#77FC49;border-color:#77FC49;color:#022126}
     .pill-row .row-label{align-self:center;font:600 12px/1 "Barlow",sans-serif;color:var(--muted,#6b7280);text-transform:uppercase;letter-spacing:.06em;margin-right:2px}
     .lab-note{font-size:13px;color:var(--muted,#6b7280);margin-top:10px}
+    .lab-controls-toggle{display:none}
+    @media (max-width:640px){
+      .lab-controls{border:1px solid var(--line,#e5e7eb);background:var(--card,#fff);margin:12px 0}
+      .lab-controls-toggle{display:block;list-style:none;cursor:pointer;padding:11px 14px;font:600 13px/1.2 "Barlow",sans-serif;color:var(--ink,#111827)}
+      .lab-controls-toggle::-webkit-details-marker{display:none}
+      .lab-controls-toggle::before{content:"▸ ";color:var(--muted,#6b7280)}
+      .lab-controls[open] > .lab-controls-toggle::before{content:"▾ "}
+      .lab-controls > :not(summary){margin-left:12px;margin-right:12px}
+      .lab-controls > .pill-row:last-of-type{margin-bottom:12px}
+    }
     .lab-search{display:flex;align-items:center;gap:10px;margin:16px 0 2px}
     .lab-search label{font:600 13px/1.2 "Barlow",sans-serif;color:var(--ink,#111827)}
     .lab-search input{flex:1;max-width:340px;border:1px solid var(--line,#e5e7eb);border-radius:0;padding:9px 15px;font:500 13px "Barlow",sans-serif;background:var(--card,#fff);color:var(--ink,#111827)}
@@ -66,41 +76,45 @@
           <h1>Chart lab</h1>
           <p class="lede">TradingView&rsquo;s open-source charting library, rendering <strong>Nairaview&rsquo;s own market data</strong>. No TradingView branding, no third-party data. Search any ticker, slice by timeframe, and layer on indicators:</p>
         </div>
-        <div class="lab-search">
-          <label for="sym-search">Symbol</label>
-          <input id="sym-search" list="sym-list" placeholder="Type a ticker, e.g. GTCO" autocomplete="off" spellcheck="false">
-          <datalist id="sym-list"></datalist>
-        </div>
-        <p class="lab-note" id="search-note" hidden></p>
-        <div class="pill-row" id="sym-row" role="group" aria-label="Stock symbol">
-          <span class="row-label">Quick picks</span>
-          <button data-sym="DANGCEM" aria-pressed="true">DANGCEM</button>
-          <button data-sym="GTCO" aria-pressed="false">GTCO</button>
-          <button data-sym="MTNN" aria-pressed="false">MTNN</button>
-          <button data-sym="ZENITHBANK" aria-pressed="false">ZENITHBANK</button>
-          <button data-sym="ACCESSCORP" aria-pressed="false">ACCESSCORP</button>
-          <button data-sym="SEPLAT" aria-pressed="false">SEPLAT</button>
-        </div>
-        <div class="pill-row" id="tf-row" role="group" aria-label="Timeframe">
-          <span class="row-label">Range</span>
-          <button data-tf="all" aria-pressed="true">All</button>
-          <button data-tf="3m" aria-pressed="false">3M</button>
-          <button data-tf="1m" aria-pressed="false">1M</button>
-        </div>
-        <div class="pill-row" id="type-row" role="group" aria-label="Chart type">
-          <span class="row-label">Style</span>
-          <button data-type="candles" aria-pressed="true">Candlesticks</button>
-          <button data-type="area" aria-pressed="false">Area</button>
-        </div>
-        <div class="pill-row" id="ind-row" role="group" aria-label="Indicators">
-          <span class="row-label">Indicators</span>
-          <button data-ind="sma5" aria-pressed="false">SMA 5</button>
-          <button data-ind="sma20" aria-pressed="false">SMA 20</button>
-          <button data-ind="rsi" aria-pressed="false">RSI 14</button>
-          <button data-ind="macd" aria-pressed="false">MACD</button>
-          <button data-ind="compare" aria-pressed="false">Compare vs ASI</button>
-        </div>
-        <p class="lab-note" id="ind-note" hidden></p>
+        <details class="lab-controls" open>
+          <summary class="lab-controls-toggle">Chart controls</summary>
+          <div class="lab-search">
+            <label for="sym-search">Symbol</label>
+            <input id="sym-search" list="sym-list" placeholder="Type a ticker, e.g. GTCO" autocomplete="off" spellcheck="false">
+            <datalist id="sym-list"></datalist>
+          </div>
+          <p class="lab-note" id="search-note" hidden></p>
+          <div class="pill-row" id="sym-row" role="group" aria-label="Stock symbol">
+            <span class="row-label">Quick picks</span>
+            <button data-sym="DANGCEM" aria-pressed="true">DANGCEM</button>
+            <button data-sym="GTCO" aria-pressed="false">GTCO</button>
+            <button data-sym="MTNN" aria-pressed="false">MTNN</button>
+            <button data-sym="ZENITHBANK" aria-pressed="false">ZENITHBANK</button>
+            <button data-sym="ACCESSCORP" aria-pressed="false">ACCESSCORP</button>
+            <button data-sym="SEPLAT" aria-pressed="false">SEPLAT</button>
+          </div>
+          <div class="pill-row" id="tf-row" role="group" aria-label="Timeframe">
+            <span class="row-label">Range</span>
+            <button data-tf="all" aria-pressed="true">All</button>
+            <button data-tf="3m" aria-pressed="false">3M</button>
+            <button data-tf="1m" aria-pressed="false">1M</button>
+          </div>
+          <div class="pill-row" id="type-row" role="group" aria-label="Chart type">
+            <span class="row-label">Style</span>
+            <button data-type="candles" aria-pressed="true">Candlesticks</button>
+            <button data-type="area" aria-pressed="false">Area</button>
+          </div>
+          <div class="pill-row" id="ind-row" role="group" aria-label="Indicators">
+            <span class="row-label">Indicators</span>
+            <button data-ind="sma5" aria-pressed="false">SMA 5</button>
+            <button data-ind="sma20" aria-pressed="false">SMA 20</button>
+            <button data-ind="rsi" aria-pressed="false">RSI 14</button>
+            <button data-ind="macd" aria-pressed="false">MACD</button>
+            <button data-ind="compare" aria-pressed="false">Compare vs ASI</button>
+          </div>
+          <p class="lab-note" id="ind-note" hidden></p>
+        </details>
+        <script>if (window.matchMedia && window.matchMedia('(max-width:640px)').matches) { var lc = document.querySelector('.lab-controls'); if (lc) lc.removeAttribute('open'); }</script>
         <div class="tv-wrap" id="tv-chart"><div class="tv-err" id="tv-err">Loading chart&hellip;</div></div>
         <p class="asof" id="stock-asof"></p>
         <div class="tv-wrap tv-pane" id="rsi-wrap" hidden></div>
@@ -154,7 +168,7 @@
     </div>
   </footer>
   <script defer src="assets/site.js?v=20261015o"></script>
-  <script defer src="assets/islands.js?v=20261015g"></script>
+  <script defer src="assets/islands.js?v=20261017b"></script>
   <script>window.NV_ISLANDS = window.NV_ISLANDS || {}; window.NV_ISLANDS['chart-lab'] = true;</script>
   <script>
   (function(){

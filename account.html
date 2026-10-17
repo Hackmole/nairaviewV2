@@ -61,17 +61,22 @@
         </div>
 
         <div id="authForms" class="auth-wrap" hidden>
-          <form id="authForm" class="auth-form">
+          <form id="loginForm" class="auth-form">
             <label>Email<input type="email" name="email" required autocomplete="email" placeholder="you@example.com" /></label>
-            <label>Password<input type="password" name="password" required minlength="8" autocomplete="current-password" placeholder="At least 8 characters" /></label>
-            <p class="forgot-row"><a href="#" id="forgotLink">Forgot password?</a></p>
-            <p class="form-error" id="authError" role="alert" hidden></p>
-            <p class="form-note" id="authSuccess" role="status" hidden></p>
-            <div class="auth-actions">
-              <button type="submit" class="btn-primary" id="btnLogin">Log in</button>
-              <button type="submit" class="btn-ghost" id="btnSignup">Create account</button>
-            </div>
-            <p class="form-note">New to Nairaview? Tap <strong>Create account</strong>. It takes a minute. We store only your email and a scrambled password, never your broker details.</p>
+            <label>Password<input type="password" name="password" required minlength="8" autocomplete="current-password" placeholder="Your password" /></label>
+            <p class="forgot-row"><a href="#forgotForm" id="forgotLink">Forgot password?</a></p>
+            <p class="form-error" id="loginError" role="alert" hidden></p>
+            <p class="form-note" id="loginSuccess" role="status" hidden></p>
+            <button type="submit" class="btn-primary">Log in</button>
+            <p class="form-note">New to Nairaview? <a href="#signupForm" id="showSignup">Create an account</a>. It takes a minute.</p>
+          </form>
+          <form id="signupForm" class="auth-form" hidden>
+            <label>Email<input type="email" name="email" required autocomplete="email" placeholder="you@example.com" /></label>
+            <label>Password<input type="password" name="password" required minlength="8" autocomplete="new-password" placeholder="At least 8 characters" /></label>
+            <p class="form-error" id="signupError" role="alert" hidden></p>
+            <p class="form-note" id="signupSuccess" role="status" hidden></p>
+            <button type="submit" class="btn-primary">Create account</button>
+            <p class="form-note">We store only your email and a scrambled password, never your broker details. Already have an account? <a href="#loginForm" id="showLogin">Log in</a>.</p>
           </form>
           <form id="forgotForm" class="auth-form" hidden>
             <p class="guide-p">Enter your account email and we&rsquo;ll send you a link to choose a new password.</p>
@@ -98,6 +103,10 @@
               <button type="button" class="btn-ghost" id="tfaBack">Back</button>
             </div>
           </form>
+          <div class="alerts-promo" id="alertsPromo" style="margin-top:1.5rem">
+            <p class="guide-p"><strong>Price alerts.</strong> Set a target price on any stock and we email you the moment a daily close hits it. Free with your account.</p>
+            <p><a class="btn-ghost" href="#signupForm" id="alertsSignupCta">Create an account to set alerts</a></p>
+          </div>
         </div>
 
         <div id="authState" class="auth-wrap" hidden>
@@ -205,12 +214,29 @@
   <script>
   (function () {
     var API = 'https://nairaview-api.meetomidiora.workers.dev';
-    var authForm = document.getElementById('authForm');
-    // Which submit button was pressed: click fires before submit, so this is reliable.
-    var authMode = 'login';
+    var loginForm = document.getElementById('loginForm');
+    var signupForm = document.getElementById('signupForm');
     var tfaChallenge = null;
-    document.getElementById('btnLogin').addEventListener('click', function () { authMode = 'login'; });
-    document.getElementById('btnSignup').addEventListener('click', function () { authMode = 'signup'; });
+
+    // Login / signup toggle: only the visible form can be submitted (Enter included).
+    function showOnly(form) {
+      loginForm.hidden = form !== loginForm;
+      signupForm.hidden = form !== signupForm;
+      document.getElementById('forgotForm').hidden = true;
+    }
+    document.getElementById('showSignup').addEventListener('click', function (ev) {
+      ev.preventDefault();
+      showOnly(signupForm);
+    });
+    document.getElementById('showLogin').addEventListener('click', function (ev) {
+      ev.preventDefault();
+      showOnly(loginForm);
+    });
+    document.getElementById('alertsSignupCta').addEventListener('click', function (ev) {
+      ev.preventDefault();
+      showOnly(signupForm);
+      signupForm.scrollIntoView({ block: 'start' });
+    });
 
     function fail(id, msg) {
       var el = document.getElementById(id);
@@ -218,11 +244,11 @@
       el.hidden = false;
     }
 
-    async function submit(url, errId) {
+    async function submit(url, form, errId, okId, okMsg) {
       document.getElementById(errId).hidden = true;
       var data = {
-        email: authForm.querySelector('[name="email"]').value.trim(),
-        password: authForm.querySelector('[name="password"]').value,
+        email: form.querySelector('[name="email"]').value.trim(),
+        password: form.querySelector('[name="password"]').value,
       };
       try {
         var res = await fetch(url, {
@@ -235,21 +261,26 @@
         if (!res.ok) { fail(errId, out.error || 'Something went wrong.'); return; }
         if (out.need_2fa) {
           tfaChallenge = out.challenge;
-          authForm.hidden = true;
+          loginForm.hidden = true;
+          signupForm.hidden = true;
           document.getElementById('tfaForm').hidden = false;
           return;
         }
-        var okEl = document.getElementById('authSuccess');
-        okEl.textContent = authMode === 'signup' ? 'Account created. Taking you to your portfolio…' : 'Signed in. Taking you to your portfolio…';
+        var okEl = document.getElementById(okId);
+        okEl.textContent = okMsg;
         okEl.hidden = false;
         setTimeout(function () { window.location.href = 'portfolio'; }, 900);
       } catch (e) {
         fail(errId, 'Could not reach the server. Check your connection and try again.');
       }
     }
-    authForm.addEventListener('submit', function (ev) {
+    loginForm.addEventListener('submit', function (ev) {
       ev.preventDefault();
-      submit(authMode === 'signup' ? API + '/api/auth/signup' : API + '/api/auth/login', 'authError');
+      submit(API + '/api/auth/login', loginForm, 'loginError', 'loginSuccess', 'Signed in. Taking you to your portfolio…');
+    });
+    signupForm.addEventListener('submit', function (ev) {
+      ev.preventDefault();
+      submit(API + '/api/auth/signup', signupForm, 'signupError', 'signupSuccess', 'Account created. Taking you to your portfolio…');
     });
 
     document.getElementById('logoutBtn').addEventListener('click', async function () {
@@ -287,7 +318,8 @@
       var guideP = document.querySelector('.section-heading .guide-p');
       if (guideP) guideP.hidden = true;
       document.getElementById('authForms').hidden = false;
-      authForm.hidden = true;
+      loginForm.hidden = true;
+      signupForm.hidden = true;
       var resetForm = document.getElementById('resetForm');
       resetForm.hidden = false;
       resetForm.addEventListener('submit', function (ev) {
@@ -312,17 +344,18 @@
     // Forgot-password toggle
     document.getElementById('forgotLink').addEventListener('click', function (ev) {
       ev.preventDefault();
-      authForm.hidden = true;
+      loginForm.hidden = true;
+      signupForm.hidden = true;
       document.getElementById('forgotForm').hidden = false;
     });
     document.getElementById('backToLogin').addEventListener('click', function () {
       document.getElementById('forgotForm').hidden = true;
-      authForm.hidden = false;
+      showOnly(loginForm);
     });
     // Two-factor login step
     document.getElementById('tfaBack').addEventListener('click', function () {
       document.getElementById('tfaForm').hidden = true;
-      authForm.hidden = false;
+      showOnly(loginForm);
     });
     document.getElementById('tfaForm').addEventListener('submit', function (ev) {
       ev.preventDefault();

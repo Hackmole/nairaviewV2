@@ -3,7 +3,7 @@ import type { Holding } from '../lib/types.js';
 
 /* React-owned portfolio tracker. Mounts on #portfolioApp.
    - Auth: GET /api/holdings (credentials: include). 401 or unreachable →
-     redirect to the account page, exactly like the vanilla version.
+     an inline interstitial explaining sign-in is needed (no silent redirect).
    - Prices: baked daily-close snapshot first (refreshed by scripts/v2_refresh.py), then live daily-close prices via
      the `nv:live-prices` CustomEvent dispatched by assets/live.js.
    - CRUD: add/update form, two-step confirm delete, per-row gain/loss on
@@ -36,10 +36,21 @@ function api(path: string, opts?: RequestInit): Promise<Response> {
   return fetch(API + path, { credentials: 'include', ...(opts || {}) });
 }
 
+/* Snapshot date, parsed from the baked topline (kept fresh by the daily
+   refresh), e.g. "DAILY CLOSE · FRI 16 OCT 2026 · WAT" -> "16 Oct 2026". */
+function snapshotDate(): string {
+  try {
+    const t = document.querySelector('.topline-date');
+    const m = t && /(\d{1,2}) ([A-Z]{3}) (\d{4})/.exec(t.textContent || '');
+    if (!m) return '';
+    return m[1] + ' ' + m[2].charAt(0) + m[2].slice(1).toLowerCase() + ' ' + m[3];
+  } catch { return ''; }
+}
+
 interface FormState { ticker: string; shares: string; avg_cost: string }
 
 export default function Portfolio(): React.ReactElement | null {
-  const [status, setStatus] = useState<'loading' | 'ready'>('loading');
+  const [status, setStatus] = useState<'loading' | 'ready' | 'locked' | 'unreachable'>('loading');
   const [holdings, setHoldings] = useState<Holding[]>([]);
   const [prices, setPrices] = useState<Record<string, number>>(SNAPSHOT);
   const [liveCount, setLiveCount] = useState(0);
@@ -51,7 +62,7 @@ export default function Portfolio(): React.ReactElement | null {
 
   function load() {
     api('/api/holdings').then((res) => {
-      if (res.status === 401) { window.location.href = 'account'; return null; }
+      if (res.status === 401) { setStatus('locked'); return null; }
       if (!res.ok) throw new Error('down');
       return res.json() as Promise<HoldingsResponse>;
     }).then((out) => {
@@ -59,7 +70,7 @@ export default function Portfolio(): React.ReactElement | null {
       setHoldings(out.holdings || []);
       setStatus('ready');
     }).catch(() => {
-      window.location.href = 'account';
+      setStatus('unreachable');
     });
   }
 
@@ -131,7 +142,30 @@ export default function Portfolio(): React.ReactElement | null {
       .catch(() => { setDeleting(null); setArmedDel(null); });
   }
 
-  if (status === 'loading') return null; /* static page shows nothing until authed */
+  if (status === 'loading') return null; /* static page shows nothing until auth resolves */
+
+  if (status === 'locked' || status === 'unreachable') {
+    return (
+      <div className="auth-wrap">
+        <p className="guide-p"><strong>{status === 'locked' ? 'Sign in to view your portfolio.' : 'We could not reach your account.'}</strong></p>
+        <p className="guide-p">
+          {status === 'locked'
+            ? 'Your portfolio is private to your account. Sign in to see your holdings, valued at our latest daily-close prices.'
+            : 'Check your connection, then try again. Your holdings are safe.'}
+        </p>
+        <p>
+          {status === 'locked'
+            ? <a className="btn-primary" href="account">Sign in or create an account</a>
+            : <button type="button" className="btn-primary" onClick={load}>Try again</button>}
+        </p>
+        {status === 'unreachable' && (
+          <p className="form-note"><a href="account">Go to the account page</a></p>
+        )}
+      </div>
+    );
+  }
+
+  const snapDate = snapshotDate();
 
   let totValue = 0, totCost = 0, totCoveredCost = 0, valued = false;
   const rows = holdings.map((h) => {
@@ -174,8 +208,9 @@ export default function Portfolio(): React.ReactElement | null {
           ? 'Prices temporarily unavailable. Valuation appears when the feed loads. Holdings still show cost below.'
           : liveCount
           ? 'Valued at the latest daily-close prices, refreshed after each market close. Gain/loss is calculated on covered holdings only.'
-          : 'Valued at Nairaview\u2019s latest daily-close snapshot prices. Not live. Gain/loss is calculated on covered holdings only; other holdings show cost only.'}
+          : 'Valued at Nairaview\u2019s daily-close snapshot prices' + (snapDate ? ' (as of ' + snapDate + ')' : '') + '. Not live. Gain/loss is calculated on covered holdings only; other holdings show cost only.'}
       </p>
+      <p className="form-note"><strong>Covered</strong> means we have a current price for that holding. Gain/loss is only calculated on covered holdings; the rest show cost only.</p>
       <p className="form-note"><a href="account">Account settings &amp; log out</a></p>
       <div className="movers-col">
         <table className="movers-table" id="holdingsTable">

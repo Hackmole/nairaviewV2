@@ -339,6 +339,11 @@ def main():
     idx = os.path.join(REPO, "index.html")
     t = open(idx, encoding="utf-8").read()
     t = re.sub(r'(<h1 id="market-heading">)[\d,\.]+(</h1>)', rf"\g<1>{asi:,.2f}\g<2>", t)
+    pts = asi * day_chg / 100
+    hero_move = (f'<span class="{direction(day_chg)}">{arrow(day_chg)} {disp_pct(day_chg)}</span>'
+                 f'<span class="points">{"\u2212" if pts < 0 else "+"}{abs(pts):,.2f} points today</span>')
+    t = re.sub(r'(<div class="hero-move" id="heroMove">).*?(</div>)',
+               lambda m: m.group(1) + hero_move + m.group(2), t, flags=re.S)
     t = re.sub(r'(<p class="hero-meta" id="heroNote">)As of the \d{1,2} [A-Z][a-z]{2} \d{4} close(</p>)',
                rf"\g<1>As of the {d_short} close\g<2>", t)
     t = re.sub(r'(<div class="chart-value" id="chartValue">)[\d,\.]+(</div>)', rf"\g<1>{asi:,.2f}\g<2>", t)
@@ -361,6 +366,8 @@ def main():
                rf"\g<1>{ytd_s}\g<2>", t)
     t = re.sub(r'(<span id="periodLabel">)31 Dec 2025 \u2013 \d{1,2} [A-Z][a-z]{2} \d{4}(</span>)',
                rf"\g<1>31 Dec 2025 – {d_short}\g<2>", t)
+    t = re.sub(r'(<desc id="chartDesc">).*?(</desc>)',
+               rf"\g<1>Interactive chart showing selected verified market closes from 31 December 2025 to {d} {mon_long} {yyyy}.\g<2>", t)
     t = re.sub(r'(<span class="noteDate">)\d{1,2} [A-Z][a-z]{2} \d{4}(</span>)',
                rf"\g<1>{d_short}\g<2>", t)
     t = re.sub(r'(<div class="date" id="wrapDate">)MARKET WRAP \u00b7 \d{1,2} [A-Z]{3}(</div>)',
@@ -376,8 +383,14 @@ def main():
                lambda m: m.group(1) + h3 + m.group(2), t, flags=re.S)
     t = re.sub(r'(<div class="date" id="wrapDate">.*?</h3>\s*<p>).*?(</p>)',
                lambda m: m.group(1) + body + m.group(2), t, flags=re.S)
+    def _recap_date(fn):
+        m = re.search(r"(\d{2})-([a-z]{3})-(\d{4})", fn)
+        if not m:
+            return ""
+        return f"{m.group(3)}-{MONTHS.index(m.group(2).capitalize()) + 1:02d}-{m.group(1)}"
     recaps = sorted([f for f in os.listdir(REPO)
-                     if f.startswith("ngx-weekly-recap-") and f.endswith(".html")], reverse=True)
+                     if f.startswith("ngx-weekly-recap-") and f.endswith(".html")],
+                    key=_recap_date, reverse=True)
     cta_href = recaps[0][:-5] if recaps else "market-recap"
     cta_text = "Read the weekly recap" if recaps else "See the market recap"
     t = re.sub(r'(<a class="btn-gold wrap-cta" href=")[^"]*(">).*?(</a>)',
@@ -417,6 +430,40 @@ def main():
         log(f"WARNING: could not read highs-lows.json: {e}")
         hl_syms, ws_label = {}, "18 Sep 2026"
 
+
+    def build_hist_rows(hprices):
+        """Rebuild <tbody id="histBody"> rows from /api/history (newest first, max 11)."""
+        rows = []
+        take = hprices[-12:]  # one extra session back for the oldest row's day change
+        for i in range(len(take) - 1, max(0, len(take) - 12), -1):
+            cur = take[i]
+            prev = take[i - 1] if i > 0 else None
+            close = cur.get("close")
+            if close is None:
+                continue
+            try:
+                dt = datetime.strptime(str(cur.get("date"))[:10], "%Y-%m-%d")
+                dstr = f"{dt.day} {MONTHS[dt.month - 1]} {dt.year}"
+            except Exception:
+                dstr = str(cur.get("date") or "")
+            def cell(v):
+                return "\u00b7" if v is None else fmt_price(v)
+            pc, dc = "", ""
+            if prev and prev.get("close"):
+                ch = (close - prev["close"]) / prev["close"] * 100
+                pc, dc = disp_pct(ch), direction(ch)
+            vol = cur.get("volume") or 0
+            rows.append(
+                f"<tr><td>{dstr}</td><td>{cell(cur.get('open'))}</td>"
+                f"<td>{cell(cur.get('high'))}</td><td>{cell(cur.get('low'))}</td>"
+                f"<td>{fmt_price(close)}</td>"
+                f'<td class="{dc if dc != "flat" else ""}">{pc}</td>'
+                f"<td>{fmt_vol(vol) if vol else chr(183)}</td></tr>")
+            if len(rows) >= 11:
+                break
+        return "\n".join(rows)
+
+
     # ---- 6. stocks/*.html in-place refresh ----
     n_stocks = 0
     for fn in sorted(os.listdir(os.path.join(REPO, "stocks"))):
@@ -428,6 +475,23 @@ def main():
             continue  # keep baked values when the feed lacks this ticker
         p = os.path.join(REPO, "stocks", fn)
         t = open(p, encoding="utf-8").read()
+        # Collapse any duplicated history card left by older runs
+        t = re.sub(r'(<div class="hist-card" id="history">.*?</tbody></table></div></div>)'
+                   r'\s*<div class="hist-card" id="history">.*?</tbody></table></div></div>',
+                   r'\1', t, flags=re.S)
+        # Fetch session history for the history-table rebuild (best effort)
+        hist = None
+        try:
+            hdoc = get_json(f"/api/history?symbol={sym}", timeout=20)
+            hprices = hdoc.get("prices") or []
+            if len(hprices) >= 2:
+                hist = hprices
+        except Exception:
+            hist = None
+        if hist:
+            # Stash the tbody so the blanket date swap below can't clobber real row dates
+            t = re.sub(r'<tbody id="histBody">.*?</tbody>',
+                       '<tbody id="histBody"><!--HISTBODY--></tbody>', t, flags=re.S)
         price = st["current_price"]
         prev = st.get("previous_close") or price
         chg = st.get("official_change_percent")
@@ -480,6 +544,10 @@ def main():
                    rf"\g<1>{d_short}\g<2>", t)
         t = re.sub(r'(<p class="asof">As of the )\d{1,2} [A-Z][a-z]{2} \d{4}( close · 16:00 WAT\.</p>)',
                    rf"\g<1>{d_short}\g<2>", t)
+        # Stock-page topline uses the all-caps format: DAILY CLOSE &middot; 5 OCT 2026 &middot; WAT
+        d_up_short = f"{d} {mon_up} {yyyy}"
+        t = re.sub(r'(DAILY CLOSE (?:\u00b7|&middot;) )\d{1,2} [A-Z]{3} \d{4}( (?:\u00b7|&middot;) WAT)',
+                   rf"\g<1>{d_up_short}\g<2>", t)
         # "What's happening" summary block (brief 3): regenerated each refresh
         wh = whats_happening(sym, st, hlinfo, d_short, 'id="pchartMount"' in t)
         t = re.sub(r'<!-- WHATHAPPENING -->.*?<!-- /WHATHAPPENING -->',
@@ -499,9 +567,41 @@ def main():
                    lambda m: m.group(1) + og_new.replace('"', "&quot;") + m.group(2), t)
         t = re.sub(r'(<meta name="twitter:description" content=")[^"]*(")',
                    lambda m: m.group(1) + og_new.replace('"', "&quot;") + m.group(2), t)
-        t = re.sub(r'("text": ")[^"]*(")',
-                   lambda m: m.group(1) + ld_new.replace('"', '\\"') + m.group(2), t)
+        # Visible FAQ: refresh the price answer (Q1) and the tracked-session count (Q3)
+        faq1_new = (f"{name} ({sym}) last closed at <strong>{fmt_price(price)}</strong> "
+                    f"({daystr}) on {d_short}. Prices update here after each NGX trading session.")
+        t = re.sub(r'(What is the current [^<]*? share price\?</summary><div class="faq-a"><p class="guide-p">)'
+                   r'.*?(</p></div></details>)',
+                   lambda m: m.group(1) + faq1_new + m.group(2), t, count=1)
+        n_sess = len(hist) if hist else 11
+        t = re.sub(r'(covers (?:all|the last) )\d+( tracked sessions)',
+                   rf"\g<1>{n_sess}\g<2>", t)
+        # JSON-LD: rebuild the whole FAQPage block from the visible answers (valid JSON, no HTML)
+        faq_entities = [
+            {"@type": "Question", "name": f"What is the current {sym} share price?",
+             "acceptedAnswer": {"@type": "Answer",
+                "text": f"{name} ({sym}) last closed at {fmt_price(price)} ({daystr}) on {d_short}."}},
+            {"@type": "Question", "name": f"What sector is {sym} in?",
+             "acceptedAnswer": {"@type": "Answer",
+                "text": f"{sym} is listed on the NGX Main Board under the {sector} sector."}},
+            {"@type": "Question", "name": f"Where can I see {sym}\u2019s recent price trend?",
+             "acceptedAnswer": {"@type": "Answer",
+                "text": f"The interactive chart on this page covers the last {n_sess} tracked sessions for {sym}."}},
+            {"@type": "Question", "name": f"Is {sym} a good investment?",
+             "acceptedAnswer": {"@type": "Answer",
+                "text": "Nairaview provides market data, not investment advice. Consider the company\u2019s "
+                        "financials, your goals and risk tolerance, and speak to a licensed adviser before deciding."}},
+        ]
+        ld_doc = {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": faq_entities}
+        ld_html = ('<script type="application/ld+json">\n' +
+                   json.dumps(ld_doc, ensure_ascii=False, indent=2) +
+                   '\n</script>')
+        t = re.sub(r'<script type="application/ld\+json">.*?</script>',
+                   lambda m: ld_html if '"FAQPage"' in m.group(0) else m.group(0),
+                   t, flags=re.S, count=1)
         t = re.sub(r"\d{1,2} [A-Z][a-z]{2} \d{4}", d_short, t)
+        if hist and "<!--HISTBODY-->" in t:
+            t = t.replace("<!--HISTBODY-->", build_hist_rows(hist))
         open(p, "w", encoding="utf-8").write(t)
         n_stocks += 1
     log(f"refreshed {n_stocks} stock pages")

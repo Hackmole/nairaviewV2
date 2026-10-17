@@ -1552,10 +1552,7 @@
 /* ---- Ticker tape (brief 10): homepage market strip under header ---- */
 (function () {
   try {
-    if (!document.querySelector("section.hero")) return; /* homepage only */
     if (document.getElementById("tape")) return;
-    var header = document.querySelector("header.site-header");
-    if (!header) return;
     var t = document.createElement("div");
     t.className = "tape";
     t.id = "tape";
@@ -1563,7 +1560,17 @@
     t.innerHTML = '<button type="button" class="tape-nav tape-prev" aria-label="Scroll tape left">&lsaquo;</button>' +
       '<div class="tape-view"><div class="tape-track" id="tapeTrack"></div></div>' +
       '<button type="button" class="tape-nav tape-next" aria-label="Scroll tape right">&rsaquo;</button>';
-    header.parentNode.insertBefore(t, header.nextSibling);
+    var slot = document.querySelector(".live-ticker");
+    if (slot) {
+      /* hub pages: own tape replaces the old third-party ticker slot */
+      slot.textContent = "";
+      slot.appendChild(t);
+    } else {
+      if (!document.querySelector("section.hero")) return; /* homepage only */
+      var header = document.querySelector("header.site-header");
+      if (!header) return;
+      header.parentNode.insertBefore(t, header.nextSibling);
+    }
     var view = t.querySelector(".tape-view");
     t.querySelector(".tape-prev").addEventListener("click", function () { view.scrollBy({ left: -240, behavior: "smooth" }); });
     t.querySelector(".tape-next").addEventListener("click", function () { view.scrollBy({ left: 240, behavior: "smooth" }); });

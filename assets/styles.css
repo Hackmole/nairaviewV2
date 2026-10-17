@@ -666,7 +666,8 @@ body.drawer-open { overflow: hidden; }
 .d-hub::after { content: ">"; font-size: 14px; color: var(--muted); display: inline-block; transition: transform .2s; }
 .d-group.open .d-hub::after { transform: rotate(90deg); color: var(--green-strong); }
 .d-subs { display: none; }
-.d-group.open .d-subs { display: block; padding-bottom: 6px; }
+.d-group.open .d-subs { display: block; padding-bottom: 6px; animation: dsubs-in .18s ease-out; }
+@keyframes dsubs-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
 .d-subs .d-sec { margin-top: 2px; }
 .d-drophead { display: block; padding: 10px 20px 2px; font: 600 9px/1.4 "IBM Plex Mono", "Noto Sans", monospace; text-transform: uppercase; letter-spacing: .12em; color: var(--muted); }
 .page-kicker { margin: 26px 0 0; }
@@ -1838,3 +1839,11 @@ tr.etf-group[id] { scroll-margin-top: calc(var(--header-h) + 48px); }
 /* T-bill result crossfade (tier 2): signals recalculation on input change */
 .tb-xfade tbody { animation: tb-xfade .12s ease-out; }
 @keyframes tb-xfade { from { opacity: .35; } to { opacity: 1; } }
+
+/* Command palette open (tier 3): 120ms fade + 4px rise */
+.palette-overlay.palette-open .palette { animation: palette-in .12s ease-out; }
+@keyframes palette-in { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+/* Heatmap flip flash (tier 3): ring tiles whose direction changed on repaint */
+.heat-tile.heat-flip { animation: heat-flip .6s ease-out; }
+@keyframes heat-flip { 0% { box-shadow: 0 0 0 2px var(--green-strong); } 100% { box-shadow: none; } }

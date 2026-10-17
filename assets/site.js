@@ -759,6 +759,12 @@
       function renderHeatmap() {
         var host = document.getElementById('heatTiles');
         if (!host) return;
+        /* snapshot direction per symbol so repainted tiles that flipped flash */
+        var prevDir = {};
+        Array.prototype.forEach.call(host.querySelectorAll('.heat-tile'), function (tile) {
+          var s = tile.querySelector('.ht-s');
+          if (s) prevDir[s.textContent] = tile.classList.contains('heat-down');
+        });
         host.innerHTML = '';
         var rows = tables.gainers.concat(tables.losers);
         if (!rows.length) return;
@@ -775,6 +781,8 @@
              full-width and read as the biggest company. */
           t.style.maxWidth = (grow * 170) + 'px';
           t.style.background = r.cv >= 0 ? 'var(--green-soft)' : 'var(--red-soft)';
+          t.classList.add(r.cv >= 0 ? 'heat-up' : 'heat-down');
+          if (prevDir[r.s] !== undefined && prevDir[r.s] !== (r.cv < 0)) t.classList.add('heat-flip');
           var s1 = document.createElement('span'); s1.className = 'ht-s'; s1.textContent = r.s;
           var s2 = document.createElement('span'); s2.className = 'ht-c ' + (r.cv >= 0 ? 'up' : 'down'); s2.textContent = dirArrow(r) + r.m;
           var s3 = document.createElement('span'); s3.className = 'ht-p'; s3.textContent = r.p;
@@ -1456,6 +1464,7 @@
   function open(op) {
     opener = op || null;
     overlay.hidden = false;
+    overlay.classList.add('palette-open');
     document.body.style.overflow = "hidden";
     input.value = "";
     render(search(""));
@@ -1463,6 +1472,7 @@
   }
   function close() {
     overlay.hidden = true;
+    overlay.classList.remove('palette-open');
     document.body.style.overflow = "";
     if (opener) opener.focus();
   }

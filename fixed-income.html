@@ -91,6 +91,17 @@
                 <text x="562" y="220" fill="var(--muted)" font-size="10" font-family="IBM Plex Mono,monospace">7 Oct</text>
               </svg>
               </div>
+            <h2 class="guide-h2" style="margin-top:28px">How much will I earn?</h2>
+              <p class="lab-note">Enter an amount and pick a tenor. Uses the latest auction stop rates.</p>
+              <div data-island="tbill-calculator" id="tbillCalcMount">
+                <p class="lab-note">The calculator needs JavaScript. The short version: at the 15.90% stop rate, ₦1,000,000 invested for 364 days buys ₦1,188,445 of face value. Gross interest ₦188,445, less 10% withholding tax (₦18,845), leaves ₦169,601 net, a 17.01% annualised yield.</p>
+              </div>
+            <h2 class="guide-h2" style="margin-top:28px">What the stop rate means for you</h2>
+              <p class="lab-note"><strong>Stop rate.</strong> The highest yield the CBN accepted at the auction. Every successful bidder gets this rate, so it is the market price of that tenor.</p>
+              <p class="lab-note"><strong>Discount pricing.</strong> You do not pay the full face value. You pay less now and receive the full amount at maturity; the difference is your interest. At 15.90% for 364 days, ₦1,000,000 buys ₦1,188,445 of face value.</p>
+              <p class="lab-note"><strong>Subscription vs allotment.</strong> Subscription is how much investors bid; allotment is how much the CBN actually sold. When subscription dwarfs allotment, demand is hot and the next stop rate often falls.</p>
+              <p class="lab-note"><strong>Annualised.</strong> The rate scaled to a full year, so a 91-day and a 364-day rate can be compared fairly.</p>
+              <p class="lab-note"><strong>Bullet repayment.</strong> Savings bonds repay the full principal in one lump at maturity, while interest arrives quarterly.</p>
               <h2 class="guide-h2" style="margin-top:28px" id="fiBondH">FGN Savings Bond: October 2026 offer</h2>
               <p class="lab-note" id="fiBondNote">Subscriptions ran 5&ndash;9 October 2026. Minimum subscription &#8358;5,000.</p>
               <div class="movers-col"><table class="movers-table">
@@ -153,7 +164,7 @@
 
   <script>window.NV_ISLANDS = window.NV_ISLANDS || {}; window.NV_ISLANDS["fixed-income"] = true;</script>
   <script defer src="assets/site.js?v=20261017c"></script>
-  <script defer src="assets/islands.js?v=20261017b"></script>
+  <script defer src="assets/islands.js?v=20261017c"></script>
   <script defer src="assets/live.js?v=20261017a"></script>
     <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a9f4136dd40547a7b1acca41e62cc7a5"}'></script><!-- End Cloudflare Web Analytics -->
 </body>

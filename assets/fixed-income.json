@@ -50,5 +50,16 @@
       }
     ]
   },
-  "vs_stocks_note": "The 364-day T-bill now yields 15.85% against August inflation of 15.39%. The risk-free return barely beats inflation. Falling T-bill yields (as now) usually make equities look more attractive, since the 'safe' alternative pays less. Rising yields do the opposite."
+  "vs_stocks_note": "The 364-day T-bill now yields 15.85% against August inflation of 15.39%. The risk-free return barely beats inflation. Falling T-bill yields (as now) usually make equities look more attractive, since the 'safe' alternative pays less. Rising yields do the opposite.",
+  "tax": {
+    "tbill_wht": 0.1,
+    "fgn_bond_wht": 0,
+    "note": "FIRS directive of October 2025: 10% withholding tax deducted at source on T-bill interest; FGN bond interest remains exempt. Investors receive tax credits for amounts withheld.",
+    "verified": "2026-10-17",
+    "sources": [
+      "FIRS public notice via TheCable Oct 2025",
+      "FIRS clarification via The Sun Oct 2025",
+      "Nairametrics Sep 2025"
+    ]
+  }
 }

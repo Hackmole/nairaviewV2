@@ -35,6 +35,7 @@ import FxCcy from './islands/FxCcy.js';
 import Compare from './islands/Compare.js';
 import FeeCalculator from './islands/FeeCalculator.js';
 import FixedIncome from './islands/FixedIncome.js';
+import TbillCalculator from './islands/TbillCalculator.js';
 import Earnings from './islands/Earnings.js';
 import Economy from './islands/Economy.js';
 
@@ -54,6 +55,7 @@ const ISLANDS: Record<string, IslandComponent> = {
   compare: Compare as IslandComponent,
   'fee-calculator': FeeCalculator as IslandComponent,
   'fixed-income': FixedIncome as IslandComponent,
+  'tbill-calculator': TbillCalculator as IslandComponent,
   earnings: Earnings as IslandComponent,
   economy: Economy as IslandComponent,
 };

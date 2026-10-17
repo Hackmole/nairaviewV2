@@ -59,7 +59,7 @@ export default function FixedIncome(): null {
 
   useEffect(() => {
     let alive = true;
-    fetch('assets/fixed-income.json?v=20261012b')
+    fetch('assets/fixed-income.json?v=20261017a')
       .then((r) => { if (!r.ok) throw new Error('bad status'); return r.json() as Promise<FiDoc>; })
       .then((d) => { if (alive) setDoc(d); })
       .catch(() => { /* static fallback stays */ });

@@ -643,6 +643,14 @@ def main():
         need_build = True
         log("portfolio SNAPSHOT prices updated")
 
+    # ---- 8b. regenerate per-stock og cards (prices change daily) ----
+    log("regenerating og cards...")
+    r = run([sys.executable, "scripts/gen_og_cards.py"], timeout=300)
+    if r.returncode != 0:
+        log(f"WARNING: gen_og_cards failed: {r.stderr[:200]}")
+    else:
+        changed.add("assets/img/og/stocks/*.png")
+
     # ---- 9. rebuild islands if a TSX island changed ----
     if need_build:
         log("rebuilding islands...")

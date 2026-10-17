@@ -92,5 +92,59 @@
       "date": "2026-10-07",
       "text": "The 364-day stop rate fell 4bps to 15.85%, extending the decline since the CBN cut the MPR to 23.00% in September. The 91-day and 182-day rates held steady."
     }
-  ]
+  ],
+  "fgn_bond_curve": {
+    "as_of": "2026-10-12",
+    "source": "AIICO Capital investor note via dmarketforces",
+    "average": 16.23,
+    "points": [
+      {
+        "tenor": "3-year",
+        "years": 3,
+        "yield": 16.61,
+        "change_bps": 26
+      },
+      {
+        "tenor": "5-year",
+        "years": 5,
+        "yield": 16.7,
+        "change_bps": 20
+      },
+      {
+        "tenor": "7-year",
+        "years": 7,
+        "yield": 16.76,
+        "change_bps": 41
+      },
+      {
+        "tenor": "10-year",
+        "years": 10,
+        "yield": 16.43,
+        "change_bps": 0
+      },
+      {
+        "tenor": "20-year",
+        "years": 20,
+        "yield": 14.69,
+        "change_bps": null
+      }
+    ],
+    "read": "The curve slopes down after 7 years: 20-year paper yields 14.69%, below the 10-year at 16.43%. Investors accept less for longer dates when they expect rates to fall over time."
+  },
+  "fgn_bond_auctions": {
+    "next": "2026-10-19",
+    "offer": "N1.75tn",
+    "reopenings": [
+      "19% FGN FEB 2034",
+      "16.79% FGN SEP 2036",
+      "15.45% FGN JUN 2038"
+    ],
+    "upcoming": [
+      "2026-10-19",
+      "2026-11-16",
+      "2026-12-14"
+    ],
+    "min_subscription": 50001000,
+    "channel": "Primary Dealer Market Makers (PDMMs)"
+  }
 }

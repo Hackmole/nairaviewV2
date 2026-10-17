@@ -54,6 +54,29 @@ function trendSVG(hist: Array<{ date: string; rate: number }>): string {
     grid + '<polyline points="' + pts + '" fill="none" stroke="#32D9EB" stroke-width="3"/>' + dots + '</svg>';
 }
 
+function curveSVG(pts: Array<{ tenor: string; years: number; yield: number }>): string {
+  if (pts.length < 2) return '';
+  const W = 620, H = 240, L = 40, B = 200, T = 20;
+  const ys = pts.map((p) => p.yield);
+  const lo = Math.min(...ys) - 0.3, hi = Math.max(...ys) + 0.3;
+  const xlo = Math.min(...pts.map((p) => p.years)), xhi = Math.max(...pts.map((p) => p.years));
+  const X = (yr: number) => 60 + ((yr - xlo) / Math.max(xhi - xlo, 1)) * (W - 60 - 30);
+  const Y = (v: number) => T + (1 - (v - lo) / (hi - lo)) * (B - T - 10);
+  const path = pts.map((p, i) => (i ? 'L' : 'M') + X(p.years).toFixed(0) + ',' + Y(p.yield).toFixed(0)).join(' ');
+  const dots = pts.map((p) =>
+    '<circle cx="' + X(p.years).toFixed(0) + '" cy="' + Y(p.yield).toFixed(0) + '" r="4" fill="#32D9EB"/>' +
+    '<text x="' + X(p.years).toFixed(0) + '" y="' + (Y(p.yield) - 12).toFixed(0) + '" fill="var(--ink)" font-size="11" font-family="IBM Plex Mono,monospace" text-anchor="middle">' + p.yield.toFixed(2) + '%</text>' +
+    '<text x="' + X(p.years).toFixed(0) + '" y="220" fill="var(--muted)" font-size="10" font-family="IBM Plex Mono,monospace" text-anchor="middle">' + esc(p.tenor) + '</text>'
+  ).join('');
+  const grid = [Math.ceil(lo), Math.round((lo + hi) / 2), Math.floor(hi)].map((g) =>
+    '<text x="8" y="' + (Y(g) + 4).toFixed(0) + '" fill="var(--muted)" font-size="11" font-family="IBM Plex Mono,monospace">' + g + '%</text>'
+  ).join('');
+  return '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="FGN bond yield curve" style="width:100%;height:auto;display:block">' +
+    '<line x1="' + L + '" y1="' + T + '" x2="' + L + '" y2="' + B + '" stroke="var(--line)" stroke-width="1"/>' +
+    '<line x1="' + L + '" y1="' + B + '" x2="' + W + '" y2="' + B + '" stroke="var(--line)" stroke-width="1"/>' +
+    grid + '<path d="' + path + '" fill="none" stroke="#32D9EB" stroke-width="3"/>' + dots + '</svg>';
+}
+
 export default function FixedIncome(): null {
   const [doc, setDoc] = useState<FiDoc | null>(null);
 
@@ -111,6 +134,26 @@ export default function FixedIncome(): null {
       set('fiNotesBody', notes.slice(0, 3).map((n) =>
         '<div class="note-item"><span class="note-date">' + esc(fmtDate(n.date)) + '</span><p class="lab-note">' + esc(n.text) + '</p></div>'
       ).join(''));
+    }
+
+    const fba = (doc as any).fgn_bond_auctions;
+    if (fba) {
+      set('fiBondCalBody',
+        '<p class="lab-note"><strong>Next FGN bond auction: ' + esc(fmtDate(fba.next)) + '</strong> (' +
+        esc(fba.offer) + ' reopened: ' + (fba.reopenings || []).map(esc).join(', ') + '). ' +
+        'Monthly auctions continue ' + (fba.upcoming || []).slice(1).map((d: string) => esc(fmtDate(d))).join(' and ') + '. ' +
+        'Minimum \u20A6' + Number(fba.min_subscription).toLocaleString('en-NG') + ' via ' + esc(fba.channel) + '.</p>');
+    }
+
+    const curve = (doc as any).fgn_bond_curve;
+    if (curve && curve.points && curve.points.length >= 2) {
+      set('fiCurveChart', '<div class="chart-wrap">' + curveSVG(curve.points) + '</div>');
+      set('fiCurveBody', '<thead><tr><th>Tenor</th><th>Yield</th><th>Week change</th></tr></thead><tbody>' +
+        curve.points.map((p: { tenor: string; yield: number; change_bps: number | null }) =>
+          '<tr><td>' + esc(p.tenor) + '</td><td>' + p.yield.toFixed(2) + '%</td><td>' +
+          (p.change_bps === null || p.change_bps === undefined ? 'n/a' : p.change_bps === 0 ? 'unchanged' : (p.change_bps > 0 ? '+' : '') + p.change_bps + ' bps') +
+          '</td></tr>').join('') + '</tbody>');
+      setText('fiCurveNote', curve.read + ' (' + curve.source + ', ' + fmtDate(curve.as_of) + '.)');
     }
 
     const tbillRate = doc.ntb_latest.rates['364d'].toFixed(2) + '%';

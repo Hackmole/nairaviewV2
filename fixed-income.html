@@ -96,12 +96,29 @@
                 <text x="562" y="220" fill="var(--muted)" font-size="10" font-family="IBM Plex Mono,monospace">7 Oct</text>
               </svg>
               </div>
+            <h2 class="guide-h2" style="margin-top:28px">The yield curve</h2>
+            <p class="lab-note">Secondary-market yields on benchmark FGN bonds. Unlike auction stop rates, these move every trading day.</p>
+            <div id="fiCurveChart"></div>
+            <div class="movers-col"><table class="movers-table" id="fiCurveBody">
+              <thead><tr><th>Tenor</th><th>Yield</th><th>Week change</th></tr></thead>
+              <tbody>
+                <tr><td>3-year</td><td>16.61%</td><td>+26 bps</td></tr>
+                <tr><td>5-year</td><td>16.70%</td><td>+20 bps</td></tr>
+                <tr><td>7-year</td><td>16.76%</td><td>+41 bps</td></tr>
+                <tr><td>10-year</td><td>16.43%</td><td>unchanged</td></tr>
+                <tr><td>20-year</td><td>14.69%</td><td>n/a</td></tr>
+              </tbody>
+            </table></div>
+            <p class="lab-note" id="fiCurveNote">The curve slopes down after 7 years: 20-year paper yields 14.69%, below the 10-year at 16.43%. Investors accept less for longer dates when they expect rates to fall over time. (AIICO Capital via dmarketforces, 12 October 2026.)</p>
             <h2 class="guide-h2" style="margin-top:28px">Mark your calendar</h2>
             <div id="fiCalBody">
               <p class="lab-note"><strong>Next NTB auction: Wednesday 21 October 2026.</strong> Every two weeks on Wednesdays (CBN, on behalf of the Federal Government/DMO).</p>
               <div class="chip-row"><span class="date-chip next">21 Oct</span><span class="date-chip">4 Nov</span><span class="date-chip">18 Nov</span><span class="date-chip">2 Dec</span><span class="date-chip">16 Dec</span><span class="date-chip">30 Dec</span></div>
               <p class="lab-note">Follows the bi-weekly Wednesday pattern; the CBN occasionally shifts dates around holidays.</p>
             </div>
+              <div id="fiBondCalBody">
+                <p class="lab-note"><strong>Next FGN bond auction: Monday 19 October 2026</strong> (&#8358;1.75tn reopened: 19% FEB 2034, 16.79% SEP 2036, 15.45% JUN 2038). Monthly auctions continue 16 November and 14 December. Minimum &#8358;50,001,000 via Primary Dealer Market Makers.</p>
+              </div>
             <div id="fiSbCalBody">
               <p class="lab-note"><strong>Next savings bond window: November 2026</strong> (expected 2&ndash;6 November). Usually opens the first Monday of the month, closes Friday, settles the following Wednesday. Expected dates; confirmed when the DMO publishes the monthly circular.</p>
             </div>
@@ -193,7 +210,7 @@
 
   <script>window.NV_ISLANDS = window.NV_ISLANDS || {}; window.NV_ISLANDS["fixed-income"] = true;</script>
   <script defer src="assets/site.js?v=20261017c"></script>
-  <script defer src="assets/islands.js?v=20261017e"></script>
+  <script defer src="assets/islands.js?v=20261017f"></script>
   <script defer src="assets/live.js?v=20261017a"></script>
     <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a9f4136dd40547a7b1acca41e62cc7a5"}'></script><!-- End Cloudflare Web Analytics -->
 </body>

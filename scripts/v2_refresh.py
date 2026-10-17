@@ -746,6 +746,16 @@ def bake_etfs():
                         lambda m: m.group(1) + f"Close &middot; {dstr} &middot; NGX ETF data." + m.group(2),
                         st2, count=1)
         st2 = st2.replace(">Hand-verified</span>", ">Daily close</span>")
+        if dstr:
+            # refresh the "current price" FAQ answer (visible + JSON-LD)
+            st2 = re.sub(
+                r"The last (?:hand-verified )?close was <strong>[^<]*</strong> on [^ ]+ \((?:NGX Daily Official List|NGX ETF data)\)",
+                f"The last close was <strong>{fmtP(f['close'])}</strong> on {dstr} (NGX ETF data)",
+                st2, count=1)
+            st2 = re.sub(
+                r'"text": "The last (?:hand-verified )?close was [^"]*?"',
+                f'"text": "The last close was {fmtP(f["close"])} on {dstr} (NGX ETF data)."',
+                st2, count=1)
         if "kstats-vintage" not in st2:
             st2 = st2.replace(
                 '<div class="section" style="padding-top:34px">',

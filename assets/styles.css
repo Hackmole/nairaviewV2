@@ -1776,3 +1776,9 @@ a, button { -webkit-tap-highlight-color: transparent; }
 .etf-group strong { display: block; font-size: 15px; }
 .etf-group span { color: var(--muted); font-size: 13px; font-weight: 400; }
 tr.etf-group[id] { scroll-margin-top: calc(var(--header-h) + 48px); }
+
+/* ETF key facts */
+.fact-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); margin: 0 0 6px; padding: 0; }
+.fact-list > div { background: var(--paper); padding: 10px 14px; }
+.fact-list dt { font-size: 11.5px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+.fact-list dd { margin: 3px 0 0; font-weight: 600; }

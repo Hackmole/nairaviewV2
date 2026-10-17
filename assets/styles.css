@@ -1790,3 +1790,6 @@ tr.etf-group[id] { scroll-margin-top: calc(var(--header-h) + 48px); }
 .note-item { border-left: 3px solid var(--green-strong); padding: 2px 0 2px 14px; margin: 12px 0; }
 .note-date { font: 600 11.5px/1 "IBM Plex Mono", monospace; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
 .note-item .lab-note { margin-top: 4px; }
+
+/* FX everyday-amount table: highlight the $100 row */
+.amt-hero td { font-weight: 700; color: var(--ink); background: var(--green-soft); }

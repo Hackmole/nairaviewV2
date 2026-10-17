@@ -13,6 +13,8 @@ export default function FxConverter(): null {
   const [amount, setAmount] = useState<number>(100);
   const [ccy, setCcy] = useState('USD');
   const [leg, setLeg] = useState('official');
+  const [dir, setDir] = useState<'to-ngn' | 'from-ngn'>('to-ngn');
+  const [amtCcy, setAmtCcy] = useState('USD');
   const [rates, setRates] = useState<FxDoc['latest'] | null>(null);
   const [fxFailed, setFxFailed] = useState(false);
   const settled = useRef(false);
@@ -109,6 +111,29 @@ export default function FxConverter(): null {
       });
     }
     toggles.forEach((t) => { t.addEventListener('click', onToggle); });
+    const dirToggles = Array.prototype.slice.call(document.querySelectorAll('.fx-dir-toggle')) as HTMLElement[];
+    function onDirToggle(e: Event) {
+      const b = e.currentTarget as HTMLElement;
+      setDir((b.getAttribute('data-dir') as 'to-ngn' | 'from-ngn') || 'to-ngn');
+      dirToggles.forEach((x) => {
+        const on = x === b;
+        x.classList.toggle('active', on);
+        x.setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
+    }
+    dirToggles.forEach((x) => { x.addEventListener('click', onDirToggle); });
+    /* everyday-amount table currency tabs */
+    const amtTabs = Array.prototype.slice.call(document.querySelectorAll('#fxAmtCcy button')) as HTMLElement[];
+    function onAmtTab(e: Event) {
+      const b = e.currentTarget as HTMLElement;
+      setAmtCcy(b.getAttribute('data-ccy') || 'USD');
+      amtTabs.forEach((x) => {
+        const on = x === b;
+        x.classList.toggle('active', on);
+        x.setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
+    }
+    amtTabs.forEach((x) => { x.addEventListener('click', onAmtTab); });
     return () => {
       alive = false;
       if (amtEl) amtEl.removeEventListener('input', onAmt);
@@ -117,6 +142,8 @@ export default function FxConverter(): null {
       document.removeEventListener('click', onDocClick);
       document.removeEventListener('keydown', onKey);
       toggles.forEach((t) => { t.removeEventListener('click', onToggle); });
+      dirToggles.forEach((x) => { x.removeEventListener('click', onDirToggle); });
+      amtTabs.forEach((x) => { x.removeEventListener('click', onAmtTab); });
     };
   }, []);
 
@@ -138,13 +165,29 @@ export default function FxConverter(): null {
       return;
     }
     markFeedOk('fx', fmtFxDate(legs.official_date));
-    res.textContent = fmtFx(amount * (rate as number));
-    if (note) {
-      const legName = leg === 'official' ? 'official NFEM rate' : 'indicative street rate';
-      note.textContent = amount.toLocaleString('en-NG') + ' ' + ccy + ' at the ' + legName + ' (' + fmtFxDate(legs!.official_date) + ')' +
-        (leg === 'official' ? '' : ' · via ' + fmtFxSource(legs!.parallel_source) + ', ' + relTime(legs!.parallel_updated_at));
+    const sym: Record<string, string> = { USD: '$', EUR: '\u20ac', GBP: '\u00a3' };
+    const legName = leg === 'official' ? 'official NFEM rate' : 'indicative street rate';
+    const trust = leg === 'official' ? '' : ' \u00b7 via ' + fmtFxSource(legs!.parallel_source) + ', ' + relTime(legs!.parallel_updated_at);
+    if (dir === 'to-ngn') {
+      res.textContent = fmtFx(amount * (rate as number));
+      if (note) note.textContent = amount.toLocaleString('en-NG') + ' ' + ccy + ' at the ' + legName + ' (' + fmtFxDate(legs!.official_date) + ')' + trust;
+    } else {
+      const out = (rate as number) > 0 ? amount / (rate as number) : 0;
+      res.textContent = (sym[ccy] || '') + out.toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      if (note) note.textContent = '\u20a6' + amount.toLocaleString('en-NG') + ' buys ' + (sym[ccy] || '') + out.toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' at the ' + legName + ' (' + fmtFxDate(legs!.official_date) + ')' + trust;
     }
-  });
+    /* everyday-amount table */
+    const amtBody = document.querySelector('#fxAmtTable tbody');
+    const amtNote = el('fxAmtNote');
+    const al = rates && rates[amtCcy];
+    if (amtBody && al && al.official > 0 && al.parallel > 0) {
+      const AMTS = [1, 5, 10, 50, 100, 500, 1000, 5000];
+      amtBody.innerHTML = AMTS.map((a) =>
+        '<tr' + (a === 100 ? ' class="amt-hero"' : '') + '><td>' + a.toLocaleString('en-NG') + '</td><td>' + fmtFx(a * al.official) + '</td><td>' + fmtFx(a * al.parallel) + '</td></tr>'
+      ).join('');
+      if (amtNote) amtNote.textContent = 'Street rate \u00b7 via ' + fmtFxSource(al.parallel_source) + ' \u00b7 ' + fmtFxTime(al.parallel_updated_at) + '.';
+    }
+  }, [rates, amount, ccy, leg, dir, amtCcy, fxFailed]);
 
   return null;
 }

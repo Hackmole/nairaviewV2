@@ -27,7 +27,7 @@
   <link rel="icon" href="assets/favicon-96.png" sizes="96x96" type="image/png">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
   <title>NGX ETFs · All 12 Exchange-Traded Funds | Nairaview</title>
-  <link rel="stylesheet" href="assets/styles.css?v=20261017c" />
+  <link rel="stylesheet" href="assets/styles.css?v=20261017d" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Barlow+Semi+Condensed:wght@600;700&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -64,6 +64,39 @@
       </div>
 
       <section class="section">
+        <div class="section-heading">
+          <div class="kicker">Start from your goal</div>
+          <h2>Which ETF fits you?</h2>
+        </div>
+        <div class="theme-grid">
+          <a class="theme-card" href="#etf-index">
+            <span class="theme-name">Own the whole market</span>
+            <span class="theme-sub">Index trackers &middot; 3 funds</span>
+          </a>
+          <a class="theme-card" href="etfs/NEWGOLD.html">
+            <span class="theme-name">Hedge with gold</span>
+            <span class="theme-sub">NewGold ETF</span>
+          </a>
+          <a class="theme-card" href="etfs/VSPBONDETF.html">
+            <span class="theme-name">Earn steady income</span>
+            <span class="theme-sub">Sovereign bond ETF</span>
+          </a>
+          <a class="theme-card" href="etfs/LOTUSHAL15.html">
+            <span class="theme-name">Invest the halal way</span>
+            <span class="theme-sub">Shariah-compliant</span>
+          </a>
+          <a class="theme-card" href="#etf-sector">
+            <span class="theme-name">Bet on a sector</span>
+            <span class="theme-sub">Banks, consumer, industrial</span>
+          </a>
+          <a class="theme-card" href="#etf-active">
+            <span class="theme-name">Let a manager pick</span>
+            <span class="theme-sub">Active &amp; style ETFs</span>
+          </a>
+        </div>
+      </section>
+
+      <section class="section">
         <div class="section-heading"><h2>Every NGX ETF</h2>
         <p class="guide-p" id="etfAsOf">Closes as of 16 OCT 2026. Click any fund for its full page.</p></div>
         <div style="overflow-x:auto">
@@ -71,15 +104,21 @@
           <thead><tr><th>Fund</th><th>Price</th><th>Day change</th><th>Tracks</th></tr></thead>
           <tbody id="etfBody">
 <!-- BAKED-ETF-ROWS -->
-          <tr data-etf="NEWGOLD"><td><a href="etfs/NEWGOLD.html"><strong>NewGold ETF</strong></a><span class="etf-mgr">NewGold Issuer (Absa)</span></td><td class="mono etf-price">₦88,500.00</td><td class="etf-chg up">+2.91%</td><td>Gold price (LBMA)</td></tr>
+          <tr class="etf-group" id="etf-index"><td colspan="4"><strong>Broad market index trackers</strong><span>The whole market in one trade, the default starting point.</span></td></tr>
           <tr data-etf="VETGRIF30"><td><a href="etfs/VETGRIF30.html"><strong>Vetiva Griffin 30 ETF</strong></a><span class="etf-mgr">Vetiva Fund Managers</span></td><td class="mono etf-price">₦99.00</td><td class="etf-chg up">+3.22%</td><td>NGX 30 Index</td></tr>
-          <tr data-etf="LOTUSHAL15"><td><a href="etfs/LOTUSHAL15.html"><strong>Lotus Halal Equity ETF</strong></a><span class="etf-mgr">Lotus Capital</span></td><td class="mono etf-price">₦130.05</td><td class="etf-chg down">-6.10%</td><td>Lotus Halal equity index</td></tr>
           <tr data-etf="STANBICETF30"><td><a href="etfs/STANBICETF30.html"><strong>Stanbic IBTC ETF 30</strong></a><span class="etf-mgr">Stanbic IBTC Asset Management</span></td><td class="mono etf-price">₦1,169.99</td><td class="etf-chg up">+7.24%</td><td>NGX 30 Index</td></tr>
+          <tr data-etf="SIAMLETF40"><td><a href="etfs/SIAMLETF40.html"><strong>SIAML Pension ETF 40</strong></a><span class="etf-mgr">Stanbic IBTC Asset Management</span></td><td class="mono etf-price">₦2,050.00</td><td class="etf-chg up">+5.07%</td><td>NGX Pension Index</td></tr>
+          <tr class="etf-group" id="etf-gold"><td colspan="4"><strong>Gold</strong><span>Gold without a vault, each unit backed by physical bullion.</span></td></tr>
+          <tr data-etf="NEWGOLD"><td><a href="etfs/NEWGOLD.html"><strong>NewGold ETF</strong></a><span class="etf-mgr">NewGold Issuer (Absa)</span></td><td class="mono etf-price">₦88,500.00</td><td class="etf-chg up">+2.91%</td><td>Gold price (LBMA)</td></tr>
+          <tr class="etf-group" id="etf-bond"><td colspan="4"><strong>Bonds</strong><span>FGN bond income through the stock exchange.</span></td></tr>
+          <tr data-etf="VSPBONDETF"><td><a href="etfs/VSPBONDETF.html"><strong>Vetiva S&amp;P Nigeria Sovereign Bond ETF</strong></a><span class="etf-mgr">Vetiva Fund Managers</span></td><td class="mono etf-price">₦205.00</td><td class="etf-chg up">+1.49%</td><td>S&amp;P Nigeria Sovereign Bond Index</td></tr>
+          <tr class="etf-group" id="etf-shariah"><td colspan="4"><strong>Shariah-compliant</strong><span>Equity exposure screened for Islamic principles.</span></td></tr>
+          <tr data-etf="LOTUSHAL15"><td><a href="etfs/LOTUSHAL15.html"><strong>Lotus Halal Equity ETF</strong></a><span class="etf-mgr">Lotus Capital</span></td><td class="mono etf-price">₦130.05</td><td class="etf-chg down">-6.10%</td><td>Lotus Halal equity index</td></tr>
+          <tr class="etf-group" id="etf-sector"><td colspan="4"><strong>Sector trackers</strong><span>A slice of the economy: banks, consumer goods, industrials.</span></td></tr>
           <tr data-etf="VETBANK"><td><a href="etfs/VETBANK.html"><strong>Vetiva Banking ETF</strong></a><span class="etf-mgr">Vetiva Fund Managers</span></td><td class="mono etf-price">₦28.49</td><td class="etf-chg up">+5.52%</td><td>NGX Banking Index</td></tr>
           <tr data-etf="VETGOODS"><td><a href="etfs/VETGOODS.html"><strong>Vetiva Consumer Goods ETF</strong></a><span class="etf-mgr">Vetiva Fund Managers</span></td><td class="mono etf-price">₦46.65</td><td class="etf-chg up">+1.41%</td><td>NGX Consumer Goods Index</td></tr>
           <tr data-etf="VETINDETF"><td><a href="etfs/VETINDETF.html"><strong>Vetiva Industrial ETF</strong></a><span class="etf-mgr">Vetiva Fund Managers</span></td><td class="mono etf-price">₦118.00</td><td class="etf-chg down">-1.89%</td><td>NGX Industrial Index</td></tr>
-          <tr data-etf="VSPBONDETF"><td><a href="etfs/VSPBONDETF.html"><strong>Vetiva S&amp;P Nigeria Sovereign Bond ETF</strong></a><span class="etf-mgr">Vetiva Fund Managers</span></td><td class="mono etf-price">₦205.00</td><td class="etf-chg up">+1.49%</td><td>S&amp;P Nigeria Sovereign Bond Index</td></tr>
-          <tr data-etf="SIAMLETF40"><td><a href="etfs/SIAMLETF40.html"><strong>SIAML Pension ETF 40</strong></a><span class="etf-mgr">Stanbic IBTC Asset Management</span></td><td class="mono etf-price">₦2,050.00</td><td class="etf-chg up">+5.07%</td><td>NGX Pension Index</td></tr>
+          <tr class="etf-group" id="etf-active"><td colspan="4"><strong>Active & style</strong><span>Managers picking stocks for growth, value, or market-beating returns.</span></td></tr>
           <tr data-etf="GREENWETF"><td><a href="etfs/GREENWETF.html"><strong>Greenwich Alpha ETF</strong></a><span class="etf-mgr">Greenwich Merchant Bank</span></td><td class="mono etf-price">₦727.48</td><td class="etf-chg up">+1.04%</td><td>Actively managed Nigerian equities</td></tr>
           <tr data-etf="MERGROWTH"><td><a href="etfs/MERGROWTH.html"><strong>Meristem Growth ETF</strong></a><span class="etf-mgr">Meristem Wealth Management</span></td><td class="mono etf-price">₦121.50</td><td class="etf-chg down">-9.33%</td><td>Nigerian growth equities</td></tr>
           <tr data-etf="MERVALUE"><td><a href="etfs/MERVALUE.html"><strong>Meristem Value ETF</strong></a><span class="etf-mgr">Meristem Wealth Management</span></td><td class="mono etf-price">₦124.20</td><td class="etf-chg down">-10.00%</td><td>Nigerian value equities</td></tr>
@@ -90,12 +129,30 @@
       </section>
 
       <section class="section">
-        <h2 class="guide-h2">A note on ETF prices</h2>
-        <p class="guide-p">NGX ETFs can trade far above or below the value of what they hold. In early 2025, index-tracking ETFs soared to triple-digit premiums as retail demand overwhelmed supply, then fell by half in weeks when prices snapped back toward net asset value. Always check the premium or discount before buying; the fund's published NAV is the anchor, not the last traded price.</p>
+        <h2 class="guide-h2">The premium trap: read this before buying any ETF</h2>
+        <p class="guide-p">An ETF's market price and the value of what it holds (its net asset value, or NAV) are two different numbers. When buyers pile in faster than new units are created, the price detaches above NAV: that gap is the <strong>premium</strong>. When sellers dominate, it trades at a <strong>discount</strong>.</p>
+        <p class="guide-p">Nigeria saw this up close in early 2025: index-tracking ETFs soared to triple-digit premiums as retail demand overwhelmed supply, then fell by half in weeks when prices snapped back toward NAV. Buyers at the top paid two or three times the underlying value, and the ETF itself did nothing wrong.</p>
+        <p class="guide-p"><strong>The practical rule:</strong> check the premium or discount before every buy. The fund manager publishes the NAV, usually daily on their website. Compare it with the last traded price here. A small premium is normal. A large one is a warning.</p>
         <h2 class="guide-h2">Frequently asked questions</h2>
         <details class="faq-item"><summary class="faq-q">What is an ETF?</summary><div class="faq-a"><p class="guide-p">An exchange-traded fund is a basket of assets (stocks, bonds or gold) that trades on the stock exchange like a single share. You buy it through any stockbroker, exactly like a stock.</p></div></details>
         <details class="faq-item"><summary class="faq-q">How do I buy an ETF in Nigeria?</summary><div class="faq-a"><p class="guide-p">Open an account with an NGX-licensed stockbroker, fund it, and place a buy order using the ETF's symbol (for example STANBICETF30). Settlement and fees work like ordinary shares.</p></div></details>
         <details class="faq-item"><summary class="faq-q">Do NGX ETFs pay dividends?</summary><div class="faq-a"><p class="guide-p">Some distribute income from their holdings; others reinvest it. Check each fund's page and the manager's distribution notices.</p></div></details>
+        <details class="faq-item"><summary class="faq-q">ETF or mutual fund: what's the difference?</summary><div class="faq-a"><p class="guide-p">Both pool your money into a basket of assets. The difference is the door you use: an ETF trades live on the exchange through your stockbroker, with prices you can see all session; a mutual fund is bought from the manager and priced once a day. Similar baskets, different doors.</p></div></details>
+        <details class="faq-item"><summary class="faq-q">How much do I need to start?</summary><div class="faq-a"><p class="guide-p">Whatever one unit costs, plus your broker's fees. There is no fixed minimum. A unit of VETBANK costs less than lunch; a unit of NewGold costs as much as a used car. Start where your pocket allows.</p></div></details>
+        <details class="faq-item"><summary class="faq-q">Are these prices live?</summary><div class="faq-a"><p class="guide-p">They are daily closes from NGX ETF data, refreshed every trading day, not intraday ticks. Good enough for comparing funds; confirm the current price with your broker before placing an order.</p></div></details>
+      </section>
+      <section class="section">
+        <div class="section-heading"><h2>Next steps</h2></div>
+        <div class="theme-grid">
+          <a class="theme-card" href="brokers">
+            <span class="theme-name">Compare stockbrokers</span>
+            <span class="theme-sub">Fees and how to open an account</span>
+          </a>
+          <a class="theme-card" href="learn">
+            <span class="theme-name">Learn the basics</span>
+            <span class="theme-sub">Plain-English guides for new investors</span>
+          </a>
+        </div>
       </section>
     </main>
   </div>

@@ -669,23 +669,43 @@ def bake_etfs():
     def fmtP(n):
         return "\u20A6" + f"{n:,.2f}"
 
+    groups = [
+        ("index", "Broad market index trackers",
+         "The whole market in one trade, the default starting point."),
+        ("gold", "Gold",
+         "Gold without a vault, each unit backed by physical bullion."),
+        ("bond", "Bonds",
+         "FGN bond income through the stock exchange."),
+        ("shariah", "Shariah-compliant",
+         "Equity exposure screened for Islamic principles."),
+        ("sector", "Sector trackers",
+         "A slice of the economy: banks, consumer goods, industrials."),
+        ("active", "Active & style",
+         "Managers picking stocks for growth, value, or market-beating returns."),
+    ]
     trs = []
-    for sym, e in curated.items():
-        f = feed.get(sym, {})
-        price = f.get("close")
-        chg = f.get("change_percentage")
-        if chg is None:
-            chg_txt, chg_cls = "\u2014", "up"
-        else:
-            chg_txt = ("+" if chg >= 0 else "") + f"{chg:.2f}%"
-            chg_cls = "up" if chg >= 0 else "down"
+    for gkey, gtitle, gdesc in groups:
         trs.append(
-            f'<tr data-etf="{sym}">'
-            f'<td><a href="etfs/{sym}.html"><strong>{_html.escape(e["name"])}</strong></a>'
-            f'<span class="etf-mgr">{_html.escape(e["manager"])}</span></td>'
-            f'<td class="mono etf-price">{fmtP(price) if price is not None else "\u2014"}</td>'
-            f'<td class="etf-chg {chg_cls}">{chg_txt}</td>'
-            f'<td>{_html.escape(e["underlying"])}</td></tr>')
+            f'<tr class="etf-group" id="etf-{gkey}"><td colspan="4">'
+            f'<strong>{gtitle}</strong><span>{gdesc}</span></td></tr>')
+        for sym, e in curated.items():
+            if e.get("category") != gkey:
+                continue
+            f = feed.get(sym, {})
+            price = f.get("close")
+            chg = f.get("change_percentage")
+            if chg is None:
+                chg_txt, chg_cls = "\u2014", "up"
+            else:
+                chg_txt = ("+" if chg >= 0 else "") + f"{chg:.2f}%"
+                chg_cls = "up" if chg >= 0 else "down"
+            trs.append(
+                f'<tr data-etf="{sym}">'
+                f'<td><a href="etfs/{sym}.html"><strong>{_html.escape(e["name"])}</strong></a>'
+                f'<span class="etf-mgr">{_html.escape(e["manager"])}</span></td>'
+                f'<td class="mono etf-price">{fmtP(price) if price is not None else "\u2014"}</td>'
+                f'<td class="etf-chg {chg_cls}">{chg_txt}</td>'
+                f'<td>{_html.escape(e["underlying"])}</td></tr>')
     changed_etf = False
     hp = os.path.join(REPO, "etfs.html")
     t = open(hp, encoding="utf-8").read()

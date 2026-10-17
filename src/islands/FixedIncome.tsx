@@ -64,7 +64,7 @@ function curveSVG(pts: Array<{ tenor: string; years: number; yield: number }>): 
   const Y = (v: number) => T + (1 - (v - lo) / (hi - lo)) * (B - T - 10);
   const path = pts.map((p, i) => (i ? 'L' : 'M') + X(p.years).toFixed(0) + ',' + Y(p.yield).toFixed(0)).join(' ');
   const dots = pts.map((p) =>
-    '<circle cx="' + X(p.years).toFixed(0) + '" cy="' + Y(p.yield).toFixed(0) + '" r="4" fill="#32D9EB"/>' +
+    '<circle cx="' + X(p.years).toFixed(0) + '" cy="' + Y(p.yield).toFixed(0) + '" r="4" fill="#32D9EB" class="fx-dot-pop"/>' +
     '<text x="' + X(p.years).toFixed(0) + '" y="' + (Y(p.yield) - 12).toFixed(0) + '" fill="var(--ink)" font-size="11" font-family="IBM Plex Mono,monospace" text-anchor="middle">' + p.yield.toFixed(2) + '%</text>' +
     '<text x="' + X(p.years).toFixed(0) + '" y="220" fill="var(--muted)" font-size="10" font-family="IBM Plex Mono,monospace" text-anchor="middle">' + esc(p.tenor) + '</text>'
   ).join('');
@@ -74,7 +74,7 @@ function curveSVG(pts: Array<{ tenor: string; years: number; yield: number }>): 
   return '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="FGN bond yield curve" style="width:100%;height:auto;display:block">' +
     '<line x1="' + L + '" y1="' + T + '" x2="' + L + '" y2="' + B + '" stroke="var(--line)" stroke-width="1"/>' +
     '<line x1="' + L + '" y1="' + B + '" x2="' + W + '" y2="' + B + '" stroke="var(--line)" stroke-width="1"/>' +
-    grid + '<path d="' + path + '" fill="none" stroke="#32D9EB" stroke-width="3"/>' + dots + '</svg>';
+    grid + '<path d="' + path + '" fill="none" stroke="#32D9EB" stroke-width="3" pathLength="1" class="fx-draw"/>' + dots + '</svg>';
 }
 
 export default function FixedIncome(): null {

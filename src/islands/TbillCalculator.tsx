@@ -111,7 +111,7 @@ export default function TbillCalculator(): React.JSX.Element {
           </div>
         </div>
       </div>
-      <table className="calc-out">
+      <table className="calc-out tb-xfade" key={tenor + ':' + amount}>
         <tbody>
           {rows.map(([k, v, hi]) => (
             <tr key={k} className={hi ? 'calc-total' : ''}><th scope="row">{k}</th><td>{v}</td></tr>

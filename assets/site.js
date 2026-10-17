@@ -146,6 +146,9 @@
         var label = window.NV.marketLabel(open);
         statusEl.innerHTML = '<i class="status-dot" aria-hidden="true"></i> ' + label;
         statusEl.classList.toggle('closed', !open);
+        /* whisper of motion on each 60s tick: brief opacity dip */
+        statusEl.classList.add('tick-fade');
+        setTimeout(function () { statusEl.classList.remove('tick-fade'); }, 200);
         var hh = String(wat.getHours()).padStart(2, '0'), mm = String(wat.getMinutes()).padStart(2, '0');
         statusEl.title = 'Nigerian Exchange trading hours: Mon–Fri 9:30–16:00 WAT. Now ' + hh + ':' + mm + ' WAT.';
       }
@@ -1834,6 +1837,8 @@
             setProgress(d);
             btn.textContent = "✓ Completed";
             btn.disabled = true;
+            btn.classList.add('done-pop');
+            setTimeout(function () { btn.classList.remove('done-pop'); }, 250);
             /* suggest next */
             var idx = PATH.indexOf(slug);
             if (idx < PATH.length - 1) {

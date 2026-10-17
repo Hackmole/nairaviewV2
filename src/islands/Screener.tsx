@@ -111,6 +111,13 @@ export default function Screener(): React.ReactElement {
   /* Expandable rows (mobile redesign brief 3): one open at a time, chart lazy-fetched */
   const [expanded, setExpanded] = useState<string | null>(null);
   const [charts, setCharts] = useState<Record<string, number[] | 'loading' | 'error'>>({});
+  /* Stagger generation: bumps on filter change so rows re-animate (not on mount) */
+  const [filterGen, setFilterGen] = useState(0);
+  const firstFilter = useRef(true);
+  useEffect(() => {
+    if (firstFilter.current) { firstFilter.current = false; return; }
+    setFilterGen((g) => g + 1);
+  }, [f]);
 
   function toggleExpand(sym: string) {
     const next = expanded === sym ? null : sym;
@@ -396,12 +403,14 @@ useEffect(() => {
   return (
     <>
       {liveStale && <p className="stale-note">Live prices unavailable. Showing the last snapshot{staleDate ? ' (' + staleDate + ')' : ''}.</p>}
-      {rows.map((r) => {
+      {rows.map((r, i) => {
         const starred = watch.indexOf(r.s) !== -1;
         const badgeHTML = window.nvBadgeHTML ? window.nvBadgeHTML(r.s) : '';
         const isOpen = expanded === r.s;
+        const stagger = filterGen > 0 && i < 12;
         return (
-          <div className="market-item" key={r.s}>
+          <div className={'market-item' + (stagger ? ' scr-stagger' : '')} key={r.s + ':' + filterGen}
+            style={stagger ? { animationDelay: (i * 25) + 'ms' } : undefined}>
             <div className="market-row has-expand">
               <button
                 type="button" className="star"

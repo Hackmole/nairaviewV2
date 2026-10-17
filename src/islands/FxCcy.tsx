@@ -38,7 +38,7 @@ function chartSVG(history: FxHistoryPoint[] | undefined): { svg: string; range: 
       d += (started ? 'L' : 'M') + x(i).toFixed(1) + ' ' + y(v).toFixed(1);
       started = true;
     });
-    return d ? '<path d="' + d + '" class="' + cls + '" fill="none" stroke-width="3"/>' : '';
+    return d ? '<path d="' + d + '" class="' + cls + ' fx-draw" fill="none" stroke-width="3" pathLength="1"/>' : '';
   }
   return {
     svg: '<line x1="' + P + '" y1="' + (H - P) + '" x2="' + (W - P) + '" y2="' + (H - P) + '" class="fx-axis"/>' +

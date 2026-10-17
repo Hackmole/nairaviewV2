@@ -644,6 +644,102 @@ def main():
         log("portfolio SNAPSHOT prices updated")
 
 
+
+def bake_etfs():
+    """Rebake the ETF hub table from /api/etfs, merged with curated etfs.json."""
+    import html as _html
+    try:
+        data = get_json("/api/etfs", timeout=30)
+    except Exception as e:
+        log(f"WARNING: ETF bake skipped: {e}")
+        return
+    rows = data.get("data") or []
+    if not rows:
+        return
+    try:
+        curated = {e["symbol"]: e for e in
+                   json.load(open(os.path.join(REPO, "assets", "etfs.json"), encoding="utf-8"))["etfs"]}
+    except Exception as e:
+        log(f"WARNING: ETF bake skipped (etfs.json): {e}")
+        return
+    feed = {r.get("symbol"): r for r in rows}
+    months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN",
+              "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"]
+
+    def fmtP(n):
+        return "\u20A6" + f"{n:,.2f}"
+
+    trs = []
+    for sym, e in curated.items():
+        f = feed.get(sym, {})
+        price = f.get("close")
+        chg = f.get("change_percentage")
+        if chg is None:
+            chg_txt, chg_cls = "\u2014", "up"
+        else:
+            chg_txt = ("+" if chg >= 0 else "") + f"{chg:.2f}%"
+            chg_cls = "up" if chg >= 0 else "down"
+        trs.append(
+            f'<tr data-etf="{sym}">'
+            f'<td><a href="etfs/{sym}.html"><strong>{_html.escape(e["name"])}</strong></a>'
+            f'<span class="etf-mgr">{_html.escape(e["manager"])}</span></td>'
+            f'<td class="mono etf-price">{fmtP(price) if price is not None else "\u2014"}</td>'
+            f'<td class="etf-chg {chg_cls}">{chg_txt}</td>'
+            f'<td>{_html.escape(e["underlying"])}</td></tr>')
+    changed_etf = False
+    hp = os.path.join(REPO, "etfs.html")
+    t = open(hp, encoding="utf-8").read()
+    new_body = "<!-- BAKED-ETF-ROWS -->\n          " + "\n          ".join(trs) + "\n          <!-- /BAKED-ETF-ROWS -->"
+    t2 = re.sub(r"<!-- BAKED-ETF-ROWS -->.*?<!-- /BAKED-ETF-ROWS -->",
+                lambda m: new_body, t, flags=re.S, count=1)
+    # refresh the as-of date from the feed timestamp
+    try:
+        d = datetime.fromisoformat(data["updated_at"].replace("Z", "+00:00"))
+        dstr = f"{d.day} {months[d.month - 1]} {d.year}"
+        t2 = re.sub(r"Closes as of \d+ [A-Za-z]{3} \d{4}",
+                    f"Closes as of {dstr}", t2, count=1)
+    except Exception:
+        pass
+    if t2 != t:
+        open(hp, "w", encoding="utf-8").write(t2)
+        log(f"baked {len(trs)} ETF rows into etfs.html")
+        changed_etf = True
+    # ---- fund subpages: hero price + asof + pill ----
+    try:
+        d = datetime.fromisoformat(data["updated_at"].replace("Z", "+00:00"))
+        dstr = f"{d.day} {months[d.month - 1]} {d.year}"
+    except Exception:
+        dstr = None
+    n_sub = 0
+    for sym, e in curated.items():
+        f = feed.get(sym, {})
+        if f.get("close") is None:
+            continue
+        sp = os.path.join(REPO, "etfs", sym + ".html")
+        if not os.path.exists(sp):
+            continue
+        st = open(sp, encoding="utf-8").read()
+        st2 = re.sub(r'(<div class="quote-price">)[^<]*(</div>)',
+                    lambda m: m.group(1) + fmtP(f["close"]) + m.group(2), st, count=1)
+        if dstr:
+            st2 = re.sub(r'(<p class="asof">).*?(</p>)',
+                        lambda m: m.group(1) + f"Close &middot; {dstr} &middot; NGX ETF data." + m.group(2),
+                        st2, count=1)
+        st2 = st2.replace(">Hand-verified</span>", ">Daily close</span>")
+        if "kstats-vintage" not in st2:
+            st2 = st2.replace(
+                '<div class="section" style="padding-top:34px">',
+                '<p class="src-attr kstats-vintage">52-week range and return figures last verified August 2025.</p>\n      <div class="section" style="padding-top:34px">',
+                1)
+        if st2 != st:
+            open(sp, "w", encoding="utf-8").write(st2)
+            n_sub += 1
+    if n_sub:
+        log(f"baked ETF closes into {n_sub} fund pages")
+        changed_etf = True
+    return True
+
+
 def bake_headlines():
     """Rebake the static headline cards in news-headlines.html from /api/news."""
     import html as _html
@@ -699,6 +795,9 @@ def bake_headlines():
 
     if bake_headlines():
         changed.add("news-headlines.html")
+
+    if bake_etfs():
+        changed.add("etfs.html")
 
     # ---- 8b. regenerate per-stock og cards (prices change daily) ----
     log("regenerating og cards...")

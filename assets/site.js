@@ -1986,3 +1986,50 @@
   setTimeout(sync, 0);
   setTimeout(sync, 500);
 }());
+
+/* ---- ETF live prices: hub table + fund page heroes ---- */
+(function () {
+  try {
+    var hub = document.getElementById("etfBody");
+    var hero = document.querySelector(".quote-hero");
+    var sym = null;
+    if (!hub && hero && location.pathname.indexOf("/etfs/") !== -1) {
+      var crumb = document.querySelector("nav.crumbs span:last-child");
+      if (crumb) sym = crumb.textContent.trim();
+    }
+    if (!hub && !sym) return;
+    function fmtP(n) { return "\u20A6" + Number(n).toLocaleString("en-NG", { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+    function fmtD(d) { var m = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"]; return d.getDate() + " " + m[d.getMonth()] + " " + d.getFullYear(); }
+    fetch("https://nairaview-api.meetomidiora.workers.dev/api/etfs").then(function (r) { return r.json(); }).then(function (doc) {
+      var rows = doc.data || [];
+      if (!rows.length) return;
+      if (hub) {
+        rows.forEach(function (f) {
+          var tr = hub.querySelector('tr[data-etf="' + f.symbol + '"]');
+          if (!tr) return;
+          var pc = tr.querySelector(".etf-price"), cc = tr.querySelector(".etf-chg");
+          if (pc && f.close != null) pc.textContent = fmtP(f.close);
+          if (cc && f.change_percentage != null) {
+            var c = Number(f.change_percentage);
+            cc.textContent = (c >= 0 ? "+" : "") + c.toFixed(2) + "%";
+            cc.classList.toggle("up", c >= 0);
+            cc.classList.toggle("down", c < 0);
+          }
+        });
+        if (doc.updated_at) {
+          var el = document.getElementById("etfAsOf");
+          if (el) el.textContent = "Closes as of " + fmtD(new Date(doc.updated_at)) + ". Click any fund for its full page.";
+        }
+      }
+      if (sym && hero) {
+        var f = null;
+        rows.forEach(function (x) { if (x.symbol === sym) f = x; });
+        if (!f || f.close == null) return;
+        var qp = hero.querySelector(".quote-price");
+        if (qp) qp.textContent = fmtP(f.close);
+        var asof = hero.querySelector(".asof");
+        if (asof && doc.updated_at) asof.innerHTML = "Close &middot; " + fmtD(new Date(doc.updated_at)) + " &middot; NGX ETF data.";
+      }
+    }).catch(function () { /* baked values stand */ });
+  } catch (e) {}
+}());

@@ -27,7 +27,7 @@
   <link rel="icon" href="assets/favicon-96.png" sizes="96x96" type="image/png">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
   <title>NGX ETFs · All 12 Exchange-Traded Funds | Nairaview</title>
-  <link rel="stylesheet" href="assets/styles.css?v=20261015t" />
+  <link rel="stylesheet" href="assets/styles.css?v=20261017c" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Barlow+Semi+Condensed:wght@600;700&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -65,11 +65,26 @@
 
       <section class="section">
         <div class="section-heading"><h2>Every NGX ETF</h2>
-        <p class="guide-p">Prices are hand-verified from the NGX Daily Official List (ETFs), 27 August 2025. Click any fund for its full page.</p></div>
+        <p class="guide-p" id="etfAsOf">Closes as of 16 OCT 2026. Click any fund for its full page.</p></div>
         <div style="overflow-x:auto">
         <table class="hist-table" id="etfTable">
-          <thead><tr><th>Fund</th><th>Symbol</th><th>Tracks</th><th>Last verified close</th></tr></thead>
-          <tbody id="etfBody"><tr><td colspan="4">Loading&hellip;</td></tr></tbody>
+          <thead><tr><th>Fund</th><th>Price</th><th>Day change</th><th>Tracks</th></tr></thead>
+          <tbody id="etfBody">
+<!-- BAKED-ETF-ROWS -->
+          <tr data-etf="NEWGOLD"><td><a href="etfs/NEWGOLD.html"><strong>NewGold ETF</strong></a><span class="etf-mgr">NewGold Issuer (Absa)</span></td><td class="mono etf-price">₦88,500.00</td><td class="etf-chg up">+2.91%</td><td>Gold price (LBMA)</td></tr>
+          <tr data-etf="VETGRIF30"><td><a href="etfs/VETGRIF30.html"><strong>Vetiva Griffin 30 ETF</strong></a><span class="etf-mgr">Vetiva Fund Managers</span></td><td class="mono etf-price">₦99.00</td><td class="etf-chg up">+3.22%</td><td>NGX 30 Index</td></tr>
+          <tr data-etf="LOTUSHAL15"><td><a href="etfs/LOTUSHAL15.html"><strong>Lotus Halal Equity ETF</strong></a><span class="etf-mgr">Lotus Capital</span></td><td class="mono etf-price">₦130.05</td><td class="etf-chg down">-6.10%</td><td>Lotus Halal equity index</td></tr>
+          <tr data-etf="STANBICETF30"><td><a href="etfs/STANBICETF30.html"><strong>Stanbic IBTC ETF 30</strong></a><span class="etf-mgr">Stanbic IBTC Asset Management</span></td><td class="mono etf-price">₦1,169.99</td><td class="etf-chg up">+7.24%</td><td>NGX 30 Index</td></tr>
+          <tr data-etf="VETBANK"><td><a href="etfs/VETBANK.html"><strong>Vetiva Banking ETF</strong></a><span class="etf-mgr">Vetiva Fund Managers</span></td><td class="mono etf-price">₦28.49</td><td class="etf-chg up">+5.52%</td><td>NGX Banking Index</td></tr>
+          <tr data-etf="VETGOODS"><td><a href="etfs/VETGOODS.html"><strong>Vetiva Consumer Goods ETF</strong></a><span class="etf-mgr">Vetiva Fund Managers</span></td><td class="mono etf-price">₦46.65</td><td class="etf-chg up">+1.41%</td><td>NGX Consumer Goods Index</td></tr>
+          <tr data-etf="VETINDETF"><td><a href="etfs/VETINDETF.html"><strong>Vetiva Industrial ETF</strong></a><span class="etf-mgr">Vetiva Fund Managers</span></td><td class="mono etf-price">₦118.00</td><td class="etf-chg down">-1.89%</td><td>NGX Industrial Index</td></tr>
+          <tr data-etf="VSPBONDETF"><td><a href="etfs/VSPBONDETF.html"><strong>Vetiva S&amp;P Nigeria Sovereign Bond ETF</strong></a><span class="etf-mgr">Vetiva Fund Managers</span></td><td class="mono etf-price">₦205.00</td><td class="etf-chg up">+1.49%</td><td>S&amp;P Nigeria Sovereign Bond Index</td></tr>
+          <tr data-etf="SIAMLETF40"><td><a href="etfs/SIAMLETF40.html"><strong>SIAML Pension ETF 40</strong></a><span class="etf-mgr">Stanbic IBTC Asset Management</span></td><td class="mono etf-price">₦2,050.00</td><td class="etf-chg up">+5.07%</td><td>NGX Pension Index</td></tr>
+          <tr data-etf="GREENWETF"><td><a href="etfs/GREENWETF.html"><strong>Greenwich Alpha ETF</strong></a><span class="etf-mgr">Greenwich Merchant Bank</span></td><td class="mono etf-price">₦727.48</td><td class="etf-chg up">+1.04%</td><td>Actively managed Nigerian equities</td></tr>
+          <tr data-etf="MERGROWTH"><td><a href="etfs/MERGROWTH.html"><strong>Meristem Growth ETF</strong></a><span class="etf-mgr">Meristem Wealth Management</span></td><td class="mono etf-price">₦121.50</td><td class="etf-chg down">-9.33%</td><td>Nigerian growth equities</td></tr>
+          <tr data-etf="MERVALUE"><td><a href="etfs/MERVALUE.html"><strong>Meristem Value ETF</strong></a><span class="etf-mgr">Meristem Wealth Management</span></td><td class="mono etf-price">₦124.20</td><td class="etf-chg down">-10.00%</td><td>Nigerian value equities</td></tr>
+          <!-- /BAKED-ETF-ROWS -->
+          </tbody>
         </table>
         </div>
       </section>
@@ -126,21 +141,7 @@
     </div>
   </footer>
   <script defer src="assets/data.js?v=20261016a"></script>
-  <script>
-  (function(){
-    function fmtP(n){ return '&#8358;' + Number(n).toLocaleString('en-NG',{minimumFractionDigits:2,maximumFractionDigits:2}); }
-    fetch('assets/etfs.json?v=20261016a').then(function(r){return r.json();}).then(function(data){
-      var html = (data.etfs||[]).map(function(e){
-        return '<tr><td><a href="etfs/'+e.symbol+'.html"><strong>'+e.name+'</strong></a></td>'
-          + '<td class="mono">'+e.symbol+'</td><td>'+e.underlying+'</td><td>'+fmtP(e.close)+'</td></tr>';
-      }).join('');
-      document.getElementById('etfBody').innerHTML = html;
-    }).catch(function(){
-      document.getElementById('etfBody').innerHTML = '<tr><td colspan="4">Could not load ETF data.</td></tr>';
-    });
-  })();
-  </script>
-  <script defer src="assets/site.js?v=20261016a"></script>
+  <script defer src="assets/site.js?v=20261017c"></script>
   <script defer src="assets/live.js?v=20261016a"></script>
   <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a9f4136dd40547a7b1acca41e62cc7a5"}'></script><!-- End Cloudflare Web Analytics -->
 </body>

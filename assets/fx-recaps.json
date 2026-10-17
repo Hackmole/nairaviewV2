@@ -1,0 +1,34 @@
+[
+  {
+    "date": "2026-10-16",
+    "lede": "Friday, 16 October 2026: a dollar cost \u20a61,360.15 on the parallel market (eased, down \u20a62.69 on the day) against an official NFEM rate of \u20a61,330.88 (down \u20a60.58). The street premium stands at 2.20%.",
+    "moves": {
+      "USD": {
+        "official": 1330.88,
+        "parallel": 1360.15,
+        "d_official": -0.58,
+        "d_parallel": -2.69,
+        "premium_pct": 2.2
+      },
+      "EUR": {
+        "official": 1490.82,
+        "parallel": 1520.01,
+        "d_official": -0.24,
+        "d_parallel": 5.92,
+        "premium_pct": 1.96
+      },
+      "GBP": {
+        "official": 1764.42,
+        "parallel": 1799.68,
+        "d_official": -0.23,
+        "d_parallel": 8.83,
+        "premium_pct": 2.0
+      }
+    },
+    "watch": [
+      "Next NTB auction: Wednesday, 21 October 2026",
+      "Next FGN bond auction: Monday, 19 October 2026 (N1.75tn on offer)"
+    ],
+    "generated_at": "2026-10-17T03:42:34Z"
+  }
+]

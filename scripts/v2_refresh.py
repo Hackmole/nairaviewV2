@@ -829,6 +829,15 @@ def bake_headlines():
     if bake_etfs():
         changed.add("etfs.html")
 
+    # ---- 8a2. regenerate the daily FX recap ----
+    log("regenerating fx recap...")
+    r = run([sys.executable, "scripts/gen_fx_recap.py"], timeout=120)
+    if r.returncode != 0:
+        log(f"WARNING: gen_fx_recap.py failed: {r.stderr[-500:]}")
+    else:
+        changed.add("assets/fx-recaps.json")
+        changed.add("fx.html")
+
     # ---- 8b. regenerate per-stock og cards (prices change daily) ----
     log("regenerating og cards...")
     r = run([sys.executable, "scripts/gen_og_cards.py"], timeout=300)

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { getFx, fmtFx, fmtFxDate, fmtFxTime, fmtFxSource, relTime } from '../lib/fx.js';
+import { getJSON } from '../lib/api.js';
 import { markFeedOk, lastUpdatedLine } from '../lib/feedState.js';
 import type { FxDoc } from '../lib/types.js';
 
@@ -32,6 +33,24 @@ export default function FxConverter(): null {
       setRates(latest);
       setFxFailed(!usable);
     });
+    getJSON<{ date: string; lede: string; moves: Record<string, { official: number; parallel: number; d_official: number; d_parallel: number; premium_pct: number }>; watch: string[] }[]>(
+      'assets/fx-recaps.json?v=20261017a').then((recaps) => {
+      if (!alive || !recaps || !recaps.length) return;
+      const fN = (x: number) => '\u20a6' + x.toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      const sgn = (x: number) => (x >= 0 ? '+' : '') + x.toFixed(2);
+      const names: Record<string, string> = { USD: 'US dollar', EUR: 'Euro', GBP: 'British pound' };
+      const cur = recaps[0];
+      const lede = el('fxRecapLede'); if (lede) lede.textContent = cur.lede;
+      const mv = document.querySelector('#fxRecapMoves tbody');
+      if (mv) mv.innerHTML = Object.keys(names).filter((k) => cur.moves[k]).map((k) => {
+        const m = cur.moves[k];
+        return '<tr><td>' + names[k] + '</td><td>' + fN(m.official) + ' (' + sgn(m.d_official) + ')</td><td>' + fN(m.parallel) + ' (' + sgn(m.d_parallel) + ')</td><td>' + m.premium_pct.toFixed(2) + '%</td></tr>';
+      }).join('');
+      const wt = el('fxRecapWatch'); if (wt) wt.textContent = 'What to watch: ' + cur.watch.join('; ') + '.';
+      const ar = el('fxRecapArchive');
+      if (ar) ar.innerHTML = recaps.slice(1).map((r) =>
+        '<li><details><summary>' + r.date + '</summary><p>' + r.lede + '</p></details></li>').join('');
+    }).catch(() => { /* baked recap stays */ });
     const amtEl = el('fxAmount') as HTMLInputElement | null;
     function onAmt() { if (amtEl) { const v = parseFloat(amtEl.value); setAmount(isNaN(v) ? NaN : v); } }
     if (amtEl) {

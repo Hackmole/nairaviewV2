@@ -1793,3 +1793,9 @@ tr.etf-group[id] { scroll-margin-top: calc(var(--header-h) + 48px); }
 
 /* FX everyday-amount table: highlight the $100 row */
 .amt-hero td { font-weight: 700; color: var(--ink); background: var(--green-soft); }
+
+/* FX recap archive */
+#fxRecapArchive { list-style: none; margin: 0; padding: 0; }
+#fxRecapArchive li { margin: 6px 0; }
+#fxRecapArchive summary { cursor: pointer; font: 600 13px/1.4 "IBM Plex Mono", monospace; color: var(--muted); }
+#fxRecapArchive p { margin: 6px 0 0; }

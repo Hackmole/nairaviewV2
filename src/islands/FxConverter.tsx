@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { getFx, fmtFx, fmtFxDate } from '../lib/fx.js';
+import { getFx, fmtFx, fmtFxDate, fmtFxTime, fmtFxSource, relTime } from '../lib/fx.js';
 import { markFeedOk, lastUpdatedLine } from '../lib/feedState.js';
 import type { FxDoc } from '../lib/types.js';
 
@@ -141,7 +141,8 @@ export default function FxConverter(): null {
     res.textContent = fmtFx(amount * (rate as number));
     if (note) {
       const legName = leg === 'official' ? 'official NFEM rate' : 'indicative street rate';
-      note.textContent = amount.toLocaleString('en-NG') + ' ' + ccy + ' at the ' + legName + ' · ' + fmtFxDate(legs!.official_date);
+      note.textContent = amount.toLocaleString('en-NG') + ' ' + ccy + ' at the ' + legName + ' (' + fmtFxDate(legs!.official_date) + ')' +
+        (leg === 'official' ? '' : ' · via ' + fmtFxSource(legs!.parallel_source) + ', ' + relTime(legs!.parallel_updated_at));
     }
   });
 

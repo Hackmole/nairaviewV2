@@ -66,6 +66,7 @@ export interface FxLegs {
   official_date?: string;
   parallel: number;
   parallel_updated_at?: string;
+  parallel_source?: string;
 }
 
 export interface FxHistoryPoint {

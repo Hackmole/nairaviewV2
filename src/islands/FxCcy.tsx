@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getFx, fmtFx, fmtFxDate } from '../lib/fx.js';
+import { getFx, fmtFx, fmtFxDate, fmtFxTime, fmtFxSource, relTime } from '../lib/fx.js';
 import { markFeedOk, lastUpdatedLine } from '../lib/feedState.js';
 import type { FxDoc, FxHistoryPoint } from '../lib/types.js';
 
@@ -77,13 +77,13 @@ export default function FxCcy(props: FxCcyProps): null {
     if (legs) {
       if (legs.official > 0) {
         const o = el('fx' + P + 'Official'); if (o) o.textContent = fmtFx(legs.official);
-        const od = el('fx' + P + 'OfficialDate'); if (od) od.textContent = 'NFEM · ' + fmtFxDate(legs.official_date);
+        const od = el('fx' + P + 'OfficialDate'); if (od) od.textContent = 'Official (CBN NFEM) · ' + fmtFxDate(legs.official_date);
       } else {
         unavailCard('fx' + P + 'Official', 'fx' + P + 'OfficialDate', 'Official rate');
       }
       if (legs.parallel > 0) {
         const pl = el('fx' + P + 'Parallel'); if (pl) pl.textContent = fmtFx(legs.parallel);
-        const pd = el('fx' + P + 'ParallelDate'); if (pd) pd.textContent = 'Street rate · updated ' + fmtFxDate(legs.parallel_updated_at);
+        const pd = el('fx' + P + 'ParallelDate'); if (pd) pd.textContent = 'Parallel market · via ' + fmtFxSource(legs.parallel_source) + ' · ' + fmtFxTime(legs.parallel_updated_at) + ' (' + relTime(legs.parallel_updated_at) + ')';
       } else {
         unavailCard('fx' + P + 'Parallel', 'fx' + P + 'ParallelDate', 'Parallel rate');
       }
@@ -125,7 +125,7 @@ export default function FxCcy(props: FxCcyProps): null {
     const hd = el('fxHeroDate') as HTMLElement | null;
     if (hd && !hd.dataset.fxPainted) {
       if (usable) {
-        hd.textContent = 'Updated ' + fmtFxDate(legs!.official_date);
+        hd.textContent = 'Updated ' + fmtFxTime(legs!.parallel_updated_at) + ' (' + relTime(legs!.parallel_updated_at) + ')';
       } else {
         const last = lastUpdatedLine('fx');
         hd.textContent = last ? 'Rates unavailable · ' + last : 'Rates unavailable';
